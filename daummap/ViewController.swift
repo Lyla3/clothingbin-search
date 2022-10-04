@@ -69,6 +69,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         
     }
+    
+    
+    func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
+        print("길게 눌렸습니다")
+        print("Point: \(String(describing: mapPoint))")
+    }
+    
     @objc func buttonTapped(sender: UIButton) {
         print("버튼이 눌렸습니다.")
         
