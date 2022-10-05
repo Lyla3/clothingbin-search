@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12DF540D2BAD6975EC7C8CC8 /* libPods-daummap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 670411B861BCA340990A606F /* libPods-daummap.a */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
 		63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37728EC1ED6003A533E /* ViewController.swift */; };
@@ -294,9 +295,12 @@
 		63ABB5CD28EC245A003A533E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39528EC2007003A533E /* libsqlite3.tbd */; };
 		63ABB5CE28EC245B003A533E /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39428EC1FF0003A533E /* libxml2.tbd */; };
 		63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39328EC1FE0003A533E /* libc++.tbd */; };
+		63E00C0628ED88DA00E6AFD4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0528ED88DA00E6AFD4 /* Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		42831C18ADC8B32604EC3DBF /* Pods-daummap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.release.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.release.xcconfig"; sourceTree = "<group>"; };
+		5D0B5AD9858D2660A1B081A3 /* Pods-daummap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.debug.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.debug.xcconfig"; sourceTree = "<group>"; };
 		63ABB37028EC1ED6003A533E /* daummap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daummap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63ABB37328EC1ED6003A533E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63ABB37528EC1ED6003A533E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -596,6 +600,8 @@
 		63ABB4B628EC202D003A533E /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = changelog.txt; sourceTree = "<group>"; };
 		63ABB5C828EC20B1003A533E /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		63E00C0528ED88DA00E6AFD4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		670411B861BCA340990A606F /* libPods-daummap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-daummap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -611,6 +617,7 @@
 				63ABB39028EC1FC9003A533E /* CoreLocation.framework in Frameworks */,
 				63ABB38E28EC1FBC003A533E /* SystemConfiguration.framework in Frameworks */,
 				63ABB5CB28EC22EE003A533E /* Metal.framework in Frameworks */,
+				12DF540D2BAD6975EC7C8CC8 /* libPods-daummap.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,6 +630,7 @@
 				63ABB37228EC1ED6003A533E /* daummap */,
 				63ABB37128EC1ED6003A533E /* Products */,
 				63ABB38A28EC1FA2003A533E /* Frameworks */,
+				667C06A1D319F876F696F052 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -637,6 +645,7 @@
 		63ABB37228EC1ED6003A533E /* daummap */ = {
 			isa = PBXGroup;
 			children = (
+				63E00C0428ED87DD00E6AFD4 /* Data Model */,
 				63ABB5C928EC20DC003A533E /* Header */,
 				63ABB37328EC1ED6003A533E /* AppDelegate.swift */,
 				63ABB37528EC1ED6003A533E /* SceneDelegate.swift */,
@@ -662,6 +671,7 @@
 				63ABB38F28EC1FC9003A533E /* CoreLocation.framework */,
 				63ABB38D28EC1FBC003A533E /* SystemConfiguration.framework */,
 				63ABB38B28EC1FA2003A533E /* OpenGLES.framework */,
+				670411B861BCA340990A606F /* libPods-daummap.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1018,6 +1028,23 @@
 			path = Header;
 			sourceTree = "<group>";
 		};
+		63E00C0428ED87DD00E6AFD4 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				63E00C0528ED88DA00E6AFD4 /* Data.swift */,
+			);
+			path = "Data Model";
+			sourceTree = "<group>";
+		};
+		667C06A1D319F876F696F052 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5D0B5AD9858D2660A1B081A3 /* Pods-daummap.debug.xcconfig */,
+				42831C18ADC8B32604EC3DBF /* Pods-daummap.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1025,6 +1052,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63ABB38728EC1ED7003A533E /* Build configuration list for PBXNativeTarget "daummap" */;
 			buildPhases = (
+				91592B21201075656A5FE45E /* [CP] Check Pods Manifest.lock */,
 				63ABB36C28EC1ED6003A533E /* Sources */,
 				63ABB36D28EC1ED6003A533E /* Frameworks */,
 				63ABB36E28EC1ED6003A533E /* Resources */,
@@ -1356,12 +1384,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		91592B21201075656A5FE45E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-daummap-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		63ABB36C28EC1ED6003A533E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
+				63E00C0628ED88DA00E6AFD4 /* Data.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
 				63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */,
@@ -1506,6 +1560,7 @@
 		};
 		63ABB38828EC1ED7003A533E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D0B5AD9858D2660A1B081A3 /* Pods-daummap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1540,6 +1595,7 @@
 		};
 		63ABB38928EC1ED7003A533E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 42831C18ADC8B32604EC3DBF /* Pods-daummap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

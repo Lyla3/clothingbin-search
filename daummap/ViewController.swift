@@ -77,6 +77,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다")
         print("Point: \(String(describing: mapPoint))")
+        let poitemLongtapped = MTMapPOIItem()
+        
+        poitemLongtapped.itemName = "New"
+        poitemLongtapped.mapPoint = mapPoint
+        poitemLongtapped.markerType = .bluePin
+        
+        mapView.addPOIItems([poitemLongtapped])
+        
         
         
     }
