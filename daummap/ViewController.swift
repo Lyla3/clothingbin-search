@@ -10,10 +10,13 @@ import CoreLocation
 
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate {
     
+    public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
+    
     var locationManager: CLLocationManager!
     var clLatitude: Double?
     var clLongitude: Double?
+    
     
     //버튼
     private let button: UIButton = {
@@ -72,9 +75,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
-        print("길게 눌렸습니다")
+        print("길게 화면이 눌렸습니다")
         print("Point: \(String(describing: mapPoint))")
+        
+        
     }
+    
+    
     
     @objc func buttonTapped(sender: UIButton) {
         print("버튼이 눌렸습니다.")
