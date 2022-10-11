@@ -295,7 +295,8 @@
 		63ABB5CD28EC245A003A533E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39528EC2007003A533E /* libsqlite3.tbd */; };
 		63ABB5CE28EC245B003A533E /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39428EC1FF0003A533E /* libxml2.tbd */; };
 		63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39328EC1FE0003A533E /* libc++.tbd */; };
-		63E00C0628ED88DA00E6AFD4 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0528ED88DA00E6AFD4 /* Data.swift */; };
+		63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0828F00E3700E6AFD4 /* PositionData.swift */; };
+		63E00C0C28F1811500E6AFD4 /* ClothingBin_Dongjak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -600,7 +601,8 @@
 		63ABB4B628EC202D003A533E /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = changelog.txt; sourceTree = "<group>"; };
 		63ABB5C828EC20B1003A533E /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		63E00C0528ED88DA00E6AFD4 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
+		63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_Dongjak.csv; sourceTree = "<group>"; };
 		670411B861BCA340990A606F /* libPods-daummap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-daummap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1031,7 +1033,8 @@
 		63E00C0428ED87DD00E6AFD4 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				63E00C0528ED88DA00E6AFD4 /* Data.swift */,
+				63E00C0828F00E3700E6AFD4 /* PositionData.swift */,
+				63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -1131,6 +1134,7 @@
 				63ABB51528EC202D003A533E /* bdwn.png in Resources */,
 				63ABB51628EC202D003A533E /* navtree.css in Resources */,
 				63ABB5C228EC202D003A533E /* _m_t_map_circle_8h_source.html in Resources */,
+				63E00C0C28F1811500E6AFD4 /* ClothingBin_Dongjak.csv in Resources */,
 				63ABB5AD28EC202D003A533E /* interface_m_t_map_camera_update.html in Resources */,
 				63ABB56728EC202D003A533E /* functions_d.html in Resources */,
 				63ABB50328EC202D003A533E /* closed.png in Resources */,
@@ -1414,8 +1418,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
-				63E00C0628ED88DA00E6AFD4 /* Data.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
 				63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */,
