@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>현재위치를 확인하여 사용자 근처의 의류수거함을 확인합니다.</string>
 	<key>KAKAO_APP_KEY</key>
 	<string>292607cc5dd66056b5f3278ec4fbb8b7</string>
 	<key>UIApplicationSceneManifest</key>

@@ -19,87 +19,57 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var clLongitude: Double?
     
     var address: String?
+    var currentLocationButtonPressed: Bool = false
     
-    //class로 불러오고 싶음..
-    var positiondatas : PositionData = PositionData()
-    //positiondatas.lat = 37.48140771807268
-    //positiondatas.long = 126.97172329551269
     
     //엑셀 파일 불러오기
     var clotingBinDongjak : [[String]] = []
     
+    //현위치 버튼
+    private let currentLocationButton: UIButton = {
+        let currentLocationbutton = UIButton()
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        currentLocationbutton.setImage(UIImage(named: "currentLoction.png"), for: .normal)
+        currentLocationbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        currentLocationbutton.setTitleColor(.black, for: .normal)
+        currentLocationbutton.translatesAutoresizingMaskIntoConstraints = false
     
-    //버튼
-    private let button: UIButton = {
-        let button = UIButton()
-        button.setTitle("위치 추가", for: .normal)
-        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        button.setTitleColor(.black, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         
-        return button
+        
+        return currentLocationbutton
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         // 현재 위치 받아와서 centerpoint로 설정.
-        
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        
-        locationManager.requestWhenInUseAuthorization()
-        
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        
-        locationManager.startUpdatingLocation()
-        
-
-        
-        
-        let coor = locationManager.location?.coordinate
-        clLatitude = coor?.latitude
-        clLongitude = coor?.longitude
-        
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
+        
+        loadcurrentLocation()
+        
         self.view.addSubview(mapView)
-        self.view.addSubview(self.button)
+        self.view.addSubview(self.currentLocationButton)
         
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        
-        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-        
+        currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
         mapView.setZoomLevel(2, animated: false)
+        
         //mapView.currentLocationTrackingMode = .onWithoutHeading
         
-        //버튼 레이아웃
+        
+        //현재위치 버튼 레이아웃
         NSLayoutConstraint.activate([
-            self.button.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 70),
-            self.button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
+            self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),  
+            self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30)
         ])
         
-        
         loadDataFromCVS()
-        
-  
-        
-        //print(clotingBinDongjak)
-        print(clotingBinDongjak[0][1])
-        
-        
-      
-        for i in 0..<clotingBinDongjak.count {
-                var lat1 = clotingBinDongjak[i][1]
-            }
+
       
         loadData(cvsArray:clotingBinDongjak)
-        
-        
-        loadPin()
-       
         
     }
     
@@ -107,13 +77,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다")
         print("Point: \(String(describing: mapPoint))")
-        
-        let geocoder = MTMapReverseGeoCoder(mapPoint: mapPoint, with: self, withOpenAPIKey: "c5011a61810b5ec038918fd448cd330d")
-        
-        self.geocoder = geocoder
-        geocoder?.startFindingAddress()
+    
       
-        let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?\(geocoder))", message: "", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let cancle = UIAlertAction(title: "취소", style: .default ,handler: nil)
         
         //확인 버튼
@@ -142,34 +108,52 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
 //        address = addressString
 //    }
     
-    
-    @objc func buttonTapped(sender: UIButton) {
-        print("버튼이 눌렸습니다.")
+    func loadcurrentLocation() {
+        
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        locationManager.startUpdatingLocation()
+        
+
         
         
-        let poitem1 = MTMapPOIItem()
+        let coor = locationManager.location?.coordinate
+        clLatitude = coor?.latitude
+        clLongitude = coor?.longitude
         
-        //구현: 화면 중심점 추가
-        poitem1.itemName = "지점"
-        poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: 37.49416901892008, longitude: 127.0091708551989))
-        poitem1.markerType = .redPin
         
-        mapView.addPOIItems([poitem1])
+        
+        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
     }
     
-    @objc func loadPin() {
+    @objc func currentLocationButtonTapped(sender: UIButton) {
         
-        let poitem2 = MTMapPOIItem()
+        print("현재위치 버튼이 눌렸습니다. ")
         
-        //구현: 화면 중심점 추가
-        poitem2.itemName = "헌옷수거함"
-        poitem2.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: 37.48140771807268, longitude: 126.97172329551269))
-        poitem2.markerType = .yellowPin
+        let poCurrentItem = MTMapPOIItem()
         
-        mapView.addPOIItems([poitem2])
+        poCurrentItem.itemName = "현재위치"
+        poCurrentItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!))
+        poCurrentItem.markerType = .yellowPin
         
-        
+        currentLocationButtonPressed = !currentLocationButtonPressed
+        print(currentLocationButtonPressed)
+        if currentLocationButtonPressed {
+            mapView.addPOIItems([poCurrentItem])
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+            
+        } else {
+            mapView.removePOIItems([poCurrentItem])
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+        }
+
     }
+    
     
     //MARK: - 엑셀 파일 파싱 함수
     private func parseCSVAt(url:URL) {
@@ -194,24 +178,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         parseCSVAt(url: URL(fileURLWithPath: path))
     }
     
+    
     private func loadData(cvsArray dataArr:[[String]]) {
         for i in 0..<dataArr.count {
             let lat = dataArr[i][1]
             let lon = dataArr[i][2].split(separator: "\r")
             let info = dataArr[i][0]
-
-            //var stringLon = String(lon)
             
-//            let poitem1 = MTMapPOIItem()
-//
-//            //구현: 화면 중심점 추가
-//            poitem1.itemName = "지점"
-//            poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: 37.49416901892008, longitude: 127.0091708551989))
-//            poitem1.markerType = .redPin
-//
-//            mapView.addPOIItems([poitem1])
-            
-            //print("lat: \(lat) lon: \(lon)")
             
             let stringLon = String(lon[0])
             
@@ -226,5 +199,4 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
     }
     
-
 }

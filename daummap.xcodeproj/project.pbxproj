@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		12DF540D2BAD6975EC7C8CC8 /* libPods-daummap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 670411B861BCA340990A606F /* libPods-daummap.a */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
 		63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37728EC1ED6003A533E /* ViewController.swift */; };
@@ -603,7 +602,6 @@
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
 		63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_Dongjak.csv; sourceTree = "<group>"; };
-		670411B861BCA340990A606F /* libPods-daummap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-daummap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -619,7 +617,6 @@
 				63ABB39028EC1FC9003A533E /* CoreLocation.framework in Frameworks */,
 				63ABB38E28EC1FBC003A533E /* SystemConfiguration.framework in Frameworks */,
 				63ABB5CB28EC22EE003A533E /* Metal.framework in Frameworks */,
-				12DF540D2BAD6975EC7C8CC8 /* libPods-daummap.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,7 +670,6 @@
 				63ABB38F28EC1FC9003A533E /* CoreLocation.framework */,
 				63ABB38D28EC1FBC003A533E /* SystemConfiguration.framework */,
 				63ABB38B28EC1FA2003A533E /* OpenGLES.framework */,
-				670411B861BCA340990A606F /* libPods-daummap.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
