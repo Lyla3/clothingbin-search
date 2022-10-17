@@ -1,0 +1,6 @@
+module Pods_daummap {
+  umbrella header "Pods-daummap-umbrella.h"
+
+  export *
+  module * { export * }
+}
