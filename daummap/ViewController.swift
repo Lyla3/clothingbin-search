@@ -12,6 +12,7 @@ import CoreLocation
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
     
     
+    
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     
@@ -21,6 +22,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     var address: String?
     var currentLocationButtonPressed: Bool = false
+    var pickerList = [String](["서울시 동작구", "서울시 구로구", "서울시 서대문구"])
     
     
     //엑셀 파일 불러오기
@@ -34,11 +36,38 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         currentLocationbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         currentLocationbutton.setTitleColor(.black, for: .normal)
         currentLocationbutton.translatesAutoresizingMaskIntoConstraints = false
-    
+        
+        currentLocationbutton.layer.cornerRadius = 2
+        currentLocationbutton.layer.shadowColor = UIColor.gray.cgColor
+        currentLocationbutton.layer.shadowOpacity = 0.3
+        currentLocationbutton.layer.shadowOffset = CGSize.zero
+        currentLocationbutton.layer.shadowRadius = 6
         
         
         return currentLocationbutton
     }()
+    
+    //지역 선택 버튼
+    private let locationSelectButton: UIButton = {
+        let locationSelectButton = UIButton()
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .light)
+        locationSelectButton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        locationSelectButton.setTitleColor(.black, for: .normal)
+        locationSelectButton.translatesAutoresizingMaskIntoConstraints = false
+        locationSelectButton.setTitle("지역선택", for: .normal)
+        
+        //모서리 및 그림자
+        locationSelectButton.layer.cornerRadius = 2
+        locationSelectButton.layer.shadowColor = UIColor.gray.cgColor
+        locationSelectButton.layer.shadowOpacity = 0.3
+        locationSelectButton.layer.shadowOffset = CGSize.zero
+        locationSelectButton.layer.shadowRadius = 6
+        
+        
+        
+        return locationSelectButton
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,8 +81,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
-        
+        self.view.addSubview(self.locationSelectButton)
+
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
+        
+        
+        locationSelectButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
         
         mapView.setZoomLevel(2, animated: false)
         
@@ -65,6 +98,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
             self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),  
             self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30)
+        ])
+        
+        //지역선택 버튼 레이아웃
+        NSLayoutConstraint.activate([
+            self.locationSelectButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
+            self.locationSelectButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+            self.locationSelectButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10)
         ])
         
         loadDataFromCVS()
@@ -150,6 +190,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
 
     }
     
+    @objc func locationSelectButtonTapped(sender: UIButton) {
+        
+    }
+    
     
     //MARK: - 엑셀 파일 파싱 함수
     private func parseCSVAt(url:URL) {
@@ -170,7 +214,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     private func loadDataFromCVS() {
-        let path = Bundle.main.path(forResource: "ClothingBin_Data", ofType: "csv")!
+        let path = Bundle.main.path(forResource: "ClothingBin_Dongjak", ofType: "csv")!
         parseCSVAt(url: URL(fileURLWithPath: path))
     }
     
@@ -193,6 +237,30 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.addPOIItems([poitem1])
         }
         
+    }
+    
+}
+extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource{
+    
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerList.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerList[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //showPicker.text = pickerList[row]
+    }
+    func createPickerView() {
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
     }
     
 }
