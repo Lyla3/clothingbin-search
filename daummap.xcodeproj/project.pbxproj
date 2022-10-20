@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		634B6CCC29014AE4005906B8 /* ClothingBin_Data.csv in Resources */ = {isa = PBXBuildFile; fileRef = 634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
 		63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37728EC1ED6003A533E /* ViewController.swift */; };
@@ -301,6 +302,7 @@
 /* Begin PBXFileReference section */
 		42831C18ADC8B32604EC3DBF /* Pods-daummap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.release.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.release.xcconfig"; sourceTree = "<group>"; };
 		5D0B5AD9858D2660A1B081A3 /* Pods-daummap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.debug.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.debug.xcconfig"; sourceTree = "<group>"; };
+		634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_Data.csv; sourceTree = "<group>"; };
 		63ABB37028EC1ED6003A533E /* daummap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daummap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63ABB37328EC1ED6003A533E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63ABB37528EC1ED6003A533E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1031,6 +1033,7 @@
 			children = (
 				63E00C0828F00E3700E6AFD4 /* PositionData.swift */,
 				63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */,
+				634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -1161,6 +1164,7 @@
 				63ABB4BC28EC202D003A533E /* map_pin_custom.png in Resources */,
 				63ABB53B28EC202D003A533E /* functions_9.js in Resources */,
 				63ABB56F28EC202D003A533E /* variables_1.js in Resources */,
+				634B6CCC29014AE4005906B8 /* ClothingBin_Data.csv in Resources */,
 				63ABB4B928EC202D003A533E /* OpenSourceNotice.md in Resources */,
 				63ABB59128EC202D003A533E /* properties_0.html in Resources */,
 				63ABB4E728EC202D003A533E /* hierarchy.js in Resources */,
@@ -1574,6 +1578,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = daummap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "의류수거함 검색";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1609,6 +1614,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = daummap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "의류수거함 검색";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

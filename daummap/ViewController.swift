@@ -11,6 +11,7 @@ import CoreLocation
 
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
     
+    
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     
@@ -102,11 +103,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
     }
     
-//    // 좌표를 통해 얻은 문자열 값을 불러오기 위한 함수
-//    func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
-//        guard let addressString = addressString else {return}
-//        address = addressString
-//    }
     
     func loadcurrentLocation() {
         
@@ -174,7 +170,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     private func loadDataFromCVS() {
-        let path = Bundle.main.path(forResource: "ClothingBin_Dongjak", ofType: "csv")!
+        let path = Bundle.main.path(forResource: "ClothingBin_Data", ofType: "csv")!
         parseCSVAt(url: URL(fileURLWithPath: path))
     }
     
