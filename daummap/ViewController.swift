@@ -22,11 +22,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     var address: String?
     var currentLocationButtonPressed: Bool = false
-    var pickerList = [String](["서울시 동작구", "서울시 구로구", "서울시 서대문구"])
+    //var pickerList = [String](["서울시 동작구", "서울시 구로구", "서울시 서대문구"])
+    var pickerViewcityList = [String](["서울시 동작구","서울시 구로구","서울시 양천구","서울시 종로구","서울시 영등포구","서울시 관악구"])
+    var pickerViewcountyList = [String](["동작구", "구로구", "서대문구"])
+    
+    var selectedCity : String = "서울"
+    var selectedCounty : String = "동작구"
     
     
     //엑셀 파일 불러오기
-    var clotingBinDongjak : [[String]] = []
+    var CVSdataArray : [[String]] = []
     
     //현위치 버튼
     private let currentLocationButton: UIButton = {
@@ -48,13 +53,17 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }()
     
     //지역 선택 버튼
-    private let locationSelectButton: UIButton = {
-        let locationSelectButton = UIButton()
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .light)
+    private let locationSelectButton: UITextField = {
+        let locationSelectButton = UITextField()
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         locationSelectButton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        locationSelectButton.setTitleColor(.black, for: .normal)
+        locationSelectButton.minimumFontSize = 20
+        locationSelectButton.textColor = UIColor.black
         locationSelectButton.translatesAutoresizingMaskIntoConstraints = false
-        locationSelectButton.setTitle("지역선택", for: .normal)
+        locationSelectButton.text = "지역선택"
+        locationSelectButton.textAlignment = .center
+        //locationSelectButton.font = UIFont(sy)
+        
         
         //모서리 및 그림자
         locationSelectButton.layer.cornerRadius = 2
@@ -78,6 +87,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         mapView.baseMapType = .standard
         
         loadcurrentLocation()
+        createPickerView()
         
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
@@ -107,10 +117,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             self.locationSelectButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10)
         ])
         
-        loadDataFromCVS()
+        //loadDataFromCVS()
 
       
-        loadData(cvsArray:clotingBinDongjak)
+        loadData(cvsArray:CVSdataArray)
         
     }
     
@@ -204,7 +214,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             if let dataArr = dataEncoded?.components(separatedBy: "\n").map({$0.components(separatedBy: ",")}) {
                 
                 for item in dataArr{
-                    clotingBinDongjak.append(item)
+                    CVSdataArray.append(item)
                 }
             }
             
@@ -212,11 +222,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             print("Error reading CVS file.")
         }
     }
-    
-    private func loadDataFromCVS() {
-        let path = Bundle.main.path(forResource: "ClothingBin_Dongjak", ofType: "csv")!
+    //MARK: - CVS 데이터 로드
+    private func loadDataFromCVSAt(resource:String) {
+        let path = Bundle.main.path(forResource: resource, ofType: "csv")!
         parseCSVAt(url: URL(fileURLWithPath: path))
     }
+    
     
     
     private func loadData(cvsArray dataArr:[[String]]) {
@@ -238,29 +249,97 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         }
         
     }
+    //MARK: - PickerView
+    func createPickerView() {
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        //pickerView.dataSourece = self
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let btnDone = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(onPickDone))
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let btnCancel = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(onPickCancel))
+        toolbar.setItems([btnCancel , space , btnDone], animated: true)
+        toolbar.isUserInteractionEnabled = true
+        
+        //텍스트필드 입력 수단 연결
+        locationSelectButton.inputView = pickerView
+        locationSelectButton.inputAccessoryView = toolbar
+        
+    }
+    //MARK: - PickerView 확인 버튼
+
+    @objc func onPickDone() {
+        /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
+        locationSelectButton.text = "\(selectedCity) \(selectedCounty)"
+    
+        
+        switch selectedCity {
+        case "서울":
+            print("서울이 선택되었습니다.")
+            loadDataFromCVSAt(resource: "ClothingBin_Dongjak")
+            loadData(cvsArray:CVSdataArray)
+            //locationSelectButton.resignFirstResponder()
+        default:
+            locationSelectButton.resignFirstResponder()
+        }
+        locationSelectButton.resignFirstResponder()
+       /// 피커뷰 내림
+    }
+    
+    @objc func onPickCancel() {
+        locationSelectButton.resignFirstResponder() /// 피커뷰 내림
+    }
     
 }
+
+//MARK: - PickerView 익스텐션 구현
+
 extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource{
     
-    
+    //PickerView의 component 개수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
     
+    //PickerView의 component별 행수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerList.count
+        switch component {
+        case 0:
+            return pickerViewcityList.count
+        case 1:
+            return pickerViewcountyList.count
+        default:
+            return 0
+        }
     }
     
+    //PickerView의 component의 내용에 들어갈 list
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerList[row]
+        switch component {
+                case 0:
+                    return "\(pickerViewcityList[row])"
+                case 1:
+                    return "\(pickerViewcountyList[row])"
+                default:
+                    return ""
+                }
+    }
+    //피커뷰에서 선택된 행을 처리할 수 있는 메서드
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch component {
+        case 0:
+            selectedCity = pickerViewcityList[row]
+        case 1:
+            selectedCounty = pickerViewcountyList[row]
+        default:
+            break
+            
+        }
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        //showPicker.text = pickerList[row]
-    }
-    func createPickerView() {
-        let pickerView = UIPickerView()
-        pickerView.delegate = self
-    }
+    
     
 }
