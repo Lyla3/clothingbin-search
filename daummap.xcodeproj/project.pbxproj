@@ -8,7 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		6344DFD0290695EF00950B20 /* clothingBin_Yangcheon.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFCF290695EF00950B20 /* clothingBin_Yangcheon.csv */; };
-		634B6CCC29014AE4005906B8 /* ClothingBin_Data.csv in Resources */ = {isa = PBXBuildFile; fileRef = 634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */; };
+		6344DFDA2906FB8C00950B20 /* Seoul_guro.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFD92906FB8C00950B20 /* Seoul_guro.csv */; };
+		6344DFDC290D507D00950B20 /* Seoul_Yeoungdeungpo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDB290D507D00950B20 /* Seoul_Yeoungdeungpo.csv */; };
+		6344DFDE290D571300950B20 /* Seoul_Yangcheon.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */; };
+		6344DFE0290D573500950B20 /* Seoul_Gongro.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDF290D573500950B20 /* Seoul_Gongro.csv */; };
+		6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFE1290D577600950B20 /* Seoul_gwanak.csv */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
 		63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37728EC1ED6003A533E /* ViewController.swift */; };
@@ -304,7 +308,11 @@
 		42831C18ADC8B32604EC3DBF /* Pods-daummap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.release.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.release.xcconfig"; sourceTree = "<group>"; };
 		5D0B5AD9858D2660A1B081A3 /* Pods-daummap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-daummap.debug.xcconfig"; path = "Target Support Files/Pods-daummap/Pods-daummap.debug.xcconfig"; sourceTree = "<group>"; };
 		6344DFCF290695EF00950B20 /* clothingBin_Yangcheon.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clothingBin_Yangcheon.csv; sourceTree = "<group>"; };
-		634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_Data.csv; sourceTree = "<group>"; };
+		6344DFD92906FB8C00950B20 /* Seoul_guro.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_guro.csv; sourceTree = "<group>"; };
+		6344DFDB290D507D00950B20 /* Seoul_Yeoungdeungpo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Yeoungdeungpo.csv; sourceTree = "<group>"; };
+		6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Yangcheon.csv; sourceTree = "<group>"; };
+		6344DFDF290D573500950B20 /* Seoul_Gongro.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gongro.csv; sourceTree = "<group>"; };
+		6344DFE1290D577600950B20 /* Seoul_gwanak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_gwanak.csv; sourceTree = "<group>"; };
 		63ABB37028EC1ED6003A533E /* daummap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daummap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63ABB37328EC1ED6003A533E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63ABB37528EC1ED6003A533E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1035,8 +1043,12 @@
 			children = (
 				63E00C0828F00E3700E6AFD4 /* PositionData.swift */,
 				63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */,
+				6344DFD92906FB8C00950B20 /* Seoul_guro.csv */,
 				6344DFCF290695EF00950B20 /* clothingBin_Yangcheon.csv */,
-				634B6CCB29014AE4005906B8 /* ClothingBin_Data.csv */,
+				6344DFDB290D507D00950B20 /* Seoul_Yeoungdeungpo.csv */,
+				6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */,
+				6344DFDF290D573500950B20 /* Seoul_Gongro.csv */,
+				6344DFE1290D577600950B20 /* Seoul_gwanak.csv */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -1167,7 +1179,6 @@
 				63ABB4BC28EC202D003A533E /* map_pin_custom.png in Resources */,
 				63ABB53B28EC202D003A533E /* functions_9.js in Resources */,
 				63ABB56F28EC202D003A533E /* variables_1.js in Resources */,
-				634B6CCC29014AE4005906B8 /* ClothingBin_Data.csv in Resources */,
 				63ABB4B928EC202D003A533E /* OpenSourceNotice.md in Resources */,
 				63ABB59128EC202D003A533E /* properties_0.html in Resources */,
 				63ABB4E728EC202D003A533E /* hierarchy.js in Resources */,
@@ -1214,6 +1225,8 @@
 				63ABB5B628EC202D003A533E /* struct_m_t_map_bounds.html in Resources */,
 				63ABB55D28EC202D003A533E /* defines_0.js in Resources */,
 				63ABB5AA28EC202D003A533E /* protocol_m_t_map_reverse_geo_coder_delegate_01-p-members.html in Resources */,
+				6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */,
+				6344DFDA2906FB8C00950B20 /* Seoul_guro.csv in Resources */,
 				63ABB54628EC202D003A533E /* all_11.html in Resources */,
 				63ABB51C28EC202D003A533E /* properties_3.html in Resources */,
 				63ABB4C428EC202D003A533E /* th_line.png in Resources */,
@@ -1269,11 +1282,13 @@
 				63ABB52628EC202D003A533E /* typedefs_0.html in Resources */,
 				63ABB4C328EC202D003A533E /* copyright.png in Resources */,
 				63ABB59A28EC202D003A533E /* navtreeindex0.js in Resources */,
+				6344DFDC290D507D00950B20 /* Seoul_Yeoungdeungpo.csv in Resources */,
 				63ABB59028EC202D003A533E /* properties_9.js in Resources */,
 				63ABB54728EC202D003A533E /* properties_0.js in Resources */,
 				63ABB58A28EC202D003A533E /* functions_4.js in Resources */,
 				63ABB53328EC202D003A533E /* all_7.js in Resources */,
 				63ABB52928EC202D003A533E /* functions_6.js in Resources */,
+				6344DFE0290D573500950B20 /* Seoul_Gongro.csv in Resources */,
 				63ABB4CD28EC202D003A533E /* info_box_tail.png in Resources */,
 				63ABB4CA28EC202D003A533E /* info_box.png in Resources */,
 				63ABB51328EC202D003A533E /* struct_m_t_map_point_geo.html in Resources */,
@@ -1356,6 +1371,7 @@
 				63ABB5B528EC202D003A533E /* navtreedata.js in Resources */,
 				63ABB4CF28EC202D003A533E /* map_present_direction.png in Resources */,
 				63ABB55828EC202D003A533E /* properties_2.js in Resources */,
+				6344DFDE290D571300950B20 /* Seoul_Yangcheon.csv in Resources */,
 				63ABB57628EC202D003A533E /* search_l.png in Resources */,
 				63ABB4F928EC202D003A533E /* hierarchy.html in Resources */,
 				63ABB4CC28EC202D003A533E /* map_pinup_custom.png in Resources */,

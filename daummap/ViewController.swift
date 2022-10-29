@@ -22,12 +22,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     var address: String?
     var currentLocationButtonPressed: Bool = false
-    //var pickerList = [String](["서울시 동작구", "서울시 구로구", "서울시 서대문구"])
-    var pickerViewcityList = [String](["서울시 동작구","서울시 구로구","서울시 양천구","서울시 종로구","서울시 영등포구","서울시 관악구"])
-    var pickerViewcountyList = [String](["동작구", "구로구", "서대문구"])
     
-    var selectedCity : String = "서울"
-    var selectedCounty : String = "동작구"
+    var pickerViewcityList = [String](["서울시 동작구","서울시 구로구","서울시 양천구","서울시 종로구","서울시 영등포구","서울시 관악구"])
+    
+    var pickerToFileDictionary : [String:String] = ["서울시 동작구":"ClothingBin_Dongjak","서울시 구로구":"Seoul_guro","서울시 양천구":"Seoul_Yangcheon","서울시 종로구":"Seoul_Gongro","서울시 영등포구":"Seoul_Yeoungdeungpo","서울시 관악구":"Seoul_gwanak"]
+    
+    var selectedCity : String = "서울시 동작구"
+    
+    var pickerViewcityListIsOn = [Bool]([false,false,false,false,false,false])
+    
+    var currentRow : Int = 0
     
     
     //엑셀 파일 불러오기
@@ -92,7 +96,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
         self.view.addSubview(self.locationSelectButton)
-
+        
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
         
@@ -106,7 +110,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         //현재위치 버튼 레이아웃
         NSLayoutConstraint.activate([
             self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
-            self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),  
+            self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
             self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30)
         ])
         
@@ -118,8 +122,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         ])
         
         //loadDataFromCVS()
-
-      
+        
+        
         loadData(cvsArray:CVSdataArray)
         
     }
@@ -128,8 +132,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다")
         print("Point: \(String(describing: mapPoint))")
-    
-      
+        
+        
         let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let cancle = UIAlertAction(title: "취소", style: .default ,handler: nil)
         
@@ -160,19 +164,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationManager.delegate = self
         
         locationManager.requestWhenInUseAuthorization()
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        
         locationManager.startUpdatingLocation()
-        
-
-        
         
         let coor = locationManager.location?.coordinate
         clLatitude = coor?.latitude
         clLongitude = coor?.longitude
-        
-        
         
         mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
     }
@@ -197,7 +194,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.removePOIItems([poCurrentItem])
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
         }
-
+        
     }
     
     @objc func locationSelectButtonTapped(sender: UIButton) {
@@ -240,15 +237,19 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             let stringLon = String(lon[0])
             
             let poitem1 = MTMapPOIItem()
-
+            
             poitem1.itemName = info
             poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(lat) ?? 0, longitude: Double(stringLon) ?? 0))
             poitem1.markerType = .redPin
-
+            
             mapView.addPOIItems([poitem1])
         }
-        
     }
+    
+    func removeData() {
+        mapView.removeAllPOIItems()
+    }
+    
     //MARK: - PickerView
     func createPickerView() {
         let pickerView = UIPickerView()
@@ -269,24 +270,66 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationSelectButton.inputAccessoryView = toolbar
         
     }
+    
+    
     //MARK: - PickerView 확인 버튼
-
+    
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
-        locationSelectButton.text = "\(selectedCity) \(selectedCounty)"
-    
+        locationSelectButton.text = "\(selectedCity)"
+        
         
         switch selectedCity {
-        case "서울":
-            print("서울이 선택되었습니다.")
-            loadDataFromCVSAt(resource: "ClothingBin_Dongjak")
-            loadData(cvsArray:CVSdataArray)
-            //locationSelectButton.resignFirstResponder()
+        case "서울시 동작구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 동작구"]!)
+            }
+        case "서울시 구로구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 구로구"]!)
+            }
+        case "서울시 영등포구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 영등포구"]!)
+            }
+        case "서울시 양천구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 양천구"]!)
+            }
+        case "서울시 관악구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 관악구"]!)
+            }
+        case "서울시 종로구":
+            if pickerViewcityListIsOn[currentRow] == false {
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 종로스위프트 구"]!)
+            }
+            
+            
         default:
             locationSelectButton.resignFirstResponder()
         }
         locationSelectButton.resignFirstResponder()
-       /// 피커뷰 내림
+        /// 피커뷰 내림
+    }
+    
+    func UIPickerToCVS (resourceFileName:String) {
+        CVSdataArray = []
+        mapView.removeAllPOIItems()
+        loadDataFromCVSAt(resource: resourceFileName)
+        loadData(cvsArray:CVSdataArray)
+        
+        print("CVSdataArray의 값\(CVSdataArray.count/2)")
+        
+        print("CVSdataArray: \(Int(trunc(Double(CVSdataArray.count/2))))")
+        
+        //mapView의 시점을 배열의 목록 중 가운데 지점의 좌표로 보냄.
+        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][1]) ?? 126.978179, longitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][2].split(separator: "\r")[0]) ?? 126.978179)), animated: true)
+        
+        for i in 0..<pickerViewcityListIsOn.count {
+            pickerViewcityListIsOn[i] = false
+        }
+        pickerViewcityListIsOn[currentRow] = true
     }
     
     @objc func onPickCancel() {
@@ -301,43 +344,25 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     
     //PickerView의 component 개수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
+        return 1
     }
     
     //PickerView의 component별 행수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch component {
-        case 0:
-            return pickerViewcityList.count
-        case 1:
-            return pickerViewcountyList.count
-        default:
-            return 0
-        }
+        return pickerViewcityList.count
     }
     
     //PickerView의 component의 내용에 들어갈 list
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch component {
-                case 0:
-                    return "\(pickerViewcityList[row])"
-                case 1:
-                    return "\(pickerViewcountyList[row])"
-                default:
-                    return ""
-                }
+        return "\(pickerViewcityList[row])"
     }
     //피커뷰에서 선택된 행을 처리할 수 있는 메서드
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch component {
-        case 0:
-            selectedCity = pickerViewcityList[row]
-        case 1:
-            selectedCounty = pickerViewcountyList[row]
-        default:
-            break
-            
-        }
+        //선택된 city를 selectedCity에 넣어줌.
+        selectedCity = pickerViewcityList[row]
+        
+        currentRow=row
+        
     }
     
     
