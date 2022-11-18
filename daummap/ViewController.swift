@@ -12,7 +12,6 @@ import CoreLocation
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
     
     
-    
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     
@@ -85,6 +84,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         // 현재 위치 받아와서 centerpoint로 설정.
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
@@ -96,6 +97,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
         self.view.addSubview(self.locationSelectButton)
+
+        
+        
         
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
@@ -201,6 +205,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
     }
     
+
     
     //MARK: - 엑셀 파일 파싱 함수
     private func parseCSVAt(url:URL) {
@@ -302,7 +307,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             }
         case "서울시 종로구":
             if pickerViewcityListIsOn[currentRow] == false {
-                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 종로스위프트 구"]!)
+                UIPickerToCVS(resourceFileName:pickerToFileDictionary["서울시 종로구"]!)
             }
             
             
@@ -319,10 +324,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         loadDataFromCVSAt(resource: resourceFileName)
         loadData(cvsArray:CVSdataArray)
         
-        print("CVSdataArray의 값\(CVSdataArray.count/2)")
-        
-        print("CVSdataArray: \(Int(trunc(Double(CVSdataArray.count/2))))")
-        
         //mapView의 시점을 배열의 목록 중 가운데 지점의 좌표로 보냄.
         mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][1]) ?? 126.978179, longitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][2].split(separator: "\r")[0]) ?? 126.978179)), animated: true)
         
@@ -336,7 +337,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationSelectButton.resignFirstResponder() /// 피커뷰 내림
     }
     
+    
+    
 }
+
 
 //MARK: - PickerView 익스텐션 구현
 
