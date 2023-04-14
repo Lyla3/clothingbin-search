@@ -172,10 +172,15 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationManager.startUpdatingLocation()
         
         let coor = locationManager.location?.coordinate
-        clLatitude = coor?.latitude
-        clLongitude = coor?.longitude
         
-        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+        guard let clLatitude = coor?.latitude, let clLongitude = coor?.longitude
+        else {print("현재위치가 없습니다.")
+            return
+        }
+        //clLatitude = coor?.latitude
+        //clLongitude = coor?.longitude
+        
+        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude, longitude: clLongitude)), animated: true)
     }
     
     @objc func currentLocationButtonTapped(sender: UIButton) {

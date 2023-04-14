@@ -1591,7 +1591,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W59RZD488N;
+				DEVELOPMENT_TEAM = QGS57V8K4N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/IOS_DaumMap_SDK_1.4.0\\ 7/lib/DaumMap.embeddedframework",
@@ -1627,7 +1627,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = W59RZD488N;
+				DEVELOPMENT_TEAM = QGS57V8K4N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/IOS_DaumMap_SDK_1.4.0\\ 7/lib/DaumMap.embeddedframework",
