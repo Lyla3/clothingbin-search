@@ -101,18 +101,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }()
     
     //activityIndicator 생성
+    //로딩중 표시
     lazy var activityIndicator: UIActivityIndicatorView = {
             // Create an indicator.
-            let activityIndicator = UIActivityIndicatorView()
-            activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-            activityIndicator.center = self.view.center
-            activityIndicator.color = UIColor.red
-            // Also show the indicator even when the animation is stopped.
-            activityIndicator.hidesWhenStopped = true
-        activityIndicator.style = UIActivityIndicatorView.Style.medium
-            // Start animation.
-            activityIndicator.stopAnimating()
-            return activityIndicator }()
+        let activityIndicator = UIActivityIndicatorView()
+               activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+               activityIndicator.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
+               activityIndicator.hidesWhenStopped = false
+               activityIndicator.style = UIActivityIndicatorView.Style.medium
+               activityIndicator.startAnimating()
+        
+               return activityIndicator
+    }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,6 +135,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
         self.view.addSubview(self.locationSelectButton)
+        
+        //self.view.addSubview(self.activityIndicator)
+
         
         
         
@@ -276,18 +281,25 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             poCurrentItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!))
             poCurrentItem.markerType = .yellowPin
             
-            currentLocationButtonPressed = !currentLocationButtonPressed
-            print(currentLocationButtonPressed)
-            if currentLocationButtonPressed {
-                mapView.addPOIItems([poCurrentItem])
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-                
+            mapView.removeAllPOIItems()
+            mapView.addPOIItems([poCurrentItem])
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
             
-                
-            } else {
-                mapView.removePOIItems([poCurrentItem])
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-            }
+//            
+//            currentLocationButtonPressed = !currentLocationButtonPressed
+//            print(currentLocationButtonPressed)
+//            if currentLocationButtonPressed {
+//                mapView.removeAllPOIItems()
+//                mapView.addPOIItems([poCurrentItem])
+//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+//                
+//            
+//                
+//            } else {
+//                mapView.removeAllPOIItems()
+//                mapView.addPOIItems([poCurrentItem])
+//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+//            }
             
             //현재 위치 근처의 의류수거함 데이터 불러오는 함수 실행,CVSdataArray 업데이트
             loadDataFromCVSAt(resource:"ClothingBin_all")
@@ -389,7 +401,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     
     //데이터를 cvs에서 불러와서 poitem1의 배열에 담아 이를 mapView에 띄움.
-    private func loadData(cvsArray dataArr:[[String]]) {
+    private func loadData(cvsArray dataArr:[[String]],  completionHandler: @escaping () -> Void ) {
+        
+        //로딩중 표시
+        print("로딩중 표시 - loadData")
+        print("로딩중 표시 - loadData2")
+        print("ㅇㅅㅇ?\(dataArr.count)")
+        DispatchQueue.main.async {
+            
+            //self.view.backgroundColor = UIColor.white
+            self.activityIndicator.startAnimating()
+            self.view.addSubview(self.activityIndicator)
+        }
+        print("로딩중 표시 - loadData3")
+        print(dataArr.count - 1 )
                 for i in 0 ..< dataArr.count - 1 {
         
                    
@@ -412,37 +437,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                     poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(lat) ?? 0, longitude: Double(stringLon) ?? 0))
                     poitem1.markerType = .redPin
                     
-                    //poitem1.customImageAnchorPointOffset =  .init(offsetX: 0, offsetY: 0)
-                    
-//                    let view = makerInfoView
-//                        view.layer.borderColor = UIColor.black.cgColor
-//                        view.layer.borderWidth = 1
-//                        view.layer.cornerRadius = 10;
-//                        view.layer.masksToBounds = true;
-                        //view.title_lb.text = title
-                        
-                    //poitem1.customCalloutBalloonView = view
-                    
-                    
-                    //poitem1.customCalloutBalloonView = makerInfoView
-                    
-                    //layout 잡기
-//                    makerInfoView.translatesAutoresizingMaskIntoConstraints = false
-//                    
-//                    makerInfoView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-//                    makerInfoView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-                    //makerInfoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-                    
-                    //poitem1.customImageAnchorPointOffset = .init(offsetX: 0, offsetY: 0)
-                    //poitem1.markerSelectedType =
-                    //poitem1.customImageName =
                     mapView.addPOIItems([poitem1])
                 }
+        print("컴플리션 핸들러 호출")
+        print("로딩중 표시 - loadData4")
+
+        completionHandler()
+       
+
         
-        
-        
-        //현재위치에서 가까운 10개 뽑기
-        var distanceArray:[[String]] = []
+
         
         //사용 안하는 메서드
 //        for i in 0..<dataArr.count {
@@ -496,10 +500,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         //dump(sortedArray[0][0])
         
+        //mapView.setZoomLevel(4, animated: true)
+                
         
-        
-        mapView.setZoomLevel(4, animated: true)
-
     }
     
     func removeData() {
@@ -574,11 +577,35 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         mapView.removeAllPOIItems()
         loadDataFromCVSAt(resource: resourceFileName)
         if CVSdataArray.count != 0 {
-            loadData(cvsArray:CVSdataArray)
+            
+            loadData(cvsArray:CVSdataArray){
+                print("클로저 실행1")
+                DispatchQueue.main.async {
+                    if self.activityIndicator.isAnimating {
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicator.isHidden = true
+
+                    }
+                       }
+                
+               
+                //self.activityIndicator.removeFromSuperview()
+                print("클로저 stopAnimating")
+                
+               
+                
+                    
+               
+                
+            }
             
             //mapView의 시점을 배열의 목록 중 가운데 지점의 좌표로 보냄.
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][1]) ?? 126.978179, longitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][2].split(separator: "\r")[0]) ?? 126.978179)), animated: true)
             mapView.setZoomLevel(1, animated: true)
+            
+            
+           
+            
         }
         
 
