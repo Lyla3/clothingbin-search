@@ -138,10 +138,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         //self.view.addSubview(self.activityIndicator)
 
-        
-        
-        
-        
+    
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
         
@@ -165,8 +162,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         NSLayoutConstraint.activate([
             self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
             self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-            self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
-            self.currentLocationButton.widthAnchor.constraint(equalToConstant: 35),
+            //self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
+            self.currentLocationButton.widthAnchor.constraint(equalToConstant: 33),
             self.currentLocationButton.heightAnchor.constraint(equalToConstant: 33)
             
             
@@ -361,25 +358,42 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func nearCurrentloadData(cvsArray dataArr:[[String]]) {
         
         var distanceArray:[[String]] = []
+        print("clLatitude:\(String(describing: clLatitude)) clLongitude: \(String(describing: clLongitude))")
         
         for i in 0..<dataArr.count {
             
+            let info = dataArr[i][0]
+            
             let lat = dataArr[i][1]
             let lon = dataArr[i][2].split(separator: "\r")
+            
+            let CLlocationArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
+            
+            var nowDistance = locationManager.location?.distance(from: CLlocationArr)
+            print("---nowDistance---")
+            print(nowDistance ?? "nowDistance 값이 없습니다")
+            
+            //let distance = CLLocationDistance(locationManager.location,CLlocationArr)
             
             let latDistance = ((Double(lat) ?? 0) - clLatitude!)
             
             //String(lon[0])이 실제 값
             let lonDistance = ((Double(String(lon[0])) ?? 0) - clLongitude!)
             
-            let currentDistance = String((pow(latDistance,2) + pow(lonDistance,2)))
-            distanceArray.append([currentDistance,lat,String(lon[0])])
+            
+            let currentDistance = String(Double(nowDistance ?? 10000000))
+
+            
+            //let currentDistance = String((pow(latDistance,2) + pow(lonDistance,2)))
+            distanceArray.append([currentDistance,lat,String(lon[0]),info])
+            
+            
         
         }
         
-        let sortedArray = distanceArray.sorted(by: {$0[0] < $1[0]})
+        let sortedArray = distanceArray.sorted(by: {Double($0[0]) ?? 9000000 < Double($1[0]) ?? 9000000 })
         dump(sortedArray)
-        print(sortedArray)
+        //print(sortedArray)
         if sortedArray.count != 0 {
             print("----------가까운 10개만 반환-----------")
             dump(sortedArray[0...9])
@@ -388,6 +402,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             for i in 0...10{
                 let poitem1 = MTMapPOIItem()
                 poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(sortedArray[i][1])!, longitude: Double(sortedArray[i][2])!))
+                poitem1.itemName = sortedArray[i][3]
                 poitem1.markerType = .redPin
     
                 mapView.addPOIItems([poitem1])
