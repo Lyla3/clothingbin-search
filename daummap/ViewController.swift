@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  daummap채ㅣ
+//  daummap
 //
 //  Created by 너굴 on 2022/10/04.
 //
@@ -12,6 +12,12 @@ import Foundation
 
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
     
+    var locationCalculatorManager = LocationCalculatorManager()
+    
+    //mapview 터치시 피커뷰 내려가도록
+    func mapView(_ mapView: MTMapView!, singleTapOn mapPoint: MTMapPoint!) {
+        locationSelectButton.resignFirstResponder()
+    }
     
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
@@ -60,7 +66,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         currentLocationbutton.layer.shadowOffset = CGSize.zero
         currentLocationbutton.layer.shadowRadius = 6
         
-        
         return currentLocationbutton
     }()
     
@@ -74,7 +79,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationSelectButton.translatesAutoresizingMaskIntoConstraints = false
         locationSelectButton.text = "지역선택"
         locationSelectButton.textAlignment = .center
-        //locationSelectButton.font = UIFont(sy)
         
         
         //모서리 및 그림자
@@ -110,7 +114,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                activityIndicator.hidesWhenStopped = false
                activityIndicator.style = UIActivityIndicatorView.Style.medium
                activityIndicator.startAnimating()
-        
                return activityIndicator
     }()
     
@@ -118,26 +121,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        //makeUI()
-        
         // 현재 위치 받아와서 centerpoint로 설정.
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
-        
-        
         loadcurrentLocation()
         createPickerView()
-        
+    
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
         self.view.addSubview(self.locationSelectButton)
-        
-        //self.view.addSubview(self.activityIndicator)
-
     
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
@@ -145,8 +138,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationSelectButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
         
         mapView.setZoomLevel(2, animated: false)
-        
-        //mapView.currentLocationTrackingMode = .onWithoutHeading
+    
         
         //지역선택 버튼 레이아웃
         NSLayoutConstraint.activate([
@@ -156,93 +148,56 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             self.locationSelectButton.heightAnchor.constraint(equalToConstant: 40)
         ])
 
-        
-        
         //현재위치 버튼 레이아웃
         NSLayoutConstraint.activate([
             self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
             self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-            //self.currentLocationButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
             self.currentLocationButton.widthAnchor.constraint(equalToConstant: 33),
             self.currentLocationButton.heightAnchor.constraint(equalToConstant: 33)
-            
-            
-            
         ])
         
         
-        
-        //loadDataFromCVS()
-        
-        //markerInfoView view 레이아웃 설정
-        
-       
-
-        
-//  makerInfoView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//
-//            self.makerInfoView.widthAnchor.constraint(equalToConstant: 30),
-////            self.makerInfoView.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
-//            self.makerInfoView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-//            self.makerInfoView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-//            self.makerInfoView.heightAnchor.constraint(equalToConstant: 40)
-//        ])
-        
-        //loadData(cvsArray:CVSdataArray)
-        
     }
     
+    
+    //사용 안하는 메서드
    func makeUI(){
        makerInfoView.translatesAutoresizingMaskIntoConstraints = false
-       
        makerInfoView.heightAnchor.constraint(equalToConstant: 30).isActive = true
        makerInfoView.widthAnchor.constraint(equalToConstant: 30).isActive = true
        makerInfoView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-       
-       
     }
     
     //MARK: - longTap
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
-        print("길게 화면이 눌렸습니다")
+        print("길게 화면이 눌렸습니다 - longtap")
         print("Point: \(String(describing: mapPoint))")
-        
         
         let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let cancle = UIAlertAction(title: "취소", style: .default ,handler: nil)
         
-        //확인 버튼
+        //확인 버튼(:버튼 추가)
         let ok = UIAlertAction(title: "확인", style: .destructive, handler: { action in
-            
             let poitemLongtapped = MTMapPOIItem()
-            
             poitemLongtapped.itemName = "New"
             poitemLongtapped.mapPoint = mapPoint
             poitemLongtapped.markerType = .bluePin
-            
             mapView.addPOIItems([poitemLongtapped])
-            
         })
+        
         //버튼을 알림창에 추가해줌
         alert.addAction(cancle)
-        
         alert.addAction(ok)
         present(alert,animated: true, completion: nil)
-        
     }
     
     
     func loadcurrentLocation() {
-        
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
-        
         let coor = locationManager.location?.coordinate
         
         
@@ -255,61 +210,43 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             self.alertCurrentLocation()
         }
         
-        
-        
-        
     }
     
     @objc func currentLocationButtonTapped(sender: UIButton) {
         
         print("현재위치 버튼이 눌렸습니다. ")
         
-        loadcurrentLocation()
-        
-        
-        
-        if clLatitude != nil && clLatitude != nil {
-            
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-            
-            let poCurrentItem = MTMapPOIItem()
-            
-            poCurrentItem.itemName = "현재위치"
-            poCurrentItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!))
-            poCurrentItem.markerType = .yellowPin
-            
-            mapView.removeAllPOIItems()
-            mapView.addPOIItems([poCurrentItem])
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-            
-//            
-//            currentLocationButtonPressed = !currentLocationButtonPressed
-//            print(currentLocationButtonPressed)
-//            if currentLocationButtonPressed {
-//                mapView.removeAllPOIItems()
-//                mapView.addPOIItems([poCurrentItem])
-//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-//                
-//            
-//                
-//            } else {
-//                mapView.removeAllPOIItems()
-//                mapView.addPOIItems([poCurrentItem])
-//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
-//            }
-            
-            //현재 위치 근처의 의류수거함 데이터 불러오는 함수 실행,CVSdataArray 업데이트
-            loadDataFromCVSAt(resource:"ClothingBin_all")
-            
-            //업데이트된 CVSdataArray를 바탕으로 데이터를 불러온다. (가까이 있는 10개)
-            //loadData(cvsArray: CVSdataArray)
-            nearCurrentloadData(cvsArray: CVSdataArray)
-            
-        } else {
+        switch locationManager.authorizationStatus {
+        case .denied, .notDetermined, .restricted:
             self.alertCurrentLocation()
-            print("현재 위치를 활성화 해주세요")
+             
+        case .authorizedAlways, .authorizedWhenInUse:
+                loadcurrentLocation()
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+                
+                let poCurrentItem = MTMapPOIItem()
+                
+                poCurrentItem.itemName = "현재위치"
+                poCurrentItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!))
+                poCurrentItem.markerType = .yellowPin
+                
+                mapView.removeAllPOIItems()
+                mapView.addPOIItems([poCurrentItem])
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: clLatitude!, longitude: clLongitude!)), animated: true)
+                
+                
+                //현재 위치 근처의 의류수거함 데이터 불러오는 함수 실행,CVSdataArray 업데이트
+                loadDataFromCVSAt(resource:"ClothingBin_all")
+                
+                //업데이트된 CVSdataArray를 바탕으로 데이터를 불러온다. (가까이 있는 10개)
+                //loadData(cvsArray: CVSdataArray)
+                nearCurrentloadData(cvsArray: CVSdataArray)
+                
+            
+            
+        @unknown default:
+            self.alertCurrentLocation()
         }
-        
     }
     
     //현재 위치 설정 알림
@@ -328,8 +265,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     @objc func locationSelectButtonTapped(sender: UIButton) {
         
     }
-    
-    
     
     //MARK: - 엑셀 파일 파싱 함수
     private func parseCSVAt(url:URL) {
@@ -356,60 +291,64 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //현재 위치 근처 데이터 의류수거함 뽑는 함수
     private func nearCurrentloadData(cvsArray dataArr:[[String]]) {
-        
+    
         var distanceArray:[[String]] = []
         print("clLatitude:\(String(describing: clLatitude)) clLongitude: \(String(describing: clLongitude))")
-        
-        for i in 0..<dataArr.count {
-            
-            let info = dataArr[i][0]
-            
-            let lat = dataArr[i][1]
-            let lon = dataArr[i][2].split(separator: "\r")
-            
-            let CLlocationArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
-            
-            var nowDistance = locationManager.location?.distance(from: CLlocationArr)
-            print("---nowDistance---")
-            print(nowDistance ?? "nowDistance 값이 없습니다")
-            
-            //let distance = CLLocationDistance(locationManager.location,CLlocationArr)
-            
-            let latDistance = ((Double(lat) ?? 0) - clLatitude!)
-            
-            //String(lon[0])이 실제 값
-            let lonDistance = ((Double(String(lon[0])) ?? 0) - clLongitude!)
-            
-            
-            let currentDistance = String(Double(nowDistance ?? 10000000))
+        if clLatitude != nil && clLongitude != nil {
+            for i in 0..<dataArr.count {
+                
+                let info = dataArr[i][0]
+                
+                let lat = dataArr[i][1]
+                let lon = dataArr[i][2].split(separator: "\r")
+                
+                let CLlocationArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
+                
+                var nowDistance = locationManager.location?.distance(from: CLlocationArr)
+                print("---nowDistance---")
+                print(nowDistance ?? "nowDistance 값이 없습니다")
+                
+                //let distance = CLLocationDistance(locationManager.location,CLlocationArr)
+                
+                let latDistance = ((Double(lat) ?? 0) - clLatitude!)
+                
+                //String(lon[0])이 실제 값
+                let lonDistance = ((Double(String(lon[0])) ?? 0) - clLongitude!)
+                
+                
+                let currentDistance = String(Double(nowDistance ?? 10000000))
 
+                
+                //let currentDistance = String((pow(latDistance,2) + pow(lonDistance,2)))
+                distanceArray.append([currentDistance,lat,String(lon[0]),info])
+                
+                
             
-            //let currentDistance = String((pow(latDistance,2) + pow(lonDistance,2)))
-            distanceArray.append([currentDistance,lat,String(lon[0]),info])
-            
-            
-        
-        }
-        
-        let sortedArray = distanceArray.sorted(by: {Double($0[0]) ?? 9000000 < Double($1[0]) ?? 9000000 })
-        dump(sortedArray)
-        //print(sortedArray)
-        if sortedArray.count != 0 {
-            print("----------가까운 10개만 반환-----------")
-            dump(sortedArray[0...9])
-            
-            //poitem1으로 추가해서 화면에 표시한다.
-            for i in 0...10{
-                let poitem1 = MTMapPOIItem()
-                poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(sortedArray[i][1])!, longitude: Double(sortedArray[i][2])!))
-                poitem1.itemName = sortedArray[i][3]
-                poitem1.markerType = .redPin
-    
-                mapView.addPOIItems([poitem1])
             }
-                       
             
+            let sortedArray = distanceArray.sorted(by: {Double($0[0]) ?? 9000000 < Double($1[0]) ?? 9000000 })
+            dump(sortedArray)
+            //print(sortedArray)
+            if sortedArray.count != 0 {
+                print("----------가까운 10개만 반환-----------")
+                dump(sortedArray[0...9])
+                
+                //poitem1으로 추가해서 화면에 표시한다.
+                for i in 0...10{
+                    let poitem1 = MTMapPOIItem()
+                    poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(sortedArray[i][1])!, longitude: Double(sortedArray[i][2])!))
+                    poitem1.itemName = sortedArray[i][3]
+                    poitem1.markerType = .redPin
+        
+                    mapView.addPOIItems([poitem1])
+                }
+                           
+                
+            }
+        } else {
+            alertCurrentLocation()
         }
+        
     
         
     }
@@ -419,8 +358,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadData(cvsArray dataArr:[[String]],  completionHandler: @escaping () -> Void ) {
         
         //로딩중 표시
-        print("로딩중 표시 - loadData")
-        print("로딩중 표시 - loadData2")
         print("ㅇㅅㅇ?\(dataArr.count)")
         DispatchQueue.main.async {
             
@@ -438,10 +375,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                     print()
                     let lat = dataArr[i][1]
                     let lon = dataArr[i][2].split(separator: "\r")
-        
-        
-        
-        
+                    
                     let stringLon = String(lon[0])
         
                     let poitem1 = MTMapPOIItem()
@@ -459,72 +393,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
 
         completionHandler()
        
-
-        
-
-        
-        //사용 안하는 메서드
-//        for i in 0..<dataArr.count {
-//
-//            let lat = dataArr[i][1]
-//            let lon = dataArr[i][2].split(separator: "\r")
-//
-//            let latDistance = ((Double(lat) ?? 0) - clLatitude!)
-//
-//            //String(lon[0])이 실제 값
-//            let lonDistance = ((Double(String(lon[0])) ?? 0) - clLongitude!)
-//
-//            let currentDistance = String((pow(latDistance,2) + pow(lonDistance,2)))
-//            distanceArray.append([currentDistance,lat,String(lon[0])])
-//
-//
-//            //              데이터 addPOIItems으로 추가 코드
-//            //            let stringLon = String(lon[0])
-//            //
-//            //            let poitem1 = MTMapPOIItem()
-//            //
-//            //            poitem1.itemName = info
-//            //            poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(lat) ?? 0, longitude: Double(stringLon) ?? 0))
-//            //            poitem1.markerType = .redPin
-//            //
-//            //            mapView.addPOIItems([poitem1])
-//        }
-        
-        
-        
-        
-        
-        //dump(distanceArray)
-//        let sortedArray = distanceArray.sorted(by: {$0[0] < $1[0]})
-//        dump(sortedArray)
-//        print(sortedArray)
-//        if sortedArray.count != 0 {
-//            print("----------가까운 10개만 반환-----------")
-//            dump(sortedArray[0...9])
-//            //poitem1.itemName = info
-//            for i in 0...10{
-//                let poitem1 = MTMapPOIItem()
-//                poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(sortedArray[i][1])!, longitude: Double(sortedArray[i][2])!))
-//                poitem1.markerType = .redPin
-//
-//                mapView.addPOIItems([poitem1])
-//            }
-//
-//
-//        }
-        
-        //dump(sortedArray[0][0])
-        
-        //mapView.setZoomLevel(4, animated: true)
-                
         
     }
     
-    func removeData() {
+    func removePOIItemsData() {
         mapView.removeAllPOIItems()
     }
     
-    //MARK: - PickerView
+    //MARK: - PickerView, UI 설정
     func createPickerView() {
         let pickerView = UIPickerView()
         pickerView.delegate = self
@@ -547,12 +423,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     
     //MARK: - PickerView 확인 버튼
-    
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
         locationSelectButton.text = "\(selectedCity)"
-        
-        
         switch selectedCity {
         case "서울시 동작구":
             if pickerViewcityListIsOn[currentRow] == false {
@@ -589,44 +462,36 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     func UIPickerToCVS (resourceFileName:String) {
         CVSdataArray = []
-        mapView.removeAllPOIItems()
+        removePOIItemsData()
         loadDataFromCVSAt(resource: resourceFileName)
         if CVSdataArray.count != 0 {
             
-            loadData(cvsArray:CVSdataArray){
+            loadData(cvsArray:CVSdataArray) {
                 print("클로저 실행1")
                 DispatchQueue.main.async {
                     if self.activityIndicator.isAnimating {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicator.isHidden = true
-
                     }
                        }
                 
-               
-                //self.activityIndicator.removeFromSuperview()
                 print("클로저 stopAnimating")
-                
-               
-                
-                    
-               
                 
             }
             
             //mapView의 시점을 배열의 목록 중 가운데 지점의 좌표로 보냄.
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][1]) ?? 126.978179, longitude: Double(CVSdataArray[Int(trunc(Double(CVSdataArray.count/2)))][2].split(separator: "\r")[0]) ?? 126.978179)), animated: true)
             mapView.setZoomLevel(1, animated: true)
-            
-            
-           
+            mapView.fitAreaToShowAllPOIItems()
+            //mapView.fit
+    //mapView.
             
         }
         
-
         for i in 0..<pickerViewcityListIsOn.count {
             pickerViewcityListIsOn[i] = false
         }
+        
         pickerViewcityListIsOn[currentRow] = true
     }
     
