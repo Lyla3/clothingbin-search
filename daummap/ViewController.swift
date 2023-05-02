@@ -59,14 +59,39 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         currentLocationbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         currentLocationbutton.setTitleColor(.black, for: .normal)
         currentLocationbutton.translatesAutoresizingMaskIntoConstraints = false
-        
-        currentLocationbutton.layer.cornerRadius = 2
+        currentLocationbutton.layer.cornerRadius = 4
         currentLocationbutton.layer.shadowColor = UIColor.gray.cgColor
         currentLocationbutton.layer.shadowOpacity = 0.3
         currentLocationbutton.layer.shadowOffset = CGSize.zero
         currentLocationbutton.layer.shadowRadius = 6
-        
+        currentLocationbutton.translatesAutoresizingMaskIntoConstraints = false
         return currentLocationbutton
+    }()
+    
+    //현재 지도 검색 버튼
+    private let currentMapButton: UIButton = {
+        let currentMapbutton = UIButton(type: .system)
+        var config = UIButton.Configuration.filled()
+        config.cornerStyle = .capsule
+        //currentMapbutton
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        //currentMapbutton.setImage(UIImage(systemName: "circle.dotted"), for: .normal)
+        currentMapbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        currentMapbutton.setTitleColor(.black, for: .normal)
+        currentMapbutton.setTitle("현 위치 검색", for: .normal)
+        currentMapbutton.configuration?.cornerStyle = .capsule
+        currentMapbutton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        currentMapbutton.translatesAutoresizingMaskIntoConstraints = false
+        //currentMapbutton.invalidateIntrinsicContentSize()
+        currentMapbutton.layer.cornerRadius = 14
+        currentMapbutton.layer.shadowColor = UIColor.gray.cgColor
+        currentMapbutton.layer.shadowOpacity = 0.3
+        currentMapbutton.layer.shadowOffset = CGSize.zero
+        currentMapbutton.layer.shadowRadius = 6
+        //currentMapbutton.layer.borderWidth = 5
+        //currentMapbutton.edgein
+        currentMapbutton.translatesAutoresizingMaskIntoConstraints = false
+        return currentMapbutton
     }()
     
     //지역 선택 버튼
@@ -82,7 +107,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         
         //모서리 및 그림자
-        locationSelectButton.layer.cornerRadius = 2
+        locationSelectButton.layer.cornerRadius = 5
         locationSelectButton.layer.shadowColor = UIColor.gray.cgColor
         locationSelectButton.layer.shadowOpacity = 0.3
         locationSelectButton.layer.shadowOffset = CGSize.zero
@@ -130,10 +155,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
+        self.view.addSubview(self.currentMapButton)
         self.view.addSubview(self.locationSelectButton)
     
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         
+        currentMapButton.addTarget(self, action: #selector(currentMapButtonTapped), for: .touchUpInside)
         
         locationSelectButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
         
@@ -152,11 +179,19 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         NSLayoutConstraint.activate([
             self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
             self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-            self.currentLocationButton.widthAnchor.constraint(equalToConstant: 33),
-            self.currentLocationButton.heightAnchor.constraint(equalToConstant: 33)
+            self.currentLocationButton.widthAnchor.constraint(equalToConstant: 32),
+            self.currentLocationButton.heightAnchor.constraint(equalToConstant: 32)
         ])
         
-        
+        //현재지도 검색 버튼 레이아웃
+        NSLayoutConstraint.activate([
+            self.currentMapButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 70),
+            //self.currentMapButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+            self.currentMapButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.currentMapButton.widthAnchor.constraint(equalToConstant: 85),
+            self.currentMapButton.heightAnchor.constraint(equalToConstant: 28)
+           
+        ])
     }
     
     
@@ -239,15 +274,15 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 loadDataFromCVSAt(resource:"ClothingBin_all")
                 
                 //업데이트된 CVSdataArray를 바탕으로 데이터를 불러온다. (가까이 있는 10개)
-                //loadData(cvsArray: CVSdataArray)
                 nearCurrentloadData(cvsArray: CVSdataArray)
-                
+           
             
             
         @unknown default:
             self.alertCurrentLocation()
         }
     }
+    
     
     //현재 위치 설정 알림
     func alertCurrentLocation() {
@@ -261,6 +296,34 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         present(alert,animated: false)
         
     }
+    
+    @objc func currentMapButtonTapped(sender: UIButton) {
+        
+        print("현 위치 검색 버튼이 눌렸습니다.")
+        
+        //ClothingBin_all인지 확인해서 이미 all 이면 다시 검색 안하도록
+        loadDataFromCVSAt(resource:"ClothingBin_all")
+        
+        //업데이트된 CVSdataArray를 바탕으로 데이터를 불러온다. (가까이 있는 10개)
+        let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+        nearCurrentMaploadData(cvsArray: CVSdataArray, currentMapPoint: MTMapPoint.mapPointGeo(mapCenterPointByMTMapPoint)())
+        // ⭐️
+        // 1) 현재 중심점 받아오기
+        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+        MTMapPoint.mapPointGeo(mapCenterPointByMTMapPoint)().latitude
+              MTMapPoint.mapPointGeo(mapCenterPointByMTMapPoint)().longitude
+        MTMapPoint.mapPointGeo(mapCenterPointByMTMapPoint)().latitude
+        //print(String(MTMapPoint.mapPointGeo(mapCenterPointByMTMapPoint)()))
+       
+        
+        // 2) 현재 지도 줌 설정에 따라 검색할 반경 값 다르게 설정(switch로 범위 값 설정)
+        // 3) 반경 내의 위 경도 값 검색
+        // 4) 알고리즘 -> 위도 && 경도
+        // 5) mapView에 띄우기
+         
+         
+    }
+
     
     @objc func locationSelectButtonTapped(sender: UIButton) {
         
@@ -302,9 +365,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 let lat = dataArr[i][1]
                 let lon = dataArr[i][2].split(separator: "\r")
                 
-                let CLlocationArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
+                let CLlocationAtArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
                 
-                var nowDistance = locationManager.location?.distance(from: CLlocationArr)
+                let nowDistance = locationManager.location?.distance(from: CLlocationAtArr)
                 print("---nowDistance---")
                 print(nowDistance ?? "nowDistance 값이 없습니다")
                 
@@ -351,6 +414,78 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
     
         
+    }
+    
+    //현재 지도 근처에 위치한 의류수거함 불러오기
+    private func nearCurrentMaploadData(cvsArray dataArr:[[String]], currentMapPoint: MTMapPointGeo ) {
+        
+        // 1) distanceArray가 전체 데이터인가?
+        var distanceArray:[[String]] = []
+        print("clLatitude:\(String(describing: clLatitude)) clLongitude: \(String(describing: clLongitude))")
+        if clLatitude != nil && clLongitude != nil {
+            removePOIItemsData()
+            for i in 0..<dataArr.count - 1 {
+                
+                let info = dataArr[i][0]
+                
+                let lat = dataArr[i][1]
+                let lon = dataArr[i][2].split(separator: "\r")
+                
+                let CLlocationAtArr = CLLocation(latitude: CLLocationDegrees(dataArr[i][1]) ?? 0, longitude: CLLocationDegrees(dataArr[i][2].split(separator: "\r")[0]) ?? 0)
+                
+               
+                let CLlocationCurrentMapPoint = CLLocation(latitude: currentMapPoint.latitude, longitude:currentMapPoint.longitude)
+                
+                let nowDistance = CLlocationCurrentMapPoint.distance(from: CLlocationAtArr)
+                print(nowDistance)
+                
+                
+                print("---nowDistance---")
+                print(nowDistance)
+               
+                let currentDistance = String(Double(nowDistance))
+                
+                distanceArray.append([currentDistance,lat,String(lon[0]),info])
+                
+            }
+            
+            //거리 값이 400미만인 인자만 추출
+            
+            var nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 500}
+            print(mapView.zoomLevel)
+            
+            switch mapView.zoomLevel {
+            case 0...2:
+                nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 400}
+                print("\(mapView.zoomLevel)zoomLevel")
+            case 3:
+                nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 900}
+            case 4:
+                nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 1500}
+            case 5..<15:
+                nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 2500}
+                // 지도를 확대해주세요.(알림창)
+            default:
+                nearDistanceArray = distanceArray.filter{Double($0[0]) ?? 90000000 < 1800}
+            }
+            
+            //poitem1으로 추가해서 화면에 표시한다.
+            
+            if nearDistanceArray.count == 0 {
+                //현재 위치에는 등록된 의류수거함이 없습니다.
+                
+            } else {
+                for i in 1...nearDistanceArray.count - 1 {
+                    let poitem1 = MTMapPOIItem()
+                    poitem1.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(nearDistanceArray[i][1])!, longitude: Double(nearDistanceArray[i][2])!))
+                    poitem1.itemName = nearDistanceArray[i][3]
+                    poitem1.markerType = .redPin
+                    
+                    mapView.addPOIItems([poitem1])
+                }
+            }
+            
+        }
     }
     
     
@@ -530,6 +665,8 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         currentRow=row
         
     }
+    
+    
     
     
     

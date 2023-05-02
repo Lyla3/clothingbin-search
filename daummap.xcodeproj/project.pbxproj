@@ -304,6 +304,7 @@
 		63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0828F00E3700E6AFD4 /* PositionData.swift */; };
 		63E00C0C28F1811500E6AFD4 /* ClothingBin_Dongjak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */; };
 		63ECBA5629FC0BC9001BFF91 /* LocationCalculatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */; };
+		63ECBA582A003267001BFF91 /* DataCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ECBA572A003267001BFF91 /* DataCore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -618,6 +619,7 @@
 		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
 		63E00C0B28F1811500E6AFD4 /* ClothingBin_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_Dongjak.csv; sourceTree = "<group>"; };
 		63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCalculatorManager.swift; sourceTree = "<group>"; };
+		63ECBA572A003267001BFF91 /* DataCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1055,6 +1057,7 @@
 				6344DFDF290D573500950B20 /* Seoul_Gongro.csv */,
 				6344DFE1290D577600950B20 /* Seoul_gwanak.csv */,
 				63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */,
+				63ECBA572A003267001BFF91 /* DataCore.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -1447,6 +1450,7 @@
 			files = (
 				63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
+				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
 				63ECBA5629FC0BC9001BFF91 /* LocationCalculatorManager.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
