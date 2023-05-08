@@ -13,6 +13,9 @@
 		6344DFDE290D571300950B20 /* Seoul_Yangcheon.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */; };
 		6344DFE0290D573500950B20 /* Seoul_Gongro.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDF290D573500950B20 /* Seoul_Gongro.csv */; };
 		6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFE1290D577600950B20 /* Seoul_gwanak.csv */; };
+		6367717A2A07E00800A663D7 /* Seoul_Seodeamun.csv in Resources */ = {isa = PBXBuildFile; fileRef = 636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */; };
+		6367717C2A07E85400A663D7 /* Seoul_Mapo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */; };
+		6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */; };
 		63886DF129E9824C0042F274 /* ClothingBin_all.csv in Resources */ = {isa = PBXBuildFile; fileRef = 63886DF029E9824C0042F274 /* ClothingBin_all.csv */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
@@ -316,6 +319,9 @@
 		6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Yangcheon.csv; sourceTree = "<group>"; };
 		6344DFDF290D573500950B20 /* Seoul_Gongro.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gongro.csv; sourceTree = "<group>"; };
 		6344DFE1290D577600950B20 /* Seoul_gwanak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_gwanak.csv; sourceTree = "<group>"; };
+		636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Seodeamun.csv; sourceTree = "<group>"; };
+		6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Mapo.csv; sourceTree = "<group>"; };
+		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
 		63886DF029E9824C0042F274 /* ClothingBin_all.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ClothingBin_all.csv; sourceTree = "<group>"; };
 		63ABB37028EC1ED6003A533E /* daummap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daummap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63ABB37328EC1ED6003A533E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1054,6 +1060,9 @@
 				6344DFCF290695EF00950B20 /* clothingBin_Yangcheon.csv */,
 				6344DFDB290D507D00950B20 /* Seoul_Yeoungdeungpo.csv */,
 				6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */,
+				636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */,
+				6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */,
+				6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */,
 				6344DFDF290D573500950B20 /* Seoul_Gongro.csv */,
 				6344DFE1290D577600950B20 /* Seoul_gwanak.csv */,
 				63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */,
@@ -1202,9 +1211,11 @@
 				63ABB51828EC202D003A533E /* searchdata.js in Resources */,
 				63ABB59328EC202D003A533E /* all_f.js in Resources */,
 				63ABB4C928EC202D003A533E /* map_pin_red.png in Resources */,
+				6367717C2A07E85400A663D7 /* Seoul_Mapo.csv in Resources */,
 				63ABB53028EC202D003A533E /* files_0.html in Resources */,
 				63ABB52328EC202D003A533E /* all_8.html in Resources */,
 				63ABB59628EC202D003A533E /* interface_m_t_map_bounds_rect.html in Resources */,
+				6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */,
 				63ABB5A228EC202D003A533E /* interface_m_t_map_p_o_i_item.js in Resources */,
 				63ABB4EA28EC202D003A533E /* functions.html in Resources */,
 				63ABB51428EC202D003A533E /* tab_b.png in Resources */,
@@ -1402,6 +1413,7 @@
 				63ABB52828EC202D003A533E /* all_e.js in Resources */,
 				63ABB5AC28EC202D003A533E /* menudata.js in Resources */,
 				63ABB5C328EC202D003A533E /* protocol_m_t_map_view_delegate_01-p.html in Resources */,
+				6367717A2A07E00800A663D7 /* Seoul_Seodeamun.csv in Resources */,
 				63ABB57C28EC202D003A533E /* functions_c.html in Resources */,
 				63ABB56628EC202D003A533E /* properties_7.js in Resources */,
 				63ABB37B28EC1ED6003A533E /* Main.storyboard in Resources */,
@@ -1621,7 +1633,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = sumsum.daummap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1661,7 +1673,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = sumsum.daummap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
