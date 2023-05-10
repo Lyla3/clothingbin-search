@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>nmap</string>
+	</array>
 	<key>KAKAO_APP_KEY</key>
 	<string>292607cc5dd66056b5f3278ec4fbb8b7</string>
 	<key>UIApplicationSceneManifest</key>
