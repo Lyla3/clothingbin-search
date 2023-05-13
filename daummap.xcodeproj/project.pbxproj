@@ -12,7 +12,7 @@
 		6344DFDE290D571300950B20 /* Seoul_Yangcheon.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */; };
 		6344DFE0290D573500950B20 /* Seoul_Gongro.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDF290D573500950B20 /* Seoul_Gongro.csv */; };
 		6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFE1290D577600950B20 /* Seoul_gwanak.csv */; };
-		6367717A2A07E00800A663D7 /* Seoul_Seodeamun.csv in Resources */ = {isa = PBXBuildFile; fileRef = 636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */; };
+		6367717A2A07E00800A663D7 /* Seoul_Seodaemun.csv in Resources */ = {isa = PBXBuildFile; fileRef = 636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */; };
 		6367717C2A07E85400A663D7 /* Seoul_Mapo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */; };
 		6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */; };
 		636771802A09CDF400A663D7 /* Seoul_Dongjak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */; };
@@ -305,8 +305,11 @@
 		63ABB5CE28EC245B003A533E /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39428EC1FF0003A533E /* libxml2.tbd */; };
 		63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39328EC1FE0003A533E /* libc++.tbd */; };
 		63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0828F00E3700E6AFD4 /* PositionData.swift */; };
-		63ECBA5629FC0BC9001BFF91 /* LocationCalculatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */; };
 		63ECBA582A003267001BFF91 /* DataCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ECBA572A003267001BFF91 /* DataCore.swift */; };
+		63FCE0422A0D455400B822C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63FCE0412A0D455400B822C3 /* GoogleService-Info.plist */; };
+		63FCE0452A0D470B00B822C3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63FCE0442A0D470B00B822C3 /* FirebaseAuth */; };
+		63FCE0472A0D470B00B822C3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 63FCE0462A0D470B00B822C3 /* FirebaseStorage */; };
+		63FCE0492A0D474A00B822C3 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FCE0482A0D474A00B822C3 /* FirebaseStorageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -317,7 +320,7 @@
 		6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Yangcheon.csv; sourceTree = "<group>"; };
 		6344DFDF290D573500950B20 /* Seoul_Gongro.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gongro.csv; sourceTree = "<group>"; };
 		6344DFE1290D577600950B20 /* Seoul_gwanak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_gwanak.csv; sourceTree = "<group>"; };
-		636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Seodeamun.csv; sourceTree = "<group>"; };
+		636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Seodaemun.csv; sourceTree = "<group>"; };
 		6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Mapo.csv; sourceTree = "<group>"; };
 		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
 		6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Dongjak.csv; sourceTree = "<group>"; };
@@ -622,8 +625,9 @@
 		63ABB5C828EC20B1003A533E /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
-		63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCalculatorManager.swift; sourceTree = "<group>"; };
 		63ECBA572A003267001BFF91 /* DataCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCore.swift; sourceTree = "<group>"; };
+		63FCE0412A0D455400B822C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		63FCE0482A0D474A00B822C3 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -634,7 +638,9 @@
 				63ABB5CE28EC245B003A533E /* libxml2.tbd in Frameworks */,
 				63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */,
 				63ABB5CD28EC245A003A533E /* libsqlite3.tbd in Frameworks */,
+				63FCE0472A0D470B00B822C3 /* FirebaseStorage in Frameworks */,
 				63ABB39228EC1FD4003A533E /* QuartzCore.framework in Frameworks */,
+				63FCE0452A0D470B00B822C3 /* FirebaseAuth in Frameworks */,
 				63ABB4D628EC202D003A533E /* DaumMap.framework in Frameworks */,
 				63ABB39028EC1FC9003A533E /* CoreLocation.framework in Frameworks */,
 				63ABB38E28EC1FBC003A533E /* SystemConfiguration.framework in Frameworks */,
@@ -667,14 +673,12 @@
 			isa = PBXGroup;
 			children = (
 				63E00C0428ED87DD00E6AFD4 /* Data Model */,
+				63FCE04A2A0D475B00B822C3 /* Controller */,
+				63FCE0402A0D42BA00B822C3 /* Resource */,
 				63ABB5C928EC20DC003A533E /* Header */,
 				63ABB37328EC1ED6003A533E /* AppDelegate.swift */,
-				63ABB37728EC1ED6003A533E /* ViewController.swift */,
 				63ABB37528EC1ED6003A533E /* SceneDelegate.swift */,
 				63ABB37928EC1ED6003A533E /* Main.storyboard */,
-				63ABB37F28EC1ED7003A533E /* Assets.xcassets */,
-				63ABB38128EC1ED7003A533E /* LaunchScreen.storyboard */,
-				63ABB38428EC1ED7003A533E /* Info.plist */,
 				63ABB37C28EC1ED6003A533E /* daummap.xcdatamodeld */,
 			);
 			path = daummap;
@@ -1055,17 +1059,36 @@
 				6344DFD92906FB8C00950B20 /* Seoul_guro.csv */,
 				6344DFDB290D507D00950B20 /* Seoul_Yeoungdeungpo.csv */,
 				6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */,
-				636771792A07E00800A663D7 /* Seoul_Seodeamun.csv */,
+				636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */,
 				6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */,
 				6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */,
 				6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */,
 				6344DFDF290D573500950B20 /* Seoul_Gongro.csv */,
 				6344DFE1290D577600950B20 /* Seoul_gwanak.csv */,
-				63ECBA5529FC0BC9001BFF91 /* LocationCalculatorManager.swift */,
 				63ECBA572A003267001BFF91 /* DataCore.swift */,
 				636771812A0A923B00A663D7 /* MapLocationManager.swift */,
+				63FCE0482A0D474A00B822C3 /* FirebaseStorageManager.swift */,
 			);
 			path = "Data Model";
+			sourceTree = "<group>";
+		};
+		63FCE0402A0D42BA00B822C3 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				63ABB38428EC1ED7003A533E /* Info.plist */,
+				63ABB38128EC1ED7003A533E /* LaunchScreen.storyboard */,
+				63ABB37F28EC1ED7003A533E /* Assets.xcassets */,
+				63FCE0412A0D455400B822C3 /* GoogleService-Info.plist */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		63FCE04A2A0D475B00B822C3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				63ABB37728EC1ED6003A533E /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		667C06A1D319F876F696F052 /* Pods */ = {
@@ -1094,6 +1117,10 @@
 			dependencies = (
 			);
 			name = daummap;
+			packageProductDependencies = (
+				63FCE0442A0D470B00B822C3 /* FirebaseAuth */,
+				63FCE0462A0D470B00B822C3 /* FirebaseStorage */,
+			);
 			productName = daummap;
 			productReference = 63ABB37028EC1ED6003A533E /* daummap.app */;
 			productType = "com.apple.product-type.application";
@@ -1122,6 +1149,9 @@
 				Base,
 			);
 			mainGroup = 63ABB36728EC1ED6003A533E;
+			packageReferences = (
+				63FCE0432A0D470B00B822C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 63ABB37128EC1ED6003A533E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1318,6 +1348,7 @@
 				63ABB5BC28EC202D003A533E /* _m_t_map_circle_8h.html in Resources */,
 				63ABB5BE28EC202D003A533E /* functions_prop.html in Resources */,
 				63ABB57F28EC202D003A533E /* search_m.png in Resources */,
+				63FCE0422A0D455400B822C3 /* GoogleService-Info.plist in Resources */,
 				63ABB59C28EC202D003A533E /* dir_3a58f908fac257e60a62a7e10a93cdbc.html in Resources */,
 				63ABB4EF28EC202D003A533E /* struct_m_t_map_image_offset.html in Resources */,
 				63ABB4D528EC202D003A533E /* map_pin_shadow.png in Resources */,
@@ -1408,7 +1439,7 @@
 				63ABB52828EC202D003A533E /* all_e.js in Resources */,
 				63ABB5AC28EC202D003A533E /* menudata.js in Resources */,
 				63ABB5C328EC202D003A533E /* protocol_m_t_map_view_delegate_01-p.html in Resources */,
-				6367717A2A07E00800A663D7 /* Seoul_Seodeamun.csv in Resources */,
+				6367717A2A07E00800A663D7 /* Seoul_Seodaemun.csv in Resources */,
 				63ABB57C28EC202D003A533E /* functions_c.html in Resources */,
 				63ABB56628EC202D003A533E /* properties_7.js in Resources */,
 				63ABB37B28EC1ED6003A533E /* Main.storyboard in Resources */,
@@ -1458,8 +1489,8 @@
 				63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
 				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
-				63ECBA5629FC0BC9001BFF91 /* LocationCalculatorManager.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
+				63FCE0492A0D474A00B822C3 /* FirebaseStorageManager.swift in Sources */,
 				636771822A0A923B00A663D7 /* MapLocationManager.swift in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
 				63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */,
@@ -1617,8 +1648,9 @@
 					"$(PROJECT_DIR)/IOS_DaumMap_SDK_1.4.0\\ 7/lib/DaumMap.embeddedframework",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = daummap/Info.plist;
+				INFOPLIST_FILE = daummap/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "의류수거함 검색";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재위치를 확인하여 사용자 근처의 의류수거함을 확인합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1629,7 +1661,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = sumsum.daummap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1657,8 +1689,9 @@
 					"$(PROJECT_DIR)/IOS_DaumMap_SDK_1.4.0\\ 7/lib/DaumMap.embeddedframework",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = daummap/Info.plist;
+				INFOPLIST_FILE = daummap/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "의류수거함 검색";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재위치를 확인하여 사용자 근처의 의류수거함을 확인합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1669,7 +1702,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = sumsum.daummap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1704,6 +1737,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		63FCE0432A0D470B00B822C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		63FCE0442A0D470B00B822C3 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63FCE0432A0D470B00B822C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		63FCE0462A0D470B00B822C3 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63FCE0432A0D470B00B822C3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		63ABB37C28EC1ED6003A533E /* daummap.xcdatamodeld */ = {

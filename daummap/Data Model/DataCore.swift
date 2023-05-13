@@ -28,6 +28,6 @@ struct DataCore {
                                                     "서울시 마포구":"Seoul_Mapo",
                                                     "서울시 양천구":"Seoul_Yangcheon",
                                                     "서울시 영등포구":"Seoul_Yeoungdeungpo",
-                                                    "서울시 관악구":"Seoul_gwanak","서울시 서대문구":"Seoul_Seodeamun",
+                                                    "서울시 관악구":"Seoul_gwanak","서울시 서대문구":"Seoul_Seodaemun",
                                                     "서울시 종로구":"Seoul_Gongro"]
 }
