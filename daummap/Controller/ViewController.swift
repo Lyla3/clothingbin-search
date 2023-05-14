@@ -72,6 +72,23 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         return currentLocationSearchMapbutton
     }()
     
+    //현위치 버튼
+    private let searchAddressButton: UIButton = {
+        let searchAddressbutton = UIButton()
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+        searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        searchAddressbutton.setTitleColor(.black, for: .normal)
+        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+        searchAddressbutton.layer.cornerRadius = 4
+        searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
+        searchAddressbutton.layer.shadowOpacity = 0.3
+        searchAddressbutton.layer.shadowOffset = CGSize.zero
+        searchAddressbutton.layer.shadowRadius = 6
+        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+        return searchAddressbutton
+    }()
+    
     //지역 선택 버튼
     private let locationSelectButton: UITextField = {
         let locationSelectButton = UITextField()
@@ -205,11 +222,18 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             
         case .authorizedAlways, .authorizedWhenInUse:
             loadcurrentLocation()
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
+            //
+            guard let nonOptionalcurrentLocationLatitude = currentLocationLatitude ,
+                  let nonOptionalcurrentLocationLongitude = currentLocationLongitude
+            else {
+                alertCurrentLocation()
+                return
+            }
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude)), animated: true)
             
             let currentLocationPOIItem = MTMapPOIItem()
             currentLocationPOIItem.itemName = "현재위치"
-            currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!))
+            currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude))
             currentLocationPOIItem.markerType = .yellowPin
             
             //현재위치 추가
@@ -520,6 +544,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         
         self.view.addSubview(mapView)
         self.view.addSubview(self.currentLocationButton)
+        self.view.addSubview(self.searchAddressButton)
         self.view.addSubview(self.currentLocationSearchMapButton)
         self.view.addSubview(self.locationSelectButton)
         self.view.addSubview(self.helpTextView)
@@ -557,6 +582,14 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
             self.currentLocationButton.widthAnchor.constraint(equalToConstant: 32),
             self.currentLocationButton.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        //주소검색 버튼 레이아웃
+        NSLayoutConstraint.activate([
+            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
+            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
+            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
         ])
         
         //현재지도 검색 버튼 레이아웃
