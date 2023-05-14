@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  daummap
 //
-//  Created by 너굴 on 2022/10/04.
+//  Created by Lyla on 2022/10/04.
 //
 
 import UIKit
@@ -295,16 +295,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         }
     }
     
-    //MARK: - 현재 위치 근처 데이터 의류수거함 뽑는 함수 (:사용자 현재위치)
+    //MARK: - 현재 위치 근처 데이터 의류수거함을 가져오는 함수 (:사용자 현재위치)
     private func loadClothingBinByCurrentLocation(from cvsArray:[[String]]) {
-        guard let currentLocationLatitudeNonOptional = currentLocationLatitude,
-              let currentLocationLongitudeNonOptional = currentLocationLongitude else {
-            alertCurrentLocation()
-            print("현재 위치를 가져올 수 없습니다. ")
-            return
-        }
-        
-        //mvc test: mapLocationManager에서 받아온 [[String]]
         let processedCVSData =
         mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
         
@@ -318,41 +310,25 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             let lon = clothingBox[2]
             
             let CLlocationAtArr = CLLocation(latitude: CLLocationDegrees(clothingBox[1]) ?? 0, longitude: CLLocationDegrees(clothingBox[2]) ?? 0)
-            
             let distanceFromCurrentLocationToClthingBox = locationManager.location?.distance(from: CLlocationAtArr)
-            
-            print(distanceFromCurrentLocationToClthingBox ?? "nowDistance 값이 없습니다")
-            
             let currentDistance = String(Double(distanceFromCurrentLocationToClthingBox ?? 10000000))
-            
-            print("----------")
-            print([info,lat,lon,currentDistance])
             distanceArray.append([info,lat,lon,currentDistance])
         }
-        print(distanceArray)
-        dump(distanceArray)
         
-        //현위치에서 가까운 10개 뽑기 by distanceArray
+        //현위치에서 가까운 의류수거함 10개 찾기 (현 위치에서의 거리가 2km 이상이면 나오지 않도록 함)
         distanceArray.sort(by:{Double($0[3]) ?? 9000000 < Double($1[3]) ?? 9000000 })
-        print("distanceArray")
         for i in 0...9 {
             distanceArrayToTen.append(distanceArray[i])
         }
-        print("distanceArrayToTen")
-        dump(distanceArrayToTen)
         for i in distanceArrayToTen {
-            if Double(i[3]) ?? 9000000 < 1000 {
+            if Double(i[3]) ?? 9000000 < 2000 {
                 let poiItem = MTMapPOIItem()
                 poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
                     latitude: Double(i[1])!,
                     longitude: Double(i[2])!))
                 poiItem.itemName = i[0]
                 poiItem.markerType = .redPin
-                
                 poiItemArray.append(poiItem)
-                print("\(i[0])가 추가되었습니다.")
-                print("lat: \(i[1])")
-                print("lon: \(i[2])")
             }
             
         }
@@ -373,13 +349,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     func loadClothinBinByBound(){
         
         clothingBinLocationArray = mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
-        
-//        for clothingBox in clothingBinLocationArray {
-//            let clothingBoxInfo = clothingBox[0]
-//            let clothingBoxLat = clothingBox[1]
-//            let clothingBoxLon = clothingBox[2].remove(target: "\r")
-//            clothingBinLocationArray.append([clothingBoxInfo,clothingBoxLat,clothingBoxLon])
-//        }
         
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
@@ -627,10 +596,8 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         locationSelectButton.resignFirstResponder()
     }
     
-    //poiItem 선택시 poiItem 지도 메서드 실행되도록 (안내가 있어야 하지 않을까요..?)
+    //poiItem 선택시 poiItem 지도 메서드 실행되도록
     func mapView(_ mapView: MTMapView!, touchedCalloutBalloonOf poiItem: MTMapPOIItem!) {
-        print("poiitem이 눌렸습니다")
-        print("\(String(describing: poiItem.itemName))")
         UIPasteboard.general.string = poiItem.itemName
         
         //네이버 지도 앱 실행
@@ -639,8 +606,6 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             let appStoreURL = URL(string: "http://itunes.apple.com/app/id311867728?mt=8")!
             guard let encodedStr = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
             let url = URL(string: encodedStr)!
-            print(url.absoluteString)
-            
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
             } else {
@@ -654,15 +619,9 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     
     
     func activityIndicatorStartAction() {
-        
-        print("Start: activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
-        
         self.activityIndicator.startAnimating()
-        
         if !activityIndicator.isAnimating {
             self.activityIndicator.isHidden = false
-            
-            
             DispatchQueue.main.async {
                 
             }
