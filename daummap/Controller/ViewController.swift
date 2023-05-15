@@ -14,9 +14,102 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     var locationManager: CLLocationManager!
+    func testMain() {
+        print("")
+        print("===============================")
+        print("[ViewController >> testMain() :: 테스트 함수 수행]")
+        print("===============================")
+        print("")
+        
+        self.locationManager = CLLocationManager.init() // locationManager 초기화
+        self.locationManager.delegate = self // 델리게이트 넣어줌
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest // 거리 정확도 설정
+        self.locationManager.requestAlwaysAuthorization() // 위치 권한 설정 값을 받아옵니다
+
+        self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
+    }
+    
+    // MARK: - [위치 서비스에 대한 권한 확인 실시]
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            if status == .authorizedAlways {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 항상 허용]")
+                print("===============================")
+                print("")
+            }
+            if status == .authorizedWhenInUse {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 앱 사용 시 허용]")
+                print("===============================")
+                print("")
+            }
+            if status == .denied {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 거부]")
+                print("===============================")
+                print("")
+            }
+            if status == .restricted || status == .notDetermined {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 대기 상태]")
+                print("===============================")
+                print("")
+            }
+        }
+    
+    // MARK: - [위치 정보 지속적 업데이트]
+       func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+           if let location = manager.location as CLLocation? {
+                     if location.coordinate.latitude == 0 {
+                         return
+                     }
+
+                     locationManager.stopUpdatingLocation()
+
+                     // do stuff with location
+               
+               if let location = locations.first {
+                   // [위치 정보가 nil 이 아닌 경우]
+                   print("")
+                   print("===============================")
+                   print("[ViewController > didUpdateLocations() : 위치 정보 확인 실시]")
+                   print("[위도 : \(location.coordinate.latitude)]")
+                   print("[경도 : \(location.coordinate.longitude)]")
+                   print("===============================")
+                   print("")
+                   currentLocationLatitude = location.coordinate.latitude
+                   currentLocationLongitude = location.coordinate.longitude
+               }
+                 }
+          
+       }
+       
+       
+       
+       
+       
+       // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
+       func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+           print("")
+           print("===============================")
+           print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
+           print("[error : \(error)]")
+           print("[localizedDescription : \(error.localizedDescription)]")
+           print("===============================")
+           print("")
+       }
+
     
     //현재 위경도
-    var currentLocationLatitude: Double?
+    var currentLocationLatitude: Double? {
+        willSet{
+            print("currentLocationLatitude:\(currentLocationLatitude):newValue:\(newValue)")
+        }
+    }
     var currentLocationLongitude: Double?
     var address: String?
     var currentLocationButtonPressed: Bool = false
@@ -156,15 +249,22 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 현재 위치 받아와서 centerpoint로 설정.
+        
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
-        loadcurrentLocation()
-        
-        pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
         
         makeUI()
+        
+        // 현재 위치 받아와서 centerpoint로 설정.
+       
+        pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
+        
+        self.testMain()
+        
+        //loadcurrentLocation()
+        
+       
     }
     
     
@@ -196,19 +296,26 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //현재 사용자의 위치를 불러옴
     func loadcurrentLocation() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-        let coor = locationManager.location?.coordinate
-        if coor?.latitude != nil && coor?.longitude != nil {
-            currentLocationLatitude = coor?.latitude
-            currentLocationLongitude = coor?.longitude
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
-        } else {
-            self.alertCurrentLocation()
-        }
+//        locationManager = CLLocationManager()
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        locationManager.startUpdatingLocation()
+//
+//        checkLocation()
+        
+        
+
+        
+//        let coor = locationManager.location?.coordinate
+//        if coor?.latitude != nil && coor?.longitude != nil {
+//            print("lat:\(coor?.latitude),lon:\(coor?.longitude)")
+//            currentLocationLatitude = coor?.latitude
+//            currentLocationLongitude = coor?.longitude
+//            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
+//        } else {
+//            self.alertCurrentLocation()
+//        }
     }
     
     //MARK: - 현재 위치 버튼 실행시
@@ -216,19 +323,22 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         removePOIItemsData()
         print("현재위치 버튼이 눌렸습니다. ")
         
+        //self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
+
         switch locationManager.authorizationStatus {
         case .denied, .notDetermined, .restricted:
             self.alertCurrentLocation()
             
         case .authorizedAlways, .authorizedWhenInUse:
             loadcurrentLocation()
-            //
-            guard let nonOptionalcurrentLocationLatitude = currentLocationLatitude ,
+            
+            guard let nonOptionalcurrentLocationLatitude = currentLocationLatitude,
                   let nonOptionalcurrentLocationLongitude = currentLocationLongitude
             else {
                 alertCurrentLocation()
                 return
             }
+            print("setMapCenter")
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude)), animated: true)
             
             let currentLocationPOIItem = MTMapPOIItem()
@@ -323,7 +433,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadClothingBinByCurrentLocation(from cvsArray:[[String]]) {
         let processedCVSData =
         mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
-        
+        self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
+
         //거리 값을 포함하여 담을 배열
         var distanceArray:[[String]] = []
         var distanceArrayToTen:[[String]] = []
@@ -334,8 +445,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             let lon = clothingBox[2]
             
             let CLlocationAtArr = CLLocation(latitude: CLLocationDegrees(clothingBox[1]) ?? 0, longitude: CLLocationDegrees(clothingBox[2]) ?? 0)
-            let distanceFromCurrentLocationToClthingBox = locationManager.location?.distance(from: CLlocationAtArr)
-            let currentDistance = String(Double(distanceFromCurrentLocationToClthingBox ?? 10000000))
+            let distanceFromCurrentLocationToClothingBox = locationManager.location?.distance(from: CLlocationAtArr)
+            //let distanceFromCurrentLocationToClothingBox2 = CLlo
+            print("locationManager.location:\(locationManager.location)")
+            let currentDistance = String(Double(distanceFromCurrentLocationToClothingBox ?? 10000000))
             distanceArray.append([info,lat,lon,currentDistance])
         }
         
@@ -345,7 +458,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             distanceArrayToTen.append(distanceArray[i])
         }
         for i in distanceArrayToTen {
-            if Double(i[3]) ?? 9000000 < 2000 {
+            if Double(i[3]) ?? 9000000 < 20000 {
                 let poiItem = MTMapPOIItem()
                 poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
                     latitude: Double(i[1])!,
@@ -692,12 +805,39 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         currentLocationSearchMapButton.isEnabled = true
     }
     
-    
+    func checkLocation() {
+        if locationManager.authorizationStatus != .authorizedWhenInUse || locationManager.authorizationStatus != .authorizedAlways
+        {
+            print("requestingautorization")
+            locationManager.requestWhenInUseAuthorization()
+            
+        } else {
+            print("startupdatinglocation")
+        }
+        
+    }
+   
 }
 
 //MARK: - String - remove 익스텐션 구현
 extension String {
     func remove(target string: String) -> String {
         return components(separatedBy: string).joined()
+    }
+}
+
+
+extension CLLocation {
+    
+    /// Get distance between two points
+    ///
+    /// - Parameters:
+    ///   - from: first point
+    ///   - to: second point
+    /// - Returns: the distance in meters
+    class func distance(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> CLLocationDistance {
+        let from = CLLocation(latitude: from.latitude, longitude: from.longitude)
+        let to = CLLocation(latitude: to.latitude, longitude: to.longitude)
+        return from.distance(from: to)
     }
 }

@@ -6,13 +6,11 @@
 //
 
 import Foundation
-import CoreLocation
 
 
 struct MapLocationManager {
     
     var locationDataArray : [[String]] = []
-    var locationManager: CLLocationManager!
     
     //현재 사용자 위치 불러오기 (:까지는 view에서 해야하나..?)
     func processUnusedStringInLocationArray(locationDataArray:[[String]]) -> [[String]] {
