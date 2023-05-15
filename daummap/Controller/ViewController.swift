@@ -14,10 +14,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     var locationManager: CLLocationManager!
-    func testMain() {
+    func loadLocation() {
         print("")
         print("===============================")
-        print("[ViewController >> testMain() :: 테스트 함수 수행]")
+        print("[ViewController >> testMain() :: loadLocation 함수 수행]")
         print("===============================")
         print("")
         
@@ -165,15 +165,18 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         return currentLocationSearchMapbutton
     }()
     
-    //현위치 버튼
+    //주소검색 버튼
     private let searchAddressButton: UIButton = {
         let searchAddressbutton = UIButton()
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         searchAddressbutton.setTitleColor(.black, for: .normal)
+        searchAddressbutton.tintColor = .black
+        searchAddressbutton.layer.borderColor = UIColor.black.cgColor
+        searchAddressbutton.layer.borderWidth = 1
         searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
-        searchAddressbutton.layer.cornerRadius = 4
+        searchAddressbutton.layer.cornerRadius = 2
         searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
         searchAddressbutton.layer.shadowOpacity = 0.3
         searchAddressbutton.layer.shadowOffset = CGSize.zero
@@ -260,11 +263,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
        
         pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
         
-        self.testMain()
+        self.loadLocation()
         
         //loadcurrentLocation()
-        
-       
+        let coor = locationManager.location?.coordinate
+        if let currentLocationLat = coor?.latitude , let currentLocationLon = coor?.longitude {
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLat, longitude: currentLocationLon)), animated: true)
+        }
+  
     }
     
     
