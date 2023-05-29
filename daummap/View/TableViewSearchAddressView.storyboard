@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Table View Search View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="TableViewSearchViewController" customModule="daummap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="558-DB-Pqv">
+                                <rect key="frame" x="0.0" y="59" width="393" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Y6W-OH-hqX" id="kCh-jx-57f"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="R0l-E2-1ot">
+                                <rect key="frame" x="0.0" y="115" width="393" height="703"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="83" id="yJy-n7-xqF">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="83"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yJy-n7-xqF" id="sRX-d8-nlw">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="83"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SubTitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APc-li-bCd" userLabel="Subtitle Label">
+                                                    <rect key="frame" x="5" y="57.000000000000007" width="45.666666666666664" height="14.333333333333336"/>
+                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="highlightedColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAX-LD-ym4" userLabel="Title Label">
+                                                    <rect key="frame" x="5" y="11" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="eAX-LD-ym4" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leadingMargin" constant="-15" id="BNr-Nh-nas"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="APc-li-bCd" secondAttribute="bottom" constant="0.67000000000000004" id="Qy4-kp-jS7"/>
+                                                <constraint firstItem="eAX-LD-ym4" firstAttribute="top" secondItem="sRX-d8-nlw" secondAttribute="topMargin" id="m52-F7-euz"/>
+                                                <constraint firstItem="APc-li-bCd" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leading" constant="5" id="vGP-YW-zKr"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="R0l-E2-1ot" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="3mL-YG-uch"/>
+                            <constraint firstItem="558-DB-Pqv" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="7Ap-35-SUN"/>
+                            <constraint firstItem="558-DB-Pqv" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="IiR-xw-6P4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="R0l-E2-1ot" secondAttribute="bottom" id="OYh-sr-R1T"/>
+                            <constraint firstItem="R0l-E2-1ot" firstAttribute="top" secondItem="558-DB-Pqv" secondAttribute="bottom" id="Uu5-VP-KUq"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="R0l-E2-1ot" secondAttribute="trailing" id="vRq-de-z94"/>
+                            <constraint firstItem="558-DB-Pqv" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="zDL-5y-BcD"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="GE8-aT-uLA" id="jhE-DJ-K8Y"/>
+                        <outlet property="searchbar" destination="558-DB-Pqv" id="0f0-WC-oUP"/>
+                        <outlet property="tableView" destination="R0l-E2-1ot" id="EQh-7H-eq8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="GE8-aT-uLA">
+                    <connections>
+                        <outlet property="delegate" destination="Y6W-OH-hqX" id="2n2-Nw-qht"/>
+                        <outlet property="searchBar" destination="558-DB-Pqv" id="sWr-0h-Kjb"/>
+                        <outlet property="searchContentsController" destination="Y6W-OH-hqX" id="xmc-eX-li6"/>
+                        <outlet property="searchResultsDataSource" destination="Y6W-OH-hqX" id="FWW-CM-RKK"/>
+                        <outlet property="searchResultsDelegate" destination="Y6W-OH-hqX" id="elw-qb-YhK"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="43.511450381679388" y="3.5211267605633805"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

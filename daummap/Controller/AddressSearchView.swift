@@ -26,8 +26,8 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
     
     
     // While the file names are the same, the references point to different files
-    //mountainsRef.name == mountainImagesRef.name            // true
-    //mountainsRef.fullPath == mountainImagesRef.fullPath    // false
+    // mountainsRef.name == mountainImagesRef.name            // true
+    // mountainsRef.fullPath == mountainImagesRef.fullPath    // false
         
     
     
@@ -68,8 +68,6 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
 
         // Create a reference to the file you want to upload
 
-
-        setupSearchCompleter() //MapKit 설정
         
     }
     

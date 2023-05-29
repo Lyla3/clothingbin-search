@@ -19,6 +19,9 @@
 		636771802A09CDF400A663D7 /* Seoul_Dongjak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */; };
 		636771822A0A923B00A663D7 /* MapLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636771812A0A923B00A663D7 /* MapLocationManager.swift */; };
 		6395CC852A2367E700B479B2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6395CC842A2367E700B479B2 /* FirebaseDatabase */; };
+		6395CC872A24CF9500B479B2 /* TableViewSearchView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */; };
+		6395CC892A24CFB800B479B2 /* TableViewSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6395CC882A24CFB800B479B2 /* TableViewSearchViewController.swift */; };
+		6395CC8B2A24D18000B479B2 /* TableViewSearchAddressView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6395CC8A2A24D18000B479B2 /* TableViewSearchAddressView.storyboard */; };
 		63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37328EC1ED6003A533E /* AppDelegate.swift */; };
 		63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37528EC1ED6003A533E /* SceneDelegate.swift */; };
 		63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ABB37728EC1ED6003A533E /* ViewController.swift */; };
@@ -332,6 +335,9 @@
 		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
 		6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Dongjak.csv; sourceTree = "<group>"; };
 		636771812A0A923B00A663D7 /* MapLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationManager.swift; sourceTree = "<group>"; };
+		6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TableViewSearchView.storyboard; sourceTree = "<group>"; };
+		6395CC882A24CFB800B479B2 /* TableViewSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSearchViewController.swift; sourceTree = "<group>"; };
+		6395CC8A2A24D18000B479B2 /* TableViewSearchAddressView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TableViewSearchAddressView.storyboard; sourceTree = "<group>"; };
 		63ABB37028EC1ED6003A533E /* daummap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daummap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63ABB37328EC1ED6003A533E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63ABB37528EC1ED6003A533E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1090,6 +1096,8 @@
 			isa = PBXGroup;
 			children = (
 				63E0A4832A1A67D6001470F2 /* AddressSearchView.storyboard */,
+				6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */,
+				6395CC8A2A24D18000B479B2 /* TableViewSearchAddressView.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1108,6 +1116,7 @@
 		63FCE04A2A0D475B00B822C3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6395CC882A24CFB800B479B2 /* TableViewSearchViewController.swift */,
 				63ABB37728EC1ED6003A533E /* ViewController.swift */,
 				63E0A4812A1A67A2001470F2 /* AddressSearchView.swift */,
 			);
@@ -1365,12 +1374,14 @@
 				63E0A4842A1A67D6001470F2 /* AddressSearchView.storyboard in Resources */,
 				63ABB51328EC202D003A533E /* struct_m_t_map_point_geo.html in Resources */,
 				63ABB5BB28EC202D003A533E /* interface_m_t_map_circle-members.html in Resources */,
+				6395CC872A24CF9500B479B2 /* TableViewSearchView.storyboard in Resources */,
 				63ABB50A28EC202D003A533E /* deprecated.html in Resources */,
 				63ABB5AB28EC202D003A533E /* dir_3a58f908fac257e60a62a7e10a93cdbc.js in Resources */,
 				63ABB55A28EC202D003A533E /* all_13.html in Resources */,
 				63ABB54828EC202D003A533E /* all_9.js in Resources */,
 				63ABB53228EC202D003A533E /* functions_2.js in Resources */,
 				63ABB5BC28EC202D003A533E /* _m_t_map_circle_8h.html in Resources */,
+				6395CC8B2A24D18000B479B2 /* TableViewSearchAddressView.storyboard in Resources */,
 				63ABB5BE28EC202D003A533E /* functions_prop.html in Resources */,
 				63ABB57F28EC202D003A533E /* search_m.png in Resources */,
 				63FCE0422A0D455400B822C3 /* GoogleService-Info.plist in Resources */,
@@ -1512,6 +1523,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */,
+				6395CC892A24CFB800B479B2 /* TableViewSearchViewController.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
 				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
