@@ -103,13 +103,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
            print("")
        }
 
-    
     //현재 위경도
-    var currentLocationLatitude: Double? {
-        willSet{
-            print("currentLocationLatitude:\(currentLocationLatitude):newValue:\(newValue)")
-        }
-    }
+    var currentLocationLatitude: Double?
     var currentLocationLongitude: Double?
     var address: String?
     var currentLocationButtonPressed: Bool = false
@@ -119,7 +114,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var selectedCity : String = "서울시 강남구"
     var currentRow : Int = 0
     
-    //MVC패턴 적용
+    //mapLocationManager (Model)
     var mapLocationManager = MapLocationManager()
     
     //엑셀 파일에서 불러온 의류수거함 위치 데이터 배열
@@ -205,7 +200,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         locationSelectButton.layer.shadowOffset = CGSize.zero
         locationSelectButton.layer.shadowRadius = 6
         
-        
         return locationSelectButton
     }()
     
@@ -256,7 +250,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
-        
         makeUI()
         
         // 현재 위치 받아와서 centerpoint로 설정.
@@ -396,6 +389,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         if checkMapViewLevel() {
             loadClothinBinByBound()
         }
+    }
+    
+    //searchAddressButton 눌릴 시 실행되는 함수
+    @objc func searchAddressButtonTapped(sender: UIButton) {
+        print("::searchAddressButtonTapped::")
+        
+        let vc = AddressSearchViewController()
+                let storyboardName = vc.storyboardName
+                let storyboardID = vc.storyboardID
+
+                let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
+                let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+
+                present(viewController, animated: true)
     }
     
     
@@ -673,6 +680,9 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
         currentLocationSearchMapButton.addTarget(self, action: #selector(currentLocationMapButtonTapped), for: .touchUpInside)
         
+        //searchAddressButton 버튼 눌릴 시
+        searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
+        
         //지역선택 버튼 눌리면 locationSelectButtonTapped 실행, pickerView가 실질적으로 실행
         locationSelectButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
         mapView.setZoomLevel(2, animated: false)
@@ -724,6 +734,8 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
+    
+    
     
     //PickerView의 component별 행수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {

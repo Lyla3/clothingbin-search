@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>의류수거함 사진 촬영 권한이 필요합니다. </string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>의류수거함 사진 파일 업로드를 위해 권한이 필요합니다</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>현재 위치 로드에 필요합니다</string>
 	<key>NSLocationUsageDescription</key>
