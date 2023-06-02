@@ -11,7 +11,7 @@
         <!--Table View Search View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController id="Y6W-OH-hqX" customClass="TableViewSearchViewController" customModule="daummap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addressSearchVC" id="Y6W-OH-hqX" customClass="TableViewSearchViewController" customModule="daummap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -27,7 +27,7 @@
                                 <rect key="frame" x="0.0" y="115" width="393" height="703"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="83" id="yJy-n7-xqF">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="83" id="yJy-n7-xqF" customClass="LocationCell" customModule="daummap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yJy-n7-xqF" id="sRX-d8-nlw">
@@ -35,26 +35,34 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SubTitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APc-li-bCd" userLabel="Subtitle Label">
-                                                    <rect key="frame" x="5" y="57.000000000000007" width="45.666666666666664" height="14.333333333333336"/>
+                                                    <rect key="frame" x="9.9999999999999964" y="57.000000000000007" width="45.666666666666657" height="14.333333333333336"/>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="14.333333333333343" id="Dn4-nh-wJL"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="highlightedColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eAX-LD-ym4" userLabel="Title Label">
-                                                    <rect key="frame" x="5" y="11" width="42" height="21"/>
+                                                    <rect key="frame" x="10" y="11" width="42" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="eAX-LD-ym4" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leadingMargin" constant="-15" id="BNr-Nh-nas"/>
+                                                <constraint firstItem="APc-li-bCd" firstAttribute="top" secondItem="eAX-LD-ym4" secondAttribute="bottom" constant="2" id="Jqq-cn-ivl"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="APc-li-bCd" secondAttribute="bottom" constant="0.67000000000000004" id="Qy4-kp-jS7"/>
+                                                <constraint firstItem="eAX-LD-ym4" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leading" constant="10" id="dGB-A9-2pi"/>
                                                 <constraint firstItem="eAX-LD-ym4" firstAttribute="top" secondItem="sRX-d8-nlw" secondAttribute="topMargin" id="m52-F7-euz"/>
-                                                <constraint firstItem="APc-li-bCd" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leading" constant="5" id="vGP-YW-zKr"/>
+                                                <constraint firstItem="APc-li-bCd" firstAttribute="leading" secondItem="sRX-d8-nlw" secondAttribute="leading" constant="10" id="vGP-YW-zKr"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="subtitleLabel" destination="APc-li-bCd" id="8bz-iJ-kcR"/>
+                                            <outlet property="titleLabel" destination="eAX-LD-ym4" id="kjl-Fo-b1B"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -72,21 +80,11 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="searchDisplayController" destination="GE8-aT-uLA" id="jhE-DJ-K8Y"/>
                         <outlet property="searchbar" destination="558-DB-Pqv" id="0f0-WC-oUP"/>
                         <outlet property="tableView" destination="R0l-E2-1ot" id="EQh-7H-eq8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="GE8-aT-uLA">
-                    <connections>
-                        <outlet property="delegate" destination="Y6W-OH-hqX" id="2n2-Nw-qht"/>
-                        <outlet property="searchBar" destination="558-DB-Pqv" id="sWr-0h-Kjb"/>
-                        <outlet property="searchContentsController" destination="Y6W-OH-hqX" id="xmc-eX-li6"/>
-                        <outlet property="searchResultsDataSource" destination="Y6W-OH-hqX" id="FWW-CM-RKK"/>
-                        <outlet property="searchResultsDelegate" destination="Y6W-OH-hqX" id="elw-qb-YhK"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="43.511450381679388" y="3.5211267605633805"/>
         </scene>

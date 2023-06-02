@@ -39,7 +39,7 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
              self.view.endEditing(true)
        }
     //storyboardName : 파일이름, storyboardID : ViewController의 ID
-    let storyboardName = "AddressSearchView"
+    let storyboardName = "TableViewSearchAddressView"
     let storyboardID = "addressSearchVC"
     
     override func viewDidLoad() {
@@ -67,7 +67,6 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         let mountainImagesRef = storageRef.child("images/mountains.jpg")
 
         // Create a reference to the file you want to upload
-
         
     }
     
