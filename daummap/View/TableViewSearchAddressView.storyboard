@@ -11,12 +11,12 @@
         <!--Table View Search View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="addressSearchVC" id="Y6W-OH-hqX" customClass="TableViewSearchViewController" customModule="daummap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addressTableSearchVC" id="Y6W-OH-hqX" customClass="TableViewSearchViewController" customModule="daummap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="558-DB-Pqv">
+                            <searchBar contentMode="redraw" placeholder="의류수거함 주소를 검색해주세요" translatesAutoresizingMaskIntoConstraints="NO" id="558-DB-Pqv">
                                 <rect key="frame" x="0.0" y="59" width="393" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>

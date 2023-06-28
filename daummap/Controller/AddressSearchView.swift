@@ -4,26 +4,41 @@
 //
 //  Created by Lyla on 2023/05/21.
 //
+// AddressSearchView - 주소 추가(firebase에 업로드)
 
 import Foundation
 import UIKit
 import FirebaseStorage
 import Firebase
 import FirebaseDatabase
+import CoreLocation
 
 
-class AddressSearchViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddressSearchViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendUpdateLocationDelegate {
+    
+    func sendUpdate(location: CLLocationCoordinate2D?) {
+        print("sendUpdate-addressView")
+        selectedLocation = location
+        print("\(selectedLocation)")
+        if let nonOptionalLocation = selectedLocation?.longitude {
+            print("nonOptionalLocation")
+            addressLabel.text = String(format:"%f",nonOptionalLocation)
+        }
+        
+    }
+    
     
     var firebaseDB: DatabaseReference!
     
     @IBOutlet var photoImageView: UIImageView!
     
-    @IBOutlet var addressTextfield: UITextField!
+    @IBOutlet var addressLabel: UILabel!
     
     let imagePicker = UIImagePickerController()
     
     let storage = Storage.storage()
     
+    var selectedLocation : CLLocationCoordinate2D?
     
     // While the file names are the same, the references point to different files
     // mountainsRef.name == mountainImagesRef.name            // true
@@ -35,21 +50,27 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
     //var firebaseDB: DatabaseReference
     //let myFirestore = MyFir
     
+    var locationString : String = ""
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
              self.view.endEditing(true)
        }
     //storyboardName : 파일이름, storyboardID : ViewController의 ID
-    let storyboardName = "TableViewSearchAddressView"
-    let storyboardID = "addressSearchVC"
+    let storyboardName = "AddressSearchView"
+    let storyboardID = "addressSearchVC1"
     
     override func viewDidLoad() {
+        
+        let vc = TableViewSearchViewController()
+        
+        vc.delegate = self
+        
          super.viewDidLoad()
         
         imagePicker.delegate = self
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera
-        addressTextfield.layer.borderColor = UIColor.lightGray.cgColor
-        addressTextfield.layer.borderWidth = 0.5
+
         photoImageView.layer.borderWidth  = 0.5
         photoImageView.layer.borderColor = UIColor.lightGray.cgColor
         
@@ -69,12 +90,32 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         // Create a reference to the file you want to upload
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        print("주소:\(String(describing: selectedLocation))")
+        //addressLabel.text = String(describing: selectedLocation)
+    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let userPickedImage = info[UIImagePickerController.InfoKey.originalImage]
     }
     
-    
+
+    @IBAction func addLoctionButtonTapped(_ sender: UIButton) {
+        print("Button Pressed")
+        
+        let vc = TableViewSearchViewController()
+        
+        let storyboardName = vc.storyboardName
+        let storyboardID = vc.storyboardID
+        
+        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
+        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+        vc.delegate = self
+
+        present(viewController, animated: true)
+        
+        
+    }
     
     
     @IBAction func submitButtonTapped(_ sender: Any) {
@@ -89,8 +130,8 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         
         //new for database
         firebaseDB = Database.database().reference()
-        firebaseDB.child(Date().toString()).setValue(addressTextfield.text)
-        firebaseDB.child("냥냥").setValue("오이시쿠나레")
+        //firebaseDB.child(Date().toString()).setValue(addressTextfield.text)
+        firebaseDB.child("냥냥").setValue("value값 입니다")
         // Data in memory
         let data = Data()
 

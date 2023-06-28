@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 import MapKit
 
-
+protocol SendUpdateLocationDelegate: AnyObject {
+    func sendUpdate(location: CLLocationCoordinate2D?)
+}
 
 class LocationCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
@@ -18,9 +20,13 @@ class LocationCell: UITableViewCell {
 
 class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
     
+    var delegate: SendUpdateLocationDelegate?
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchbar: UISearchBar!
-   
+    
+    let storyboardName = "TableViewSearchAddressView"
+    let storyboardID = "addressTableSearchVC"
     
     
     //검색을 도와줌
@@ -48,7 +54,6 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
             // Clear the results and cancel the currently running local search before starting a new search.
             places = nil
             localSearch?.cancel()
-            //print("\(String(describing: localSearch))")
         }
     }
     
@@ -57,12 +62,25 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
         search(using: searchRequest)
     }
     
+    func closeView(location:CLLocationCoordinate2D?) {
+        let vc = AddressSearchViewController()
+        vc.selectedLocation = location
+        print("\(location?.latitude)")
+        if let a = location?.latitude {
+            print(a)
+            vc.locationString = String(a)
+            //vc.addressLabel.text = String(a)
+        }
+        
+        self.dismiss(animated: true)
+    }
+    
     private func search(using searchRequest: MKLocalSearch.Request) {
         // 검색 지역 설정
         searchRequest.region = searchRegion
         
         // 검색 유형 설정
-        searchRequest.resultTypes = .pointOfInterest
+        searchRequest.resultTypes = .address
         // MKLocalSearch 생성
         localSearch = MKLocalSearch(request: searchRequest)
         // 비동기로 검색 실행
@@ -74,6 +92,10 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
             self.places = response?.mapItems[0]
             
             print(places?.placemark.coordinate) // 위경도 가져옴
+            
+            //다른 페이지로 넘겨주고 종료..?
+            closeView(location: places?.placemark.coordinate)
+            
         }
     }
     
@@ -95,6 +117,14 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         searchCompleter = nil
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if delegate == nil {
+            print("delegate = nil")
+        }
+        delegate?.sendUpdate(location: places?.placemark.coordinate)
+        print("TableViewSearchController - viewWillDisappear")
     }
     
 }
