@@ -21,6 +21,7 @@ class LocationCell: UITableViewCell {
 class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
     
     var delegate: SendUpdateLocationDelegate?
+    var selectedLocation: String = ""
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchbar: UISearchBar!
@@ -59,6 +60,13 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
     
     private func search(for suggestedCompletion: MKLocalSearchCompletion) {
         let searchRequest = MKLocalSearch.Request(completion: suggestedCompletion)
+        
+        print("searchRequest:\(searchRequest.naturalLanguageQuery)")
+        if searchRequest.naturalLanguageQuery != nil {
+            selectedLocation = searchRequest.naturalLanguageQuery ?? ""
+        }
+        
+       
         search(using: searchRequest)
     }
     

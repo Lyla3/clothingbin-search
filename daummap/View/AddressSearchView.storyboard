@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -61,7 +60,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="354" height="60"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="filled" title="   주소 추가"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="주소 추가"/>
                                                 <connections>
                                                     <action selector="addLoctionButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="EyI-fT-xiR"/>
                                                 </connections>
@@ -100,34 +99,35 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spA-bQ-Z17">
                                 <rect key="frame" x="0.0" y="186.5" width="409" height="456.5"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이미지" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="reJ-hV-dxs">
-                                        <rect key="frame" x="5" y="5" width="399" height="30"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="의류수거함 이미지" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="reJ-hV-dxs">
+                                        <rect key="frame" x="10" y="5" width="394" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="PDA-EL-X7I"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QnZ-nF-TAy">
-                                        <rect key="frame" x="5" y="54.5" width="399" height="399.5"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yF6-6s-5lR">
+                                        <rect key="frame" x="0.0" y="35" width="409" height="409"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="QnZ-nF-TAy" secondAttribute="height" multiplier="1:1" id="caF-p6-19M"/>
+                                            <constraint firstAttribute="width" secondItem="yF6-6s-5lR" secondAttribute="height" multiplier="1:1" id="vyP-Mw-Ps9"/>
                                         </constraints>
-                                        <imageReference key="image" image="plus.circle" catalog="system" symbolScale="medium"/>
-                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="small" weight="medium"/>
-                                    </imageView>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="plus_photo"/>
+                                        <connections>
+                                            <action selector="clothingbinImageButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="avq-fU-0vT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="QnZ-nF-TAy" secondAttribute="trailing" constant="5" id="EVi-wH-IBK"/>
-                                    <constraint firstItem="QnZ-nF-TAy" firstAttribute="top" secondItem="reJ-hV-dxs" secondAttribute="bottom" constant="20" id="cv3-7i-9aT"/>
+                                    <constraint firstAttribute="trailing" secondItem="yF6-6s-5lR" secondAttribute="trailing" id="5bp-VL-l5y"/>
+                                    <constraint firstItem="yF6-6s-5lR" firstAttribute="leading" secondItem="spA-bQ-Z17" secondAttribute="leading" id="IdN-7r-8YJ"/>
+                                    <constraint firstItem="yF6-6s-5lR" firstAttribute="top" secondItem="reJ-hV-dxs" secondAttribute="bottom" id="NTg-Fi-trh"/>
                                     <constraint firstItem="reJ-hV-dxs" firstAttribute="top" secondItem="spA-bQ-Z17" secondAttribute="top" constant="5" id="doJ-zQ-ZaQ"/>
-                                    <constraint firstItem="QnZ-nF-TAy" firstAttribute="centerX" secondItem="spA-bQ-Z17" secondAttribute="centerX" id="eRd-r7-lAZ"/>
-                                    <constraint firstItem="reJ-hV-dxs" firstAttribute="leading" secondItem="spA-bQ-Z17" secondAttribute="leading" constant="5" id="p3z-G0-bhH"/>
-                                    <constraint firstItem="QnZ-nF-TAy" firstAttribute="leading" secondItem="spA-bQ-Z17" secondAttribute="leading" constant="5" id="rdq-0Y-7RX"/>
+                                    <constraint firstItem="reJ-hV-dxs" firstAttribute="leading" secondItem="spA-bQ-Z17" secondAttribute="leading" constant="10" id="p3z-G0-bhH"/>
                                     <constraint firstAttribute="trailing" secondItem="reJ-hV-dxs" secondAttribute="trailing" constant="5" id="sCZ-6R-pEX"/>
                                     <constraint firstAttribute="height" constant="456.5" id="zM5-fZ-b4T"/>
                                 </constraints>
@@ -146,9 +146,8 @@
                                     <action selector="submitButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="qvB-Ir-eQ4"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TUf-CY-Lan">
-                                <rect key="frame" x="20" y="687" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="주변의 의류수거함 사진을 등록해주세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TUf-CY-Lan">
+                                <rect key="frame" x="75.5" y="648" width="263.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -168,11 +167,13 @@
                             <constraint firstItem="spA-bQ-Z17" firstAttribute="top" secondItem="Ztl-Mn-t1H" secondAttribute="bottom" constant="5" id="C9p-E5-fVc"/>
                             <constraint firstItem="Ztl-Mn-t1H" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="ITY-et-jWK"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="spA-bQ-Z17" secondAttribute="trailing" constant="5" id="KUO-2L-OBM"/>
+                            <constraint firstItem="TUf-CY-Lan" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="LPT-tb-LNj"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Q24-Za-FUJ"/>
                             <constraint firstItem="spA-bQ-Z17" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="UmU-5J-49g"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="VQk-V6-CkN"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Xel-uB-bUc"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="frZ-He-WCI"/>
+                            <constraint firstItem="TUf-CY-Lan" firstAttribute="top" secondItem="spA-bQ-Z17" secondAttribute="bottom" constant="5" id="gOJ-tl-2wQ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="quD-MC-T4T" secondAttribute="trailing" id="iJ9-GF-0oS"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="jMI-px-mQs"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Ztl-Mn-t1H" secondAttribute="trailing" id="p5V-UH-SiZ"/>
@@ -184,7 +185,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addressLabel" destination="TUf-CY-Lan" id="w4a-6H-zLG"/>
-                        <outlet property="photoImageView" destination="QnZ-nF-TAy" id="ONa-Wl-vPd"/>
+                        <outlet property="clothingBinImageButton" destination="yF6-6s-5lR" id="pEy-iT-aHP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -196,12 +197,12 @@
                     <nil key="highlightedColor"/>
                 </label>
             </objects>
-            <point key="canvasLocation" x="423" y="19"/>
+            <point key="canvasLocation" x="421.73913043478262" y="18.75"/>
         </scene>
     </scenes>
     <resources>
         <image name="chevron.forward" catalog="system" width="97" height="128"/>
-        <image name="plus.circle" catalog="system" width="128" height="123"/>
+        <image name="plus_photo" width="150" height="150"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

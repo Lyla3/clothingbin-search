@@ -14,7 +14,10 @@ import FirebaseDatabase
 import CoreLocation
 
 
-class AddressSearchViewController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendUpdateLocationDelegate {
+class AddressSearchViewController: UIViewController, UINavigationControllerDelegate, SendUpdateLocationDelegate {
+    
+    //MARK: - Properites
+    private var clotingBinImage: UIImage?
     
     func sendUpdate(location: CLLocationCoordinate2D?) {
         print("sendUpdate-addressView")
@@ -24,15 +27,21 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
             print("nonOptionalLocation")
             addressLabel.text = String(format:"%f",nonOptionalLocation)
         }
+        //addressLabel.text = 
+    
+        
+        
+        //
         
     }
     
     
     var firebaseDB: DatabaseReference!
     
-    @IBOutlet var photoImageView: UIImageView!
     
     @IBOutlet var addressLabel: UILabel!
+    
+    @IBOutlet var clothingBinImageButton: UIButton!
     
     let imagePicker = UIImagePickerController()
     
@@ -67,12 +76,13 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         
          super.viewDidLoad()
         
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .camera
+        //여기 주석
+        //imagePicker.delegate = self
+        //imagePicker.allowsEditing = false
+        //imagePicker.sourceType = .camera
 
-        photoImageView.layer.borderWidth  = 0.5
-        photoImageView.layer.borderColor = UIColor.lightGray.cgColor
+        //photoImageView.layer.borderWidth  = 0.5
+        //photoImageView.layer.borderColor = UIColor.lightGray.cgColor
         
         
         // Create a root reference
@@ -95,11 +105,7 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         //addressLabel.text = String(describing: selectedLocation)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let userPickedImage = info[UIImagePickerController.InfoKey.originalImage]
-    }
     
-
     @IBAction func addLoctionButtonTapped(_ sender: UIButton) {
         print("Button Pressed")
         
@@ -116,6 +122,8 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
         
         
     }
+    
+    
     
     
     @IBAction func submitButtonTapped(_ sender: Any) {
@@ -158,11 +166,19 @@ class AddressSearchViewController: UIViewController,UIImagePickerControllerDeleg
             
     }
     
-    
+    //여기
     @IBAction func closeButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
+        
     }
     
+    @IBAction func clothingbinImageButtonTapped(_ sender: UIButton) {
+
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker,animated: true, completion: nil)
+        
+    }
     
     
     func uploadData(input: String) {
@@ -196,3 +212,20 @@ extension Date {
     }
 }
 
+extension AddressSearchViewController : UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let userPickedImage = info[UIImagePickerController.InfoKey.originalImage]
+        
+        guard let selectedImage = info[.editedImage] as? UIImage else {return}
+        
+        clotingBinImage = selectedImage
+        clothingBinImageButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        //clothingBinImageButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .)
+        //photoImageView.image = clotingBinImage
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+  
+
+}
