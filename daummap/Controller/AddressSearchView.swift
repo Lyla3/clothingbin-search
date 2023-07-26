@@ -15,11 +15,15 @@ import CoreLocation
 
 
 class AddressSearchViewController: UIViewController, UINavigationControllerDelegate, SendUpdateLocationDelegate {
+    func sendUpdate(location: CLLocationCoordinate2D?) {
+        //
+    }
+    
     
     //MARK: - Properites
     private var clotingBinImage: UIImage?
     
-    func sendUpdate(location: CLLocationCoordinate2D?) {
+    func sendUpzdate(location: CLLocationCoordinate2D?) {
         print("sendUpdate-addressView")
         selectedLocation = location
         print("\(selectedLocation)")

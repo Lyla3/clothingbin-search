@@ -10,99 +10,12 @@ import CoreLocation
 import Foundation
 
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
-        
+    //MARK: - Properties
+
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     var locationManager: CLLocationManager!
-    func loadLocation() {
-        print("")
-        print("===============================")
-        print("[ViewController >> testMain() :: loadLocation 함수 수행]")
-        print("===============================")
-        print("")
-        
-        self.locationManager = CLLocationManager.init() // locationManager 초기화
-        self.locationManager.delegate = self // 델리게이트 넣어줌
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest // 거리 정확도 설정
-        self.locationManager.requestAlwaysAuthorization() // 위치 권한 설정 값을 받아옵니다
-
-        self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
-    }
     
-    // MARK: - [위치 서비스에 대한 권한 확인 실시]
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            if status == .authorizedAlways {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 항상 허용]")
-                print("===============================")
-                print("")
-            }
-            if status == .authorizedWhenInUse {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 앱 사용 시 허용]")
-                print("===============================")
-                print("")
-            }
-            if status == .denied {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 거부]")
-                print("===============================")
-                print("")
-            }
-            if status == .restricted || status == .notDetermined {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 대기 상태]")
-                print("===============================")
-                print("")
-            }
-        }
-    
-    // MARK: - [위치 정보 지속적 업데이트]
-       func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-           if let location = manager.location as CLLocation? {
-                     if location.coordinate.latitude == 0 {
-                         return
-                     }
-
-                     locationManager.stopUpdatingLocation()
-
-                     // do stuff with location
-               
-               if let location = locations.first {
-                   // [위치 정보가 nil 이 아닌 경우]
-                   print("")
-                   print("===============================")
-                   print("[ViewController > didUpdateLocations() : 위치 정보 확인 실시]")
-                   print("[위도 : \(location.coordinate.latitude)]")
-                   print("[경도 : \(location.coordinate.longitude)]")
-                   print("===============================")
-                   print("")
-                   currentLocationLatitude = location.coordinate.latitude
-                   currentLocationLongitude = location.coordinate.longitude
-               }
-                 }
-          
-       }
-       
-       
-       
-       
-       
-       // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
-       func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-           print("")
-           print("===============================")
-           print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
-           print("[error : \(error)]")
-           print("[localizedDescription : \(error.localizedDescription)]")
-           print("===============================")
-           print("")
-       }
-
     //현재 위경도
     var currentLocationLatitude: Double?
     var currentLocationLongitude: Double?
@@ -114,11 +27,36 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var selectedCity : String = "서울시 강남구"
     var currentRow : Int = 0
     
+    
     //mapLocationManager (Model)
     var mapLocationManager = MapLocationManager()
     
     //엑셀 파일에서 불러온 의류수거함 위치 데이터 배열
     var clothingBinLocationArray : [[String]] = []
+    
+    
+    //MARK: - UISetting
+
+    //초기 안내 창 뷰
+    private let guideView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    //초기 안내 창 뷰 - nextButton
+    private let guideViewNextButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+        button.setTitle("다음", for: .normal)
+        
+        button.layer.cornerRadius = 10
+        button.layer.shadowRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
+        return button
+    }()
     
     //현위치 버튼
     private let currentLocationButton: UIButton = {
@@ -133,7 +71,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         currentLocationbutton.layer.shadowOpacity = 0.3
         currentLocationbutton.layer.shadowOffset = CGSize.zero
         currentLocationbutton.layer.shadowRadius = 6
-        currentLocationbutton.translatesAutoresizingMaskIntoConstraints = false
         return currentLocationbutton
     }()
     
@@ -246,14 +183,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
         makeUI()
         
         // 현재 위치 받아와서 centerpoint로 설정.
-       
         pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
         
         self.loadLocation()
@@ -263,13 +198,100 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         if let currentLocationLat = coor?.latitude , let currentLocationLon = coor?.longitude {
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLat, longitude: currentLocationLon)), animated: true)
         }
-  
     }
     
     
     
     
-    //MARK: - longTap
+    //MARK: - Actions
+    func loadLocation() {
+        print("")
+        print("===============================")
+        print("[ViewController >> testMain() :: loadLocation 함수 수행]")
+        print("===============================")
+        print("")
+        
+        self.locationManager = CLLocationManager.init() // locationManager 초기화
+        self.locationManager.delegate = self // 델리게이트 넣어줌
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest // 거리 정확도 설정
+        self.locationManager.requestAlwaysAuthorization() // 위치 권한 설정 값을 받아옵니다
+        self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
+    }
+    
+    // MARK: - [위치 서비스에 대한 권한 확인 실시]
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            if status == .authorizedAlways {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 항상 허용]")
+                print("===============================")
+                print("")
+            }
+            if status == .authorizedWhenInUse {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 앱 사용 시 허용]")
+                print("===============================")
+                print("")
+            }
+            if status == .denied {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 거부]")
+                print("===============================")
+                print("")
+            }
+            if status == .restricted || status == .notDetermined {
+                print("")
+                print("===============================")
+                print("[ViewController > locationManager() : 위치 사용 권한 대기 상태]")
+                print("===============================")
+                print("")
+            }
+        }
+    
+    // MARK: - [위치 정보 지속적 업데이트]
+       func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+           if let location = manager.location as CLLocation? {
+                     if location.coordinate.latitude == 0 {
+                         return
+                     }
+
+                     locationManager.stopUpdatingLocation()
+
+                     // do stuff with location
+               
+               if let location = locations.first {
+                   // [위치 정보가 nil 이 아닌 경우]
+                   print("")
+                   print("===============================")
+                   print("[ViewController > didUpdateLocations() : 위치 정보 확인 실시]")
+                   print("[위도 : \(location.coordinate.latitude)]")
+                   print("[경도 : \(location.coordinate.longitude)]")
+                   print("===============================")
+                   print("")
+                   currentLocationLatitude = location.coordinate.latitude
+                   currentLocationLongitude = location.coordinate.longitude
+               }
+                 }
+          
+       }
+       
+       
+       
+       
+       
+       // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
+       func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+           print("")
+           print("===============================")
+           print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
+           print("[error : \(error)]")
+           print("[localizedDescription : \(error.localizedDescription)]")
+           print("===============================")
+           print("")
+       }
+    
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다 - longtap")
         print("Point: \(String(describing: mapPoint))")
@@ -277,7 +299,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let cancle = UIAlertAction(title: "취소", style: .default ,handler: nil)
         
-        //확인 버튼(:버튼 추가)
+        // 확인 버튼(:버튼 추가)
         let ok = UIAlertAction(title: "확인", style: .destructive, handler: { action in
             let poitemLongtapped = MTMapPOIItem()
             poitemLongtapped.itemName = "New"
@@ -286,14 +308,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.addPOIItems([poitemLongtapped])
         })
         
-        //버튼을 알림창에 추가해줌
+        // 버튼을 알림창에 추가해줌
         alert.addAction(cancle)
         alert.addAction(ok)
         present(alert,animated: true, completion: nil)
     }
     
     
-    //현재 사용자의 위치를 불러옴
+    // 현재 사용자의 위치를 불러옴
     func loadcurrentLocation() {
 //        locationManager = CLLocationManager()
 //        locationManager.delegate = self
@@ -322,8 +344,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         removePOIItemsData()
         print("현재위치 버튼이 눌렸습니다. ")
         
-        //self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
-
         switch locationManager.authorizationStatus {
         case .denied, .notDetermined, .restricted:
             self.alertCurrentLocation()
@@ -410,6 +430,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         //print("지역선택 버튼이 눌렸습니다")
         //실행 X
     }
+    
+    @objc func closeGuideView() {
+        // guideViewNextButton 버튼이 눌렸을 때 실행된다.
+        guideView.removeFromSuperview()
+        self.guideView.removeFromSuperview()
+        
+    }
+    
     
     //MARK: - 엑셀 파일 파싱 함수
     private func parseCSVAt(url:URL) {
@@ -669,11 +697,15 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         createPickerView()
         
         self.view.addSubview(mapView)
-        self.view.addSubview(self.currentLocationButton)
-        self.view.addSubview(self.searchAddressButton)
-        self.view.addSubview(self.currentLocationSearchMapButton)
-        self.view.addSubview(self.locationSelectButton)
-        self.view.addSubview(self.helpTextView)
+        self.view.addSubview(currentLocationButton)
+        self.view.addSubview(searchAddressButton)
+        self.view.addSubview(currentLocationSearchMapButton)
+        self.view.addSubview(locationSelectButton)
+        self.view.addSubview(helpTextView)
+        self.view.addSubview(guideView)
+        self.guideView.addSubview(guideViewNextButton)
+
+        
         helpTextView.isHidden = true
         
         //self.view.addSubview(activityIndicator)
@@ -729,6 +761,20 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.currentLocationSearchMapButton.heightAnchor.constraint(equalToConstant: 28)
         ])
         
+        //초기 안내 뷰 레이아웃
+        NSLayoutConstraint.activate([
+            self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+        ])
+        
+        //안내 뷰 버튼 레이아웃
+        NSLayoutConstraint.activate([
+            self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
+            self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+            self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
+        ])
     }
     //PickerView의 component 개수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
