@@ -7,16 +7,13 @@
 
 import Foundation
 
-//예시임 안쓸거면 삭제
 struct DataCore {
-    static let cellNibName = "MealCell"
-    static let cellIdentifier = "ReusableMealCell"
-    static let popUpViewContollerID = "popupVC"
+
     
     //
     struct satisfactionString {
-        static let sat60 = "~60%"
-        static let sat75 = "75%"
+//        static let sat60 = "~60%"
+//        static let sat75 = "75%"
     }
     
     
@@ -30,4 +27,46 @@ struct DataCore {
                                                     "서울시 영등포구":"Seoul_Yeoungdeungpo",
                                                     "서울시 관악구":"Seoul_gwanak","서울시 서대문구":"Seoul_Seodaemun",
                                                     "서울시 종로구":"Seoul_Gongro"]
+    
 }
+
+enum Region: String, CaseIterable {
+    case Gangnam = "서울시 강남구"
+    case Dongjak = "서울시 동작구"
+    case Guro = "서울시 구로구"
+    case Mapo = "서울시 마포구"
+    case Yangcheon = "서울시 양천구"
+    case YeoungDeugpo = "서울시 영등포구"
+    case Gwanak = "서울시 관악구"
+    case Seodaemun = "서울시 서대문구"
+    case Gongro = "서울시 종로구"
+    
+    
+    func getFileName() -> String {
+        switch self {
+        case .Gangnam :
+            return "Seoul_Gangnam"
+        case .Dongjak :
+            return "Seoul_Dongjak"
+        case .Guro :
+            return "Seoul_guro"
+        case .Mapo :
+            return "Seoul_Mapo"
+        case .Yangcheon :
+            return "Seoul_Yangcheon"
+        case .YeoungDeugpo :
+            return "Seoul_Yeoungdeungpo"
+        case .Gwanak :
+            return "Seoul_gwanak"
+        case .Seodaemun :
+            return "Seoul_Seodaemun"
+        case .Gongro :
+            return "Seoul_Gongro"
+        }
+    }
+    
+    
+    
+    
+}
+

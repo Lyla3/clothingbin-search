@@ -13,6 +13,8 @@
 		6344DFDE290D571300950B20 /* Seoul_Yangcheon.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */; };
 		6344DFE0290D573500950B20 /* Seoul_Gongro.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFDF290D573500950B20 /* Seoul_Gongro.csv */; };
 		6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFE1290D577600950B20 /* Seoul_gwanak.csv */; };
+		634BD6FB2A7FD2FD000740EC /* CurrentLocationCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */; };
+		634BD6FD2A7FD63F000740EC /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */; };
 		6367717A2A07E00800A663D7 /* Seoul_Seodaemun.csv in Resources */ = {isa = PBXBuildFile; fileRef = 636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */; };
 		6367717C2A07E85400A663D7 /* Seoul_Mapo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */; };
 		6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */; };
@@ -331,6 +333,8 @@
 		6344DFDD290D571300950B20 /* Seoul_Yangcheon.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Yangcheon.csv; sourceTree = "<group>"; };
 		6344DFDF290D573500950B20 /* Seoul_Gongro.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gongro.csv; sourceTree = "<group>"; };
 		6344DFE1290D577600950B20 /* Seoul_gwanak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_gwanak.csv; sourceTree = "<group>"; };
+		634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationCoordinate.swift; sourceTree = "<group>"; };
+		634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
 		636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Seodaemun.csv; sourceTree = "<group>"; };
 		6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Mapo.csv; sourceTree = "<group>"; };
 		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
@@ -670,6 +674,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		634BD6D72A7FA7B0000740EC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				63E00C0428ED87DD00E6AFD4 /* Data Model */,
+				634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */,
+				63ECBA572A003267001BFF91 /* DataCore.swift */,
+				634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */,
+			);
+			name = Model;
+			path = "Data Model";
+			sourceTree = "<group>";
+		};
 		63ABB36728EC1ED6003A533E = {
 			isa = PBXGroup;
 			children = (
@@ -692,7 +708,7 @@
 			isa = PBXGroup;
 			children = (
 				63D403AA2A6D405D00377A8F /* .gitignore */,
-				63E00C0428ED87DD00E6AFD4 /* Data Model */,
+				634BD6D72A7FA7B0000740EC /* Model */,
 				63E0A4802A1A6740001470F2 /* View */,
 				63FCE04A2A0D475B00B822C3 /* Controller */,
 				63FCE0402A0D42BA00B822C3 /* Resource */,
@@ -1087,12 +1103,11 @@
 				6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */,
 				6344DFDF290D573500950B20 /* Seoul_Gongro.csv */,
 				6344DFE1290D577600950B20 /* Seoul_gwanak.csv */,
-				63ECBA572A003267001BFF91 /* DataCore.swift */,
 				636771812A0A923B00A663D7 /* MapLocationManager.swift */,
 				63FCE0482A0D474A00B822C3 /* FirebaseStorageManager.swift */,
 				63043A202A22014B00F303BC /* FirebaseStruct.swift */,
 			);
-			path = "Data Model";
+			name = "Data Model";
 			sourceTree = "<group>";
 		};
 		63E0A4802A1A6740001470F2 /* View */ = {
@@ -1527,7 +1542,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */,
+				634BD6FD2A7FD63F000740EC /* CurrentLocationManager.swift in Sources */,
 				6395CC892A24CFB800B479B2 /* TableViewSearchViewController.swift in Sources */,
+				634BD6FB2A7FD2FD000740EC /* CurrentLocationCoordinate.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
 				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,

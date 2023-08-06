@@ -25,6 +25,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var pickerViewcityListNew : [String] = []
     var selectedCity : String = "서울시 강남구"
     var poiItemIsOnMap: Bool = false
+    
+    var currentLocationCoordinate = CurrentLocationCoordinate()
+    var currentlocationManager = CurrentLocationManager()
 
     
     // 주소 검색 데이터
@@ -196,12 +199,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         mapView.baseMapType = .standard
         makeUI()
         
-        // 현재 위치 받아와서 centerpoint로 설정.
-        pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
+        // pickerView에 지역구를 넣어줌
+        // pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
+        pickerViewcityListNew =
+        Region.allCases.map{$0.rawValue}
         
         self.loadLocation()
         
-        //loadcurrentLocation()
+        // loadcurrentLocation()
         let coor = locationManager.location?.coordinate
         if let currentLocationLat = coor?.latitude , let currentLocationLon = coor?.longitude {
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLat, longitude: currentLocationLon)), animated: true)
@@ -278,8 +283,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                    print("[경도 : \(location.coordinate.longitude)]")
                    print("===============================")
                    print("")
-                   currentLocationLatitude = location.coordinate.latitude
-                   currentLocationLongitude = location.coordinate.longitude
+                   currentLocationCoordinate.latitude = location.coordinate.latitude
+                   currentLocationCoordinate.longitude = location.coordinate.longitude
                }
                  }
           
@@ -351,7 +356,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //MARK: - 현재 위치 버튼 실행시
     @objc func currentLocationButtonTapped(sender: UIButton) {
-        //removePOIItemsData()
         print("현재위치 버튼이 눌렸습니다. ")
         
         switch locationManager.authorizationStatus {
@@ -359,9 +363,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             self.alertCurrentLocation()
             
         case .authorizedAlways, .authorizedWhenInUse:
-
-            guard let nonOptionalcurrentLocationLatitude = currentLocationLatitude,
-                  let nonOptionalcurrentLocationLongitude = currentLocationLongitude
+            
+            guard let nonOptionalcurrentLocationLatitude = currentLocationCoordinate.latitude,
+                  let nonOptionalcurrentLocationLongitude = currentLocationCoordinate.longitude
             else {
                 alertCurrentLocation()
                 return
@@ -399,9 +403,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 //현재위치 추가
                 mapView.add(currentLocationPOIItem)
                 //mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), zoomLevel: 2, animated: true)
-                
-                
+                mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
             }
         @unknown default:
             self.alertCurrentLocation()
@@ -670,6 +672,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     
     //MARK: - PickerView 확인 버튼
+ 
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
         locationSelectButton.text = "\(selectedCity)"
@@ -711,11 +714,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     @objc func onPickCancel() {
         locationSelectButton.resignFirstResponder() /// 피커뷰 내림
     }
-    
-//    func searchAddress() {
-//        var geo = MTMapReverseGeoCoder(mapPoint: <#T##MTMapPoint!#>, with: <#T##MTMapReverseGeoCoderDelegate!#>, withOpenAPIKey: <#T##String!#>)
-//    }
-    
+
     
 }
 
@@ -815,16 +814,16 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     
     
     
-    //PickerView의 component별 행수
+    // PickerView의 component별 행수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerViewcityListNew.count
     }
     
-    //PickerView의 component의 내용에 들어갈 list
+    // PickerView의 component의 내용에 들어갈 list
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(pickerViewcityListNew[row])"
     }
-    //피커뷰에서 선택된 행을 처리할 수 있는 메서드
+    // 피커뷰에서 선택된 행을 처리할 수 있는 메서드
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //선택된 city를 selectedCity에 넣어줌.
         selectedCity = pickerViewcityListNew[row]
