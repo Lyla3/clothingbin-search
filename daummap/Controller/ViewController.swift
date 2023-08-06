@@ -19,14 +19,19 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //현재 위경도
     var currentLocationLatitude: Double?
     var currentLocationLongitude: Double?
-    var address: String?
     var currentLocationButtonPressed: Bool = false
     var poiItemArray : [MTMapPOIItem] = []
     let datacore = DataCore()
     var pickerViewcityListNew : [String] = []
     var selectedCity : String = "서울시 강남구"
-    var currentRow : Int = 0
     var poiItemIsOnMap: Bool = false
+
+    
+    // 주소 검색 데이터
+    var address: String?
+    var currentRow : Int = 0
+    
+    // 현재 위치 button이 몇번 눌렸는지 감지
     var currentLocationButtonTapCount : Int = 0
     
 
@@ -295,10 +300,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
            print("")
        }
     
+    // 길게 지도 눌리면 의류수거함 추가됨
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다 - longtap")
         print("Point: \(String(describing: mapPoint))")
         
+        // 안내: 의류수거함 추가
         let alert = UIAlertController(title: "이 위치에 의류수거함을 추가하시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let cancle = UIAlertAction(title: "취소", style: .default ,handler: nil)
         
