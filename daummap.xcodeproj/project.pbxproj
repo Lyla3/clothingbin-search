@@ -15,6 +15,8 @@
 		6344DFE2290D577600950B20 /* Seoul_gwanak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6344DFE1290D577600950B20 /* Seoul_gwanak.csv */; };
 		634BD6FB2A7FD2FD000740EC /* CurrentLocationCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */; };
 		634BD6FD2A7FD63F000740EC /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */; };
+		634BD7752A8267F1000740EC /* ClothingBinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD7742A8267F1000740EC /* ClothingBinManager.swift */; };
+		634BD7772A8267FC000740EC /* ClothingBin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BD7762A8267FC000740EC /* ClothingBin.swift */; };
 		6367717A2A07E00800A663D7 /* Seoul_Seodaemun.csv in Resources */ = {isa = PBXBuildFile; fileRef = 636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */; };
 		6367717C2A07E85400A663D7 /* Seoul_Mapo.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */; };
 		6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */; };
@@ -335,6 +337,8 @@
 		6344DFE1290D577600950B20 /* Seoul_gwanak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_gwanak.csv; sourceTree = "<group>"; };
 		634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationCoordinate.swift; sourceTree = "<group>"; };
 		634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
+		634BD7742A8267F1000740EC /* ClothingBinManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingBinManager.swift; sourceTree = "<group>"; };
+		634BD7762A8267FC000740EC /* ClothingBin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingBin.swift; sourceTree = "<group>"; };
 		636771792A07E00800A663D7 /* Seoul_Seodaemun.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Seodaemun.csv; sourceTree = "<group>"; };
 		6367717B2A07E85400A663D7 /* Seoul_Mapo.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Mapo.csv; sourceTree = "<group>"; };
 		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
@@ -681,6 +685,8 @@
 				634BD6FA2A7FD2FD000740EC /* CurrentLocationCoordinate.swift */,
 				63ECBA572A003267001BFF91 /* DataCore.swift */,
 				634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */,
+				634BD7762A8267FC000740EC /* ClothingBin.swift */,
+				634BD7742A8267F1000740EC /* ClothingBinManager.swift */,
 			);
 			name = Model;
 			path = "Data Model";
@@ -1546,10 +1552,12 @@
 				6395CC892A24CFB800B479B2 /* TableViewSearchViewController.swift in Sources */,
 				634BD6FB2A7FD2FD000740EC /* CurrentLocationCoordinate.swift in Sources */,
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
+				634BD7752A8267F1000740EC /* ClothingBinManager.swift in Sources */,
 				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
 				63FCE0492A0D474A00B822C3 /* FirebaseStorageManager.swift in Sources */,
 				63043A212A22014B00F303BC /* FirebaseStruct.swift in Sources */,
+				634BD7772A8267FC000740EC /* ClothingBin.swift in Sources */,
 				636771822A0A923B00A663D7 /* MapLocationManager.swift in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
 				63E0A4822A1A67A2001470F2 /* AddressSearchView.swift in Sources */,

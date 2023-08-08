@@ -21,13 +21,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var currentLocationLongitude: Double?
     var currentLocationButtonPressed: Bool = false
     var poiItemArray : [MTMapPOIItem] = []
+    //var poiItemArray2 : [MTMapPOIItem] = []
     let datacore = DataCore()
     var pickerViewcityListNew : [String] = []
-    var selectedCity : String = "서울시 강남구"
+    var selectedCity : Region = .Gangnam
     var poiItemIsOnMap: Bool = false
     
     var currentLocationCoordinate = CurrentLocationCoordinate()
     var currentlocationManager = CurrentLocationManager()
+    
+    var clothingBinManager: ClothingBinManager = ClothingBinManager()
 
     
     // 주소 검색 데이터
@@ -67,6 +70,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
         return button
+    }()
+    
+    // 안내창 예시이미지 - 현재 지도 검색
+    private let guideViewImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "guidemap_1")
+        imageView.contentMode = .scaleAspectFit
+        //imageView.heightAnchor = 100
+        return imageView
     }()
     
     //현위치 버튼
@@ -385,12 +398,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 
                 //현재위치 추가
                 mapView.add(currentLocationPOIItem)
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude)), animated: true)
                 
                 //CVSdataArray 업데이트 -> 전체 의류수거함
                 loadDataFromAllCVSAt()
                 
                 //업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
+                // ⭐️
                 loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
                 clearArray()
             } else {
@@ -495,52 +509,21 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //MARK: - CVS 전체 파일 데이터 로드 - 전체 csv파일을 경로로 지정
     private func loadDataFromAllCVSAt() {
-        for resource in datacore.pickerToFileDictionary.values {
-            let path = Bundle.main.path(forResource: resource, ofType: "csv")!
+        for resource in Region.allCases {
+            
+            let path = Bundle.main.path(forResource: resource.getFileName(), ofType: "csv") ?? "\(Region.Gangnam.getFileName())"
+            print("path: \(path)")
             parseCSVAt(url: URL(fileURLWithPath: path))
         }
     }
     
     //MARK: - 현재 위치 근처 데이터 의류수거함을 가져오는 함수 (:사용자 현재위치)
     private func loadClothingBinByCurrentLocation(from cvsArray:[[String]]) {
-        let processedCVSData =
-        mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
-        self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
-
-        //거리 값을 포함하여 담을 배열
-        var distanceArray:[[String]] = []
-        var distanceArrayToTen:[[String]] = []
+        let clotingbinDataArray =  clothingBinManager.loadClothingBinCloseCurrentLocation(from: cvsArray, locationManager: locationManager)
         
-        for clothingBox in processedCVSData {
-            let info = clothingBox[0]
-            let lat = clothingBox[1]
-            let lon = clothingBox[2]
-            
-            let CLlocationAtArr = CLLocation(latitude: CLLocationDegrees(clothingBox[1]) ?? 0, longitude: CLLocationDegrees(clothingBox[2]) ?? 0)
-            let distanceFromCurrentLocationToClothingBox = locationManager.location?.distance(from: CLlocationAtArr)
-            //let distanceFromCurrentLocationToClothingBox2 = CLlo
-            print("locationManager.location:\(locationManager.location)")
-            let currentDistance = String(Double(distanceFromCurrentLocationToClothingBox ?? 10000000))
-            distanceArray.append([info,lat,lon,currentDistance])
-        }
+        // poiItemArray에 POIItem 업데이트
+        poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
         
-        //현위치에서 가까운 의류수거함 10개 찾기 (현 위치에서의 거리가 2km 이상이면 나오지 않도록 함)
-        distanceArray.sort(by:{Double($0[3]) ?? 9000000 < Double($1[3]) ?? 9000000 })
-        for i in 0...9 {
-            distanceArrayToTen.append(distanceArray[i])
-        }
-        for i in distanceArrayToTen {
-            if Double(i[3]) ?? 9000000 < 20000 {
-                let poiItem = MTMapPOIItem()
-                poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
-                    latitude: Double(i[1])!,
-                    longitude: Double(i[2])!))
-                poiItem.itemName = i[0]
-                poiItem.markerType = .redPin
-                poiItemArray.append(poiItem)
-            }
-            
-        }
         if poiItemArray.isEmpty == true {
             helpTextView.text = "현재 위치에서 가까운 의류수거함이 없습니다."
             helpTextView.isHidden = false
@@ -557,7 +540,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //화면의 가장자리 값으로 의류수거함 불러오기
     func loadClothinBinByBound(){
         
-        clothingBinLocationArray = mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
+        clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
         
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
@@ -623,7 +606,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadClothingBinByDistrict() {
         removePOIItemsData()
         buttonSelectUnable()
-        clothingBinLocationArray = mapLocationManager.processUnusedStringInLocationArray(locationDataArray: clothingBinLocationArray)
+        clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
         
         
         print("loadClothingBinByDistrict:\(clothingBinLocationArray)")
@@ -672,32 +655,14 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     
     //MARK: - PickerView 확인 버튼
- 
+    // todo
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
-        locationSelectButton.text = "\(selectedCity)"
-        switch selectedCity {
-        case "서울시 강남구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 강남구"]!)
-        case "서울시 동작구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 동작구"]!)
-        case "서울시 구로구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 구로구"]!)
-        case "서울시 마포구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 마포구"]!)
-        case "서울시 영등포구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 영등포구"]!)
-        case "서울시 양천구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 양천구"]!)
-        case "서울시 관악구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 관악구"]!)
-        case "서울시 종로구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 종로구"]!)
-        case "서울시 서대문구":
-            UIPickerToCVS(resourceFileName:datacore.pickerToFileDictionary["서울시 서대문구"]!)
-        default:
-            locationSelectButton.resignFirstResponder()
-        }
+        locationSelectButton.text = "\(selectedCity.rawValue)"
+        UIPickerToCVS(resourceFileName:selectedCity.getFileName())
+    
+        
+      
         locationSelectButton.resignFirstResponder()
     }
     
@@ -735,6 +700,8 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         self.view.addSubview(helpTextView)
         self.view.addSubview(guideView)
         self.guideView.addSubview(guideViewNextButton)
+        self.guideView.addSubview(guideViewImageView)
+        //self.view.addSubview(guideViewImageView)
 
         
         helpTextView.isHidden = true
@@ -806,6 +773,17 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
             self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
         ])
+        
+        // 예시이미지 레이아웃
+        NSLayoutConstraint.activate([
+            self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
+            self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+            self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
+            self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
+            //self.guideViewImageView.widthAnchor.constraint(equalToConstant: 100),
+            //self.guideViewImageView.heightAnchor.constraint(equalToConstant: 100)
+
+        ])
     }
     //PickerView의 component 개수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -826,7 +804,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     // 피커뷰에서 선택된 행을 처리할 수 있는 메서드
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //선택된 city를 selectedCity에 넣어줌.
-        selectedCity = pickerViewcityListNew[row]
+        selectedCity = Region(rawValue: pickerViewcityListNew[row]) ?? .Gangnam
         
         currentRow=row
         

@@ -8,17 +8,6 @@
 import Foundation
 
 struct DataCore {
-
-    
-    //
-    struct satisfactionString {
-//        static let sat60 = "~60%"
-//        static let sat75 = "75%"
-    }
-    
-    
-    //현재 지도 줌 설정;
-    
     let pickerToFileDictionary : [String:String] = ["서울시 강남구":"Seoul_Gangnam",
                                                     "서울시 동작구":"Seoul_Dongjak",
                                                     "서울시 구로구":"Seoul_guro",
@@ -64,9 +53,5 @@ enum Region: String, CaseIterable {
             return "Seoul_Gongro"
         }
     }
-    
-    
-    
-    
 }
 
