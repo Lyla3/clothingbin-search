@@ -21,10 +21,11 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var currentLocationLongitude: Double?
     var currentLocationButtonPressed: Bool = false
     var poiItemArray : [MTMapPOIItem] = []
-    //var poiItemArray2 : [MTMapPOIItem] = []
     let datacore = DataCore()
     var pickerViewcityListNew : [String] = []
     var selectedCity : Region = .Gangnam
+    
+    // Manager로 이동(삭제 예정)
     var poiItemIsOnMap: Bool = false
     
     var currentLocationCoordinate = CurrentLocationCoordinate()
@@ -367,56 +368,72 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
 //        }
     }
     
-    //MARK: - 현재 위치 버튼 실행시
+    //MARK: - 현재 위치 버튼 실행시 (ing)
     @objc func currentLocationButtonTapped(sender: UIButton) {
         print("현재위치 버튼이 눌렸습니다. ")
         
+        // locationManager 상태에 따라 실행되는 함수가 달라짐
         switch locationManager.authorizationStatus {
         case .denied, .notDetermined, .restricted:
             self.alertCurrentLocation()
             
         case .authorizedAlways, .authorizedWhenInUse:
             
-            guard let nonOptionalcurrentLocationLatitude = currentLocationCoordinate.latitude,
-                  let nonOptionalcurrentLocationLongitude = currentLocationCoordinate.longitude
+            guard let currentLocationLatitude = currentLocationCoordinate.latitude,
+                  let currentLocationLongitude = currentLocationCoordinate.longitude
             else {
                 alertCurrentLocation()
                 return
             }
             
+            let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
+            
+            
+            
             print("poiItemIsOnMap:\(poiItemIsOnMap)")
+            
+            // 지도 지역구 버튼이 눌린 경우 한번 누르면 현재 위치만을 받아오도록 함
             if (!poiItemIsOnMap && currentLocationButtonTapCount == 0) || ( currentLocationButtonTapCount > 0)  {
                 currentLocationButtonTapCount = 0
                 removePOIItemsData()
                 
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude)), animated: true)
+                // 현재 위치를 지도의 중앙으로 맞춤 : mapView
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+       
+                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+                let currentLocationPOIItem = clothingBinManager.setMapCenter(at: currentLocationMTMapPoint)
                 
-                let currentLocationPOIItem = MTMapPOIItem()
-                currentLocationPOIItem.itemName = "현재위치"
-                currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude))
-                currentLocationPOIItem.markerType = .yellowPin
                 
-                //현재위치 추가
+                // 현재위치 추가 : mapView
                 mapView.add(currentLocationPOIItem)
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude)), animated: true)
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+       
                 
-                //CVSdataArray 업데이트 -> 전체 의류수거함
+                //mapView.showCurrentLocationMarker = true
+                //mapView.currentLocationTrackingMode  = .onWithoutHeading
+                
+                // CVSdataArray 업데이트 -> 전체 의류수거함
                 loadDataFromAllCVSAt()
                 
-                //업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
-                // ⭐️
+                // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
                 loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
                 clearArray()
             } else {
+                
                 currentLocationButtonTapCount += 1
-                let currentLocationPOIItem = MTMapPOIItem()
-                currentLocationPOIItem.itemName = "현재위치"
-                currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: nonOptionalcurrentLocationLatitude, longitude: nonOptionalcurrentLocationLongitude))
-                currentLocationPOIItem.markerType = .yellowPin
+                
+                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+                let currentLocationPOIItem = clothingBinManager.setMapCenter(at: currentLocationMTMapPoint)
+                
+                
+//                let currentLocationPOIItem = MTMapPOIItem()
+//                currentLocationPOIItem.itemName = "현재위치"
+//                currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude))
+//                currentLocationPOIItem.markerType = .yellowPin
                
-                //현재위치 추가
+                // 현재위치 추가
                 mapView.add(currentLocationPOIItem)
-                //mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
+               
                 mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
             }
         @unknown default:

@@ -313,6 +313,7 @@
 		63ABB5CD28EC245A003A533E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39528EC2007003A533E /* libsqlite3.tbd */; };
 		63ABB5CE28EC245B003A533E /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39428EC1FF0003A533E /* libxml2.tbd */; };
 		63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39328EC1FE0003A533E /* libc++.tbd */; };
+		63B528462A853D550047E225 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B528452A853D550047E225 /* Constants.swift */; };
 		63D403AB2A6D405D00377A8F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 63D403AA2A6D405D00377A8F /* .gitignore */; };
 		63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0828F00E3700E6AFD4 /* PositionData.swift */; };
 		63E0A4822A1A67A2001470F2 /* AddressSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E0A4812A1A67A2001470F2 /* AddressSearchView.swift */; };
@@ -646,6 +647,7 @@
 		63ABB4B628EC202D003A533E /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = changelog.txt; sourceTree = "<group>"; };
 		63ABB5C828EC20B1003A533E /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		63B528452A853D550047E225 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		63D403AA2A6D405D00377A8F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
 		63E0A4812A1A67A2001470F2 /* AddressSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchView.swift; sourceTree = "<group>"; };
@@ -687,6 +689,7 @@
 				634BD6FC2A7FD63F000740EC /* CurrentLocationManager.swift */,
 				634BD7762A8267FC000740EC /* ClothingBin.swift */,
 				634BD7742A8267F1000740EC /* ClothingBinManager.swift */,
+				63B528452A853D550047E225 /* Constants.swift */,
 			);
 			name = Model;
 			path = "Data Model";
@@ -1554,6 +1557,7 @@
 				63ABB37828EC1ED6003A533E /* ViewController.swift in Sources */,
 				634BD7752A8267F1000740EC /* ClothingBinManager.swift in Sources */,
 				63ECBA582A003267001BFF91 /* DataCore.swift in Sources */,
+				63B528462A853D550047E225 /* Constants.swift in Sources */,
 				63ABB37E28EC1ED6003A533E /* daummap.xcdatamodeld in Sources */,
 				63FCE0492A0D474A00B822C3 /* FirebaseStorageManager.swift in Sources */,
 				63043A212A22014B00F303BC /* FirebaseStruct.swift in Sources */,

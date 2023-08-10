@@ -22,6 +22,13 @@ class ClothingBinManager {
     var distanceArray:[ClothingBin] = []
     var distanceArrayTenCloseToUser:[ClothingBin] = []
     
+    // 이동
+    var poiItemIsOnMap: Bool = false
+
+    //MARK: - loadLoadLocationManager
+    func loadLoadLocationManager() {
+        
+    }
     
     //MARK: - 현재 위치에서 가까운 10개의 데이터 가져오기
     
@@ -72,12 +79,22 @@ class ClothingBinManager {
                     latitude: clothingBin.lat,
                     longitude: clothingBin.lon ))
                 poiItem.itemName = clothingBin.info
-                poiItem.customImage = UIImage(named: "locationpin")
+                poiItem.customImage = UIImage(named: "location")
                 poiItem.markerType = .customImage
                 poiItemArray.append(poiItem)
             }
             
         }
         return poiItemArray
+    }
+    
+    
+    func setMapCenter(at poiItem: MTMapPoint) ->  MTMapPOIItem {
+        var currentLocationPOIItem = MTMapPOIItem()
+        currentLocationPOIItem.itemName = "현재위치"
+        currentLocationPOIItem.mapPoint = poiItem
+        currentLocationPOIItem.markerType = .yellowPin
+        
+        return currentLocationPOIItem
     }
 }
