@@ -31,7 +31,6 @@ class ClothingBinManager {
     }
     
     //MARK: - 현재 위치에서 가까운 10개의 데이터 가져오기
-    
     func loadClothingBinCloseCurrentLocation(from cvsArray:[[String]], locationManager: CLLocationManager) -> [ClothingBin] {
         
         self.locationManager = locationManager
@@ -96,5 +95,23 @@ class ClothingBinManager {
         currentLocationPOIItem.markerType = .yellowPin
         
         return currentLocationPOIItem
+    }
+    
+    func makePOIItems(from districtClothingBinArray: [ClothingBin]) ->  [MTMapPOIItem]  {
+        // 배열 비워주기
+        poiItemArray = []
+        for clothingBin in districtClothingBinArray {
+            
+            let poiItem = MTMapPOIItem()
+            
+            //뷰 만들고 클릭되면 띄우기
+            poiItem.itemName = clothingBin.info
+            poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
+                latitude: clothingBin.lat,
+                longitude: clothingBin.lon ))
+            poiItem.markerType = .redPin
+            poiItemArray.append(poiItem)
+        }
+        return poiItemArray
     }
 }

@@ -409,9 +409,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
        
                 
-                //mapView.showCurrentLocationMarker = true
-                //mapView.currentLocationTrackingMode  = .onWithoutHeading
-                
                 // CVSdataArray 업데이트 -> 전체 의류수거함
                 loadDataFromAllCVSAt()
                 
@@ -424,12 +421,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 
                 // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
                 let currentLocationPOIItem = clothingBinManager.setMapCenter(at: currentLocationMTMapPoint)
-                
-                
-//                let currentLocationPOIItem = MTMapPOIItem()
-//                currentLocationPOIItem.itemName = "현재위치"
-//                currentLocationPOIItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude))
-//                currentLocationPOIItem.markerType = .yellowPin
+
                
                 // 현재위치 추가
                 mapView.add(currentLocationPOIItem)
@@ -623,22 +615,16 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadClothingBinByDistrict() {
         removePOIItemsData()
         buttonSelectUnable()
-        clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
+        //clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
         
         
-        print("loadClothingBinByDistrict:\(clothingBinLocationArray)")
-        //mapLocationManager에서 변화된 데이터 받아오기
-        for clothingBin in clothingBinLocationArray {
-            
-            let poiItem = MTMapPOIItem()
-            
-            //뷰 만들고 클릭되면 띄우기
-            poiItem.itemName = clothingBin[0]
-            poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(clothingBin[1]) ?? 0, longitude: Double(clothingBin[2]) ?? 0))
-            poiItem.markerType = .redPin
-            poiItemArray.append(poiItem)
-        }
-        mapView.addPOIItems(poiItemArray)
+        //print("loadClothingBinByDistrict:\(clothingBinLocationArray)")
+        
+        // 타입 변환: [[Sting]] -> [ClothingBin]
+        let districtClothingBinArray =  mapLocationManager.processingStringInLocationArray2(locationDataArray: clothingBinLocationArray)
+        
+
+        mapView.addPOIItems(clothingBinManager.makePOIItems(from: districtClothingBinArray))
         poiItemIsOnMap = true
         
         //dataArray 배열 비워주기
