@@ -97,7 +97,8 @@ class ClothingBinManager {
         return currentLocationPOIItem
     }
     
-    func makePOIItems(from districtClothingBinArray: [ClothingBin]) ->  [MTMapPOIItem]  {
+    // VC: loadClothingBinByDistrict
+    func makePOIItemsByDistrict(from districtClothingBinArray: [ClothingBin]) ->  [MTMapPOIItem]  {
         // 배열 비워주기
         poiItemArray = []
         for clothingBin in districtClothingBinArray {
@@ -114,4 +115,40 @@ class ClothingBinManager {
         }
         return poiItemArray
     }
+    
+    // VC: loadClothinBinByBound
+    func makePOIItemsInUserScreen(from screenClothingBinArray: [ClothingBin], topRightLat: Double, topRightLon: Double, bottomLeftLat: Double, bottomLeftLon: Double) throws -> [MTMapPOIItem] {
+        poiItemArray = []
+
+        var screenClotingBinArray: [ClothingBin] = []
+        //위도로 비교
+        screenClotingBinArray = screenClotingBinArray.filter { $0.lat > bottomLeftLat && $0.lat  < topRightLat}
+        //경도로 비교
+        screenClotingBinArray = screenClotingBinArray.filter { $0.lon > bottomLeftLon && $0.lon < topRightLon}
+        
+        if screenClotingBinArray.count == 0 {
+            for clothingBin in screenClotingBinArray {
+                let poiItem = MTMapPOIItem()
+                poiItem.itemName = clothingBin.info
+                poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
+                    latitude: clothingBin.lat,
+                    longitude: clothingBin.lon))
+                poiItem.markerType = .redPin
+                poiItemArray.append(poiItem)
+                //self.helpTextView.isHidden = true
+            
+            }
+            return poiItemArray
+            
+        } else {
+            throw ClothingBinError.noneClothingBin
+        }
+        
+        
+    }
+    
+}
+
+enum ClothingBinError :Error {
+    case noneClothingBin
 }

@@ -47,7 +47,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var mapLocationManager = MapLocationManager()
     
     //엑셀 파일에서 불러온 의류수거함 위치 데이터 배열
-    var clothingBinLocationArray : [[String]] = []
+var clothingBinLocationArray : [[String]] = []
     
     
     //MARK: - UISetting
@@ -519,7 +519,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //MARK: - CVS 전체 파일 데이터 로드 - 전체 csv파일을 경로로 지정
     private func loadDataFromAllCVSAt() {
         for resource in Region.allCases {
-            
             let path = Bundle.main.path(forResource: resource.getFileName(), ofType: "csv") ?? "\(Region.Gangnam.getFileName())"
             print("path: \(path)")
             parseCSVAt(url: URL(fileURLWithPath: path))
@@ -546,10 +545,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         clearArray()
     }
     
-    //화면의 가장자리 값으로 의류수거함 불러오기
+    // 화면의 가장자리 값으로 의류수거함 불러오기
     func loadClothinBinByBound(){
         
-        clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
+        //clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
+        
+        var allClothingBinArray = mapLocationManager.processingStringInLocationArray2(locationDataArray: clothingBinLocationArray)
+        print(allClothingBinArray)
         
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
@@ -557,51 +559,40 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         let bottomLeftLon = mapView.mapBounds.bottomLeft.mapPointGeo().longitude
         let topRightLon = mapView.mapBounds.topRight.mapPointGeo().longitude
         
-        //위도로 비교
-        clothingBinLocationArray = clothingBinLocationArray.filter { Double($0[1]) ?? 0 > bottomLeftLat && Double($0[1]) ?? 50 < topRightLat}
-        //경도로 비교
-        clothingBinLocationArray = clothingBinLocationArray.filter { Double($0[2]) ?? 0 > bottomLeftLon && Double($0[2]) ?? 150 < topRightLon}
-        
-        if clothingBinLocationArray.count == 0 {
-            // 현재 위치에는 등록된 의류수거함이 없음 -> 알림창
+        do {
+            let clothingArrayByBound = try clothingBinManager.makePOIItemsInUserScreen(from: allClothingBinArray, topRightLat: topRightLat, topRightLon: topRightLon, bottomLeftLat: bottomLeftLat, bottomLeftLon: bottomLeftLon)
+            
+            self.helpTextView.isHidden = true
+            mapView.addPOIItems(clothingArrayByBound)
+            clearArray()
+            
+        } catch ClothingBinError.noneClothingBin {
             helpTextView.text = "현 위치에 등록된 의류수거함이 없습니다."
             helpTextView.isHidden = false
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                 self.helpTextView.isHidden = true
             }
-        } else {
-            for clothinBin in clothingBinLocationArray {
-                let poiItem = MTMapPOIItem()
-                poiItem.itemName = clothinBin[0]
-                poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
-                    latitude: Double(clothinBin[1]) ?? 9000000,
-                    longitude: Double(clothinBin[2]) ?? 9000000))
-                poiItem.markerType = .redPin
-                poiItemArray.append(poiItem)
-                self.helpTextView.isHidden = true
-            }
-            mapView.addPOIItems(poiItemArray)
-            clearArray()
+        }  catch {
+            print("Error: processing loadClothinBinByBound")
         }
     }
-    
-    func checkMapViewLevel() -> Bool{
-        switch mapView.zoomLevel {
-        case 0...2:
-            print("\(mapView.zoomLevel)zoomLevel")
-            return true
-        case 3..<15:
-            // 지도를 확대해주세요.(알림창 띄움)
-            helpTextView.text = "지도를 확대해 주세요."
-            helpTextView.isHidden = false
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {                    self.helpTextView.isHidden = true
+        func checkMapViewLevel() -> Bool{
+            switch mapView.zoomLevel {
+            case 0...2:
+                print("\(mapView.zoomLevel)zoomLevel")
+                return true
+            case 3..<15:
+                // 지도를 확대해주세요.(알림창 띄움)
+                helpTextView.text = "지도를 확대해 주세요."
+                helpTextView.isHidden = false
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {                    self.helpTextView.isHidden = true
+                }
+                return false
+            default:
+                print("\(mapView.zoomLevel)zoomLevel")
+                return false
             }
-            return false
-        default:
-            print("\(mapView.zoomLevel)zoomLevel")
-            return false
         }
-    }
     
     //전역변수 초기화
     func clearArray() {
@@ -615,16 +606,11 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadClothingBinByDistrict() {
         removePOIItemsData()
         buttonSelectUnable()
-        //clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
-        
-        
-        //print("loadClothingBinByDistrict:\(clothingBinLocationArray)")
         
         // 타입 변환: [[Sting]] -> [ClothingBin]
         let districtClothingBinArray =  mapLocationManager.processingStringInLocationArray2(locationDataArray: clothingBinLocationArray)
         
-
-        mapView.addPOIItems(clothingBinManager.makePOIItems(from: districtClothingBinArray))
+        mapView.addPOIItems(clothingBinManager.makePOIItemsByDistrict(from: districtClothingBinArray))
         poiItemIsOnMap = true
         
         //dataArray 배열 비워주기
