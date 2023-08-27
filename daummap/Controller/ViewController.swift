@@ -11,7 +11,7 @@ import Foundation
 
 class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelegate, MTMapReverseGeoCoderDelegate {
     //MARK: - Properties
-
+    
     public var geocoder: MTMapReverseGeoCoder!
     var mapView:MTMapView!
     var locationManager: CLLocationManager!
@@ -32,7 +32,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     var currentlocationManager = CurrentLocationManager()
     
     var clothingBinManager: ClothingBinManager = ClothingBinManager()
-
+    
     
     // 주소 검색 데이터
     var address: String?
@@ -41,17 +41,17 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     // 현재 위치 button이 몇번 눌렸는지 감지
     var currentLocationButtonTapCount : Int = 0
     
-
+    
     
     //mapLocationManager (Model)
     var mapLocationManager = MapLocationManager()
     
     //엑셀 파일에서 불러온 의류수거함 위치 데이터 배열
-var clothingBinLocationArray : [[String]] = []
+    var clothingBinLocationArray : [[String]] = []
     
     
     //MARK: - UISetting
-
+    
     //초기 안내 창 뷰
     private let guideView: UIView = {
         let view = UIView()
@@ -101,25 +101,25 @@ var clothingBinLocationArray : [[String]] = []
     
     //현재 지도 검색 버튼
     private let currentLocationSearchMapButton: UIButton = {
-        let currentLocationSearchMapbutton = UIButton(type: .system)
+        let button = UIButton(type: .system)
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         
         //currentMapbutton
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
-        currentLocationSearchMapbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        currentLocationSearchMapbutton.setTitleColor(.black, for: .normal)
-        currentLocationSearchMapbutton.setTitle("현재 지도 검색", for: .normal)
-        currentLocationSearchMapbutton.configuration?.cornerStyle = .capsule
-        currentLocationSearchMapbutton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        currentLocationSearchMapbutton.translatesAutoresizingMaskIntoConstraints = false
-        currentLocationSearchMapbutton.layer.cornerRadius = 14
-        currentLocationSearchMapbutton.layer.shadowColor = UIColor.gray.cgColor
-        currentLocationSearchMapbutton.layer.shadowOpacity = 0.3
-        currentLocationSearchMapbutton.layer.shadowOffset = CGSize.zero
-        currentLocationSearchMapbutton.layer.shadowRadius = 6
-        currentLocationSearchMapbutton.translatesAutoresizingMaskIntoConstraints = false
-        return currentLocationSearchMapbutton
+        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitle("현재 지도 검색", for: .normal)
+        button.configuration?.cornerStyle = .capsule
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 14
+        button.layer.shadowColor = UIColor.gray.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize.zero
+        button.layer.shadowRadius = 6
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     //주소검색 버튼
@@ -213,14 +213,11 @@ var clothingBinLocationArray : [[String]] = []
         mapView.baseMapType = .standard
         makeUI()
         
-        // pickerView에 지역구를 넣어줌
-        // pickerViewcityListNew = datacore.pickerToFileDictionary.keys.map{String($0)}.sorted()
         pickerViewcityListNew =
         Region.allCases.map{$0.rawValue}
         
         self.loadLocation()
         
-        // loadcurrentLocation()
         let coor = locationManager.location?.coordinate
         if let currentLocationLat = coor?.latitude , let currentLocationLon = coor?.longitude {
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLat, longitude: currentLocationLon)), animated: true)
@@ -246,78 +243,79 @@ var clothingBinLocationArray : [[String]] = []
     }
     
     // MARK: - [위치 서비스에 대한 권한 확인 실시]
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            if status == .authorizedAlways {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 항상 허용]")
-                print("===============================")
-                print("")
-            }
-            if status == .authorizedWhenInUse {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 앱 사용 시 허용]")
-                print("===============================")
-                print("")
-            }
-            if status == .denied {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 거부]")
-                print("===============================")
-                print("")
-            }
-            if status == .restricted || status == .notDetermined {
-                print("")
-                print("===============================")
-                print("[ViewController > locationManager() : 위치 사용 권한 대기 상태]")
-                print("===============================")
-                print("")
-            }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways {
+            print("")
+            print("===============================")
+            print("[ViewController > locationManager() : 위치 사용 권한 항상 허용]")
+            print("===============================")
+            print("")
         }
+        if status == .authorizedWhenInUse {
+            print("")
+            print("===============================")
+            print("[ViewController > locationManager() : 위치 사용 권한 앱 사용 시 허용]")
+            print("===============================")
+            print("")
+        }
+        if status == .denied {
+            print("")
+            print("===============================")
+            print("[ViewController > locationManager() : 위치 사용 권한 거부]")
+            print("===============================")
+            print("")
+        }
+        if status == .restricted || status == .notDetermined {
+            print("")
+            print("===============================")
+            print("[ViewController > locationManager() : 위치 사용 권한 대기 상태]")
+            print("===============================")
+            print("")
+        }
+    }
     
     // MARK: - [위치 정보 지속적 업데이트]
-       func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-           if let location = manager.location as CLLocation? {
-                     if location.coordinate.latitude == 0 {
-                         return
-                     }
-
-                     locationManager.stopUpdatingLocation()
-
-                     // do stuff with location
-               
-               if let location = locations.first {
-                   // [위치 정보가 nil 이 아닌 경우]
-                   print("")
-                   print("===============================")
-                   print("[ViewController > didUpdateLocations() : 위치 정보 확인 실시]")
-                   print("[위도 : \(location.coordinate.latitude)]")
-                   print("[경도 : \(location.coordinate.longitude)]")
-                   print("===============================")
-                   print("")
-                   currentLocationCoordinate.latitude = location.coordinate.latitude
-                   currentLocationCoordinate.longitude = location.coordinate.longitude
-               }
-                 }
-          
-       }
-       
-       
-       
-       
-       
-       // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
-       func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-           print("")
-           print("===============================")
-           print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
-           print("[error : \(error)]")
-           print("[localizedDescription : \(error.localizedDescription)]")
-           print("===============================")
-           print("")
-       }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = manager.location as CLLocation? {
+            if location.coordinate.latitude == 0 {
+                return
+            }
+            
+            locationManager.stopUpdatingLocation()
+            
+            // do stuff with location
+            
+            if let location = locations.first {
+                // [위치 정보가 nil 이 아닌 경우]
+                print("")
+                print("===============================")
+                print("[ViewController > didUpdateLocations() : 위치 정보 확인 실시]")
+                print("[위도 : \(location.coordinate.latitude)]")
+                print("[경도 : \(location.coordinate.longitude)]")
+                print("===============================")
+                print("")
+                currentLocationCoordinate.latitude = location.coordinate.latitude
+                currentLocationCoordinate.longitude = location.coordinate.longitude
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
+    // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("")
+        print("===============================")
+        print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
+        print("[error : \(error)]")
+        print("[localizedDescription : \(error.localizedDescription)]")
+        print("===============================")
+        print("")
+    }
+    //MARK: - mapLongTap
     
     // 길게 지도 눌리면 의류수거함 추가됨
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
@@ -344,31 +342,8 @@ var clothingBinLocationArray : [[String]] = []
     }
     
     
-    // 현재 사용자의 위치를 불러옴
-    func loadcurrentLocation() {
-//        locationManager = CLLocationManager()
-//        locationManager.delegate = self
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//        locationManager.startUpdatingLocation()
-//
-//        checkLocation()
-        
-        
-
-        
-//        let coor = locationManager.location?.coordinate
-//        if coor?.latitude != nil && coor?.longitude != nil {
-//            print("lat:\(coor?.latitude),lon:\(coor?.longitude)")
-//            currentLocationLatitude = coor?.latitude
-//            currentLocationLongitude = coor?.longitude
-//            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude!, longitude: currentLocationLongitude!)), animated: true)
-//        } else {
-//            self.alertCurrentLocation()
-//        }
-    }
     
-    //MARK: - 현재 위치 버튼 실행시 (ing)
+    //MARK: - 현재 위치 버튼 실행시
     @objc func currentLocationButtonTapped(sender: UIButton) {
         print("현재위치 버튼이 눌렸습니다. ")
         
@@ -399,42 +374,37 @@ var clothingBinLocationArray : [[String]] = []
                 
                 // 현재 위치를 지도의 중앙으로 맞춤 : mapView
                 mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-       
+                
                 // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-                let currentLocationPOIItem = clothingBinManager.setMapCenter(at: currentLocationMTMapPoint)
+                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
                 
                 
                 // 현재위치 추가 : mapView
                 mapView.add(currentLocationPOIItem)
                 mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-       
                 
                 // CVSdataArray 업데이트 -> 전체 의류수거함
-                loadDataFromAllCVSAt()
+                loadDataFromAllCVS()
                 
                 // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
                 loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
                 clearArray()
             } else {
-                
                 currentLocationButtonTapCount += 1
                 
                 // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-                let currentLocationPOIItem = clothingBinManager.setMapCenter(at: currentLocationMTMapPoint)
-
-               
+                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
+                
+                
                 // 현재위치 추가
                 mapView.add(currentLocationPOIItem)
-               
+                
                 mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
             }
         @unknown default:
             self.alertCurrentLocation()
         }
     }
-    
-    // 현재 위치 검색
-    
     
     //현재 위치 설정 알림
     func alertCurrentLocation() {
@@ -449,19 +419,18 @@ var clothingBinLocationArray : [[String]] = []
         
     }
     
-    //현재 지도 검색
+    // 현재 지도 검색
     @objc func currentLocationMapButtonTapped(sender: UIButton) {
         removePOIItemsData()
         
         print("현재 지도 검색 검색 버튼이 눌렸습니다.")
         
-        loadDataFromAllCVSAt()
+        loadDataFromAllCVS()
         
-        //업데이트된 CVSdataArray를 바탕으로 데이터를 불러온다. (가까이 있는 10개)
         let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
         
         if checkMapViewLevel() {
-            loadClothinBinByBound()
+            loadClothingBinByBound()
         }
     }
     
@@ -470,13 +439,13 @@ var clothingBinLocationArray : [[String]] = []
         print("::searchAddressButtonTapped::")
         
         let vc = AddressSearchViewController()
-                let storyboardName = vc.storyboardName
-                let storyboardID = vc.storyboardID
-
-                let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-                let viewController = storyboard.instantiateViewController(identifier: storyboardID)
-
-                present(viewController, animated: true)
+        let storyboardName = vc.storyboardName
+        let storyboardID = vc.storyboardID
+        
+        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
+        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+        
+        present(viewController, animated: true)
     }
     
     
@@ -517,7 +486,7 @@ var clothingBinLocationArray : [[String]] = []
     
     
     //MARK: - CVS 전체 파일 데이터 로드 - 전체 csv파일을 경로로 지정
-    private func loadDataFromAllCVSAt() {
+    private func loadDataFromAllCVS() {
         for resource in Region.allCases {
             let path = Bundle.main.path(forResource: resource.getFileName(), ofType: "csv") ?? "\(Region.Gangnam.getFileName())"
             print("path: \(path)")
@@ -525,32 +494,30 @@ var clothingBinLocationArray : [[String]] = []
         }
     }
     
-    //MARK: - 현재 위치 근처 데이터 의류수거함을 가져오는 함수 (:사용자 현재위치)
+    //MARK: - 1) 사용자 현재위치 ->
     private func loadClothingBinByCurrentLocation(from cvsArray:[[String]]) {
         let clotingbinDataArray =  clothingBinManager.loadClothingBinCloseCurrentLocation(from: cvsArray, locationManager: locationManager)
         
         // poiItemArray에 POIItem 업데이트
-        poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
+        // poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
         
-        if poiItemArray.isEmpty == true {
+        let poiItemArrayInclothingBinManager = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
+        
+        if poiItemArrayInclothingBinManager.isEmpty == true {
             helpTextView.text = "현재 위치에서 가까운 의류수거함이 없습니다."
             helpTextView.isHidden = false
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                 self.helpTextView.isHidden = true
             }
         } else {
-            mapView.addPOIItems(poiItemArray)
+            mapView.addPOIItems(poiItemArrayInclothingBinManager)
             mapView.fitAreaToShowAllPOIItems()
         }
-        clearArray()
+        //clearArray()
     }
-    
-    // 화면의 가장자리 값으로 의류수거함 불러오기
-    func loadClothinBinByBound(){
-        
-        //clothingBinLocationArray = mapLocationManager.processingStringInLocationArray(locationDataArray: clothingBinLocationArray)
-        
-        var allClothingBinArray = mapLocationManager.processingStringInLocationArray2(locationDataArray: clothingBinLocationArray)
+    //MARK: - 2) 유저 화면 상 -> 의류수거함
+    func loadClothingBinByBound() {
+        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
         print(allClothingBinArray)
         
         //사용자 화면의 끝점의 좌표
@@ -576,23 +543,24 @@ var clothingBinLocationArray : [[String]] = []
             print("Error: processing loadClothinBinByBound")
         }
     }
-        func checkMapViewLevel() -> Bool{
-            switch mapView.zoomLevel {
-            case 0...2:
-                print("\(mapView.zoomLevel)zoomLevel")
-                return true
-            case 3..<15:
-                // 지도를 확대해주세요.(알림창 띄움)
-                helpTextView.text = "지도를 확대해 주세요."
-                helpTextView.isHidden = false
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {                    self.helpTextView.isHidden = true
-                }
-                return false
-            default:
-                print("\(mapView.zoomLevel)zoomLevel")
-                return false
+    
+    func checkMapViewLevel() -> Bool{
+        switch mapView.zoomLevel {
+        case 0...2:
+            print("\(mapView.zoomLevel)zoomLevel")
+            return true
+        case 3..<15:
+            // 지도를 확대해주세요.(알림창 띄움)
+            helpTextView.text = "지도를 확대해 주세요."
+            helpTextView.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {                    self.helpTextView.isHidden = true
             }
+            return false
+        default:
+            print("\(mapView.zoomLevel)zoomLevel")
+            return false
         }
+    }
     
     //전역변수 초기화
     func clearArray() {
@@ -600,6 +568,7 @@ var clothingBinLocationArray : [[String]] = []
         clothingBinLocationArray = []
         clothingBinLocationArray = []
     }
+    //MARK: - 3) 지역 선택 -> 의류수거함
     
     //지역 선택 버튼 눌림
     //데이터를 cvs에서 불러와서 poiItem의 배열에 담아 이를 mapView에 띄움. (:UI 지역구 선택시 사용)
@@ -608,9 +577,10 @@ var clothingBinLocationArray : [[String]] = []
         buttonSelectUnable()
         
         // 타입 변환: [[Sting]] -> [ClothingBin]
-        let districtClothingBinArray =  mapLocationManager.processingStringInLocationArray2(locationDataArray: clothingBinLocationArray)
+        let districtClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        let poiItemArray = clothingBinManager.makePOIItemsByDistrict(from: districtClothingBinArray)
         
-        mapView.addPOIItems(clothingBinManager.makePOIItemsByDistrict(from: districtClothingBinArray))
+        mapView.addPOIItems(poiItemArray)
         poiItemIsOnMap = true
         
         //dataArray 배열 비워주기
@@ -632,26 +602,21 @@ var clothingBinLocationArray : [[String]] = []
         
         let btnDone = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(onPickDone))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let btnCancel = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(onPickCancel))
+        let btnCancel = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(pickerViewResign))
         toolbar.setItems([btnCancel , space , btnDone], animated: true)
         toolbar.isUserInteractionEnabled = true
         
         //텍스트필드 입력 수단 연결
         locationSelectButton.inputView = pickerView
         locationSelectButton.inputAccessoryView = toolbar
-        
     }
     
     
     //MARK: - PickerView 확인 버튼
-    // todo
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
         locationSelectButton.text = "\(selectedCity.rawValue)"
         UIPickerToCVS(resourceFileName:selectedCity.getFileName())
-    
-        
-      
         locationSelectButton.resignFirstResponder()
     }
     
@@ -665,15 +630,14 @@ var clothingBinLocationArray : [[String]] = []
         }
     }
     
-    @objc func onPickCancel() {
+    @objc func pickerViewResign() {
         locationSelectButton.resignFirstResponder() /// 피커뷰 내림
     }
-
+    
     
 }
 
 
-//MARK: - PickerView 익스텐션 구현
 
 extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource{
     
@@ -691,7 +655,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         self.guideView.addSubview(guideViewNextButton)
         self.guideView.addSubview(guideViewImageView)
         //self.view.addSubview(guideViewImageView)
-
+        
         
         helpTextView.isHidden = true
         
@@ -769,17 +733,14 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
             self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
             self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
-            //self.guideViewImageView.widthAnchor.constraint(equalToConstant: 100),
-            //self.guideViewImageView.heightAnchor.constraint(equalToConstant: 100)
-
         ])
     }
+    
+    //MARK: - PickerView 설정
     //PickerView의 component 개수
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
-    
     
     // PickerView의 component별 행수
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -790,13 +751,12 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(pickerViewcityListNew[row])"
     }
+    
     // 피커뷰에서 선택된 행을 처리할 수 있는 메서드
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //선택된 city를 selectedCity에 넣어줌.
         selectedCity = Region(rawValue: pickerViewcityListNew[row]) ?? .Gangnam
-        
         currentRow=row
-        
     }
     
     //mapview 터치시 피커뷰 내려가도록
@@ -819,12 +779,8 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             } else {
                 UIApplication.shared.open(appStoreURL)
             }
-            
         }
     }
-    
-    
-    
     
     func activityIndicatorStartAction() {
         self.activityIndicator.startAnimating()
@@ -838,17 +794,13 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     
     func activityIndicatorStopAction() {
         print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
-        
         self.activityIndicator.stopAnimating()
         
         if activityIndicator.isAnimating {
-            
             DispatchQueue.main.async {
                 
             }
-            
         }
-        
     }
     
     func switchActivityIndicator() {
@@ -878,7 +830,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         }
         
     }
-   
+    
 }
 
 //MARK: - String - remove 익스텐션 구현

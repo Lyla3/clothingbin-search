@@ -30,7 +30,7 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
     let storyboardID = "addressTableSearchVC"
     
     
-    //검색을 도와줌
+    //검색을 도와준다
     private var searchCompleter: MKLocalSearchCompleter?
     
     //검색 지역 범위를 결정

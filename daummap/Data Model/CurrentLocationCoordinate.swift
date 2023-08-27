@@ -10,7 +10,4 @@ import Foundation
 struct CurrentLocationCoordinate {
     var latitude: Double?
     var longitude: Double?
-    
-    
-   
 }

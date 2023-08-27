@@ -37,12 +37,12 @@ class ClothingBinManager {
         
         var clothingBinArray: [ClothingBin] = []
         
-        clothingBinArray = maplocationManager.processingStringInLocationArray2(locationDataArray: cvsArray)
+        clothingBinArray = maplocationManager.changeStringToClothingBin(from: cvsArray)
         
         self.locationManager.startUpdatingLocation() // 위치 업데이트 시작
         
         
-        // 현재위치와의 거리를 구해서
+        // 현재위치와의 거리를 구한다.
         for clothingBin in clothingBinArray {
             let clothingbinCoordinate = CLLocation(latitude: CLLocationDegrees(clothingBin.lat), longitude: CLLocationDegrees(clothingBin.lon))
             let distanceFromCurrentLocationToClothingBin = Double(locationManager.location?.distance(from: clothingbinCoordinate) ?? 99999999)
@@ -53,11 +53,7 @@ class ClothingBinManager {
         
         // distanceArray에서 가까운 순으로 10개를 뽑는다.
         // distanceArrayTenCloseToUser에 넣는다.
-        print("::distanceArray::")
-        dump(distanceArray)
-        
         distanceArray.sort(by: {$0.distanceFromUser ?? 9999999 < $1.distanceFromUser ?? 9999999})
-        
         if distanceArray.count >= 10 {
             for i in 0...9 {
                 distanceArrayTenCloseToUser.append(distanceArray[i])
@@ -71,6 +67,8 @@ class ClothingBinManager {
     
     func makeMapPOIItem(with inputArray: [ClothingBin]) -> [MTMapPOIItem] {
         // 사용자 위치에서 20km이내의 의류수거함만 가져올 수 있도록 한다.
+        poiItemArray = []
+        
         for clothingBin in inputArray {
             if clothingBin.distanceFromUser ?? 999999 < 20000 {
                 let poiItem = MTMapPOIItem()
@@ -87,8 +85,9 @@ class ClothingBinManager {
         return poiItemArray
     }
     
-    
-    func setMapCenter(at poiItem: MTMapPoint) ->  MTMapPOIItem {
+    //MARK: - 1) 
+
+    func makePOIItemsByCurrentLoaction(at poiItem: MTMapPoint) ->  MTMapPOIItem {
         var currentLocationPOIItem = MTMapPOIItem()
         currentLocationPOIItem.itemName = "현재위치"
         currentLocationPOIItem.mapPoint = poiItem
@@ -105,7 +104,6 @@ class ClothingBinManager {
             
             let poiItem = MTMapPOIItem()
             
-            //뷰 만들고 클릭되면 띄우기
             poiItem.itemName = clothingBin.info
             poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
                 latitude: clothingBin.lat,
@@ -135,7 +133,6 @@ class ClothingBinManager {
                     longitude: clothingBin.lon))
                 poiItem.markerType = .redPin
                 poiItemArray.append(poiItem)
-                //self.helpTextView.isHidden = true
             
             }
             return poiItemArray
