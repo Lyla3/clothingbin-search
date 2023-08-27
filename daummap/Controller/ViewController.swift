@@ -30,9 +30,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     var currentLocationCoordinate = CurrentLocationCoordinate()
     var currentlocationManager = CurrentLocationManager()
-    
     var clothingBinManager: ClothingBinManager = ClothingBinManager()
-    
     
     // 주소 검색 데이터
     var address: String?
@@ -143,26 +141,23 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }()
     
     //지역 선택 버튼
-    private let locationSelectButton: UITextField = {
-        let locationSelectButton = UITextField()
+    private let regionButton: UITextField = {
+        let button = UITextField()
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
-        locationSelectButton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        locationSelectButton.minimumFontSize = 20
-        locationSelectButton.textColor = UIColor.black
-        locationSelectButton.translatesAutoresizingMaskIntoConstraints = false
-        locationSelectButton.text = "지역선택"
-        locationSelectButton.textAlignment = .center
-        locationSelectButton.tintColor = UIColor.clear
-        
-        
+        button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        button.minimumFontSize = 20
+        button.textColor = UIColor.black
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.text = "지역선택"
+        button.textAlignment = .center
+        button.tintColor = UIColor.clear
         //모서리 및 그림자
-        locationSelectButton.layer.cornerRadius = 5
-        locationSelectButton.layer.shadowColor = UIColor.gray.cgColor
-        locationSelectButton.layer.shadowOpacity = 0.3
-        locationSelectButton.layer.shadowOffset = CGSize.zero
-        locationSelectButton.layer.shadowRadius = 6
-        
-        return locationSelectButton
+        button.layer.cornerRadius = 5
+        button.layer.shadowColor = UIColor.gray.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize.zero
+        button.layer.shadowRadius = 6
+        return button
     }()
     
     //안내 알림창 mapView 안내창
@@ -346,6 +341,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //MARK: - 현재 위치 버튼 실행시
     @objc func currentLocationButtonTapped(sender: UIButton) {
         print("현재위치 버튼이 눌렸습니다. ")
+        // ❤️
+        print("::checkButtonStatus::")
+        print(clothingBinManager.buttonCheck(pressedButtonStatus: .currentLocation))
         
         // locationManager 상태에 따라 실행되는 함수가 달라짐
         switch locationManager.authorizationStatus {
@@ -420,10 +418,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     // 현재 지도 검색
-    @objc func currentLocationMapButtonTapped(sender: UIButton) {
+    @objc func currentMapButtonTapped(sender: UIButton) {
         removePOIItemsData()
         
         print("현재 지도 검색 검색 버튼이 눌렸습니다.")
+        // ❤️
+        print("::checkButtonStatus::")
+        print(clothingBinManager.buttonCheck(pressedButtonStatus: .map))
         
         loadDataFromAllCVS()
         
@@ -518,7 +519,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //MARK: - 2) 유저 화면 상 -> 의류수거함
     func loadClothingBinByBound() {
         let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-        print(allClothingBinArray)
         
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
@@ -607,17 +607,17 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         toolbar.isUserInteractionEnabled = true
         
         //텍스트필드 입력 수단 연결
-        locationSelectButton.inputView = pickerView
-        locationSelectButton.inputAccessoryView = toolbar
+        regionButton.inputView = pickerView
+        regionButton.inputAccessoryView = toolbar
     }
     
     
     //MARK: - PickerView 확인 버튼
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
-        locationSelectButton.text = "\(selectedCity.rawValue)"
+        regionButton.text = "\(selectedCity.rawValue)"
         UIPickerToCVS(resourceFileName:selectedCity.getFileName())
-        locationSelectButton.resignFirstResponder()
+        regionButton.resignFirstResponder()
     }
     
     func UIPickerToCVS (resourceFileName:String) {
@@ -631,7 +631,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     @objc func pickerViewResign() {
-        locationSelectButton.resignFirstResponder() /// 피커뷰 내림
+        regionButton.resignFirstResponder() /// 피커뷰 내림
     }
     
     
@@ -649,7 +649,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         self.view.addSubview(currentLocationButton)
         self.view.addSubview(searchAddressButton)
         self.view.addSubview(currentLocationSearchMapButton)
-        self.view.addSubview(locationSelectButton)
+        self.view.addSubview(regionButton)
         self.view.addSubview(helpTextView)
         self.view.addSubview(guideView)
         self.guideView.addSubview(guideViewNextButton)
@@ -659,24 +659,25 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         
         helpTextView.isHidden = true
         
-        //self.view.addSubview(activityIndicator)
+        // 현재 위치 버튼 눌림
         currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
-        currentLocationSearchMapButton.addTarget(self, action: #selector(currentLocationMapButtonTapped), for: .touchUpInside)
+        
+        currentLocationSearchMapButton.addTarget(self, action: #selector(currentMapButtonTapped), for: .touchUpInside)
         
         //searchAddressButton 버튼 눌릴 시
         searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
         
         //지역선택 버튼 눌리면 locationSelectButtonTapped 실행, pickerView가 실질적으로 실행
-        locationSelectButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
+        regionButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
         mapView.setZoomLevel(2, animated: false)
         
         
         //지역선택 버튼 레이아웃
         NSLayoutConstraint.activate([
-            self.locationSelectButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
-            self.locationSelectButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-            self.locationSelectButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-            self.locationSelectButton.heightAnchor.constraint(equalToConstant: 40)
+            self.regionButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
+            self.regionButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+            self.regionButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+            self.regionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         //안내 알림창 버튼 레이아웃
@@ -757,11 +758,15 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         //선택된 city를 selectedCity에 넣어줌.
         selectedCity = Region(rawValue: pickerViewcityListNew[row]) ?? .Gangnam
         currentRow=row
+        
+        // ❤️
+        print("::checkButtonStatus::")
+        print(clothingBinManager.buttonCheck(pressedButtonStatus: .region))
     }
     
     //mapview 터치시 피커뷰 내려가도록
     func mapView(_ mapView: MTMapView!, singleTapOn mapPoint: MTMapPoint!) {
-        locationSelectButton.resignFirstResponder()
+        regionButton.resignFirstResponder()
     }
     
     //poiItem 선택시 poiItem 지도 메서드 실행되도록
@@ -818,19 +823,6 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         currentLocationButton.isEnabled = true
         currentLocationSearchMapButton.isEnabled = true
     }
-    
-    func checkLocation() {
-        if locationManager.authorizationStatus != .authorizedWhenInUse || locationManager.authorizationStatus != .authorizedAlways
-        {
-            print("requestingautorization")
-            locationManager.requestWhenInUseAuthorization()
-            
-        } else {
-            print("startupdatinglocation")
-        }
-        
-    }
-    
 }
 
 //MARK: - String - remove 익스텐션 구현

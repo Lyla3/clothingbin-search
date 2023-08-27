@@ -24,6 +24,11 @@ class ClothingBinManager {
     
     // 이동
     var poiItemIsOnMap: Bool = false
+    
+    var previousButtonStatus: ButtonStatus = .none
+    var presentButtonStatus: ButtonStatus = .none
+    
+    
 
     //MARK: - loadLoadLocationManager
     func loadLoadLocationManager() {
@@ -144,6 +149,81 @@ class ClothingBinManager {
         
     }
     
+    // 이전 버튼 vs 현재 눌린 버튼 
+//    func checkPressedButtonStatus(pressedButtonStatus: ButtonStatus) -> Bool {
+//        //
+//        if previousButtonStatus == .none {
+//            presentButtonStatus = pressedButtonStatus
+//        } else {
+//            // 1 - 1,2,3 일때
+//            if previousButtonStatus == .currentLocation {
+//                presentButtonStatus = pressedButtonStatus
+//                // 현재위치 버튼이 눌린 경우
+//                // 각 버튼에 맞는 내용 실행
+//
+//                switch pressedButtonStatus {
+//                case .currentLocation:
+//
+//                }
+//                // 2,3일때
+//            } else {
+//                // 2,3 - 1인가?
+//                if pressedButtonStatus == .currentLocation {
+//                    // 현재위치로만 간다(불러오기 X)
+//                    //
+//                } else {
+//
+//                }
+//            }
+//        }
+//
+//
+//
+//
+//
+//        return false
+//    }
+    
+    func buttonCheck(pressedButtonStatus: ButtonStatus) -> ExecuteButton {
+        if poiItemIsOnMap && pressedButtonStatus == .currentLocation {
+           // 현재위치로만 이동
+            
+            presentButtonStatus = pressedButtonStatus
+            
+            
+            poiItemIsOnMap = false
+            previousButtonStatus = presentButtonStatus
+            return .changeMapCenter
+        } else if pressedButtonStatus == .currentLocation {
+            switch pressedButtonStatus {
+            case .currentLocation:
+                return .currentLocation
+            case .map:
+                poiItemIsOnMap = true
+                return .map
+            case .region:
+                poiItemIsOnMap = true
+                return .region
+            default:
+                poiItemIsOnMap = true
+                return .currentLocation
+            }
+        } else {
+            switch pressedButtonStatus {
+            case .currentLocation:
+                return .currentLocation
+            case .map:
+                poiItemIsOnMap = true
+                return .map
+            case .region:
+                poiItemIsOnMap = true
+                return .region
+            default:
+                poiItemIsOnMap = true
+                return .currentLocation
+            }
+        }
+    }
 }
 
 enum ClothingBinError :Error {

@@ -55,3 +55,17 @@ enum Region: String, CaseIterable {
     }
 }
 
+enum ButtonStatus {
+    case none
+    case currentLocation
+    case region
+    case map
+}
+
+enum ExecuteButton {
+    case currentLocation
+    case region
+    case map
+    case changeMapCenter
+}
+
