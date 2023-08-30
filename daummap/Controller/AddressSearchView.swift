@@ -11,13 +11,26 @@ import UIKit
 import FirebaseStorage
 import Firebase
 import FirebaseDatabase
+import FirebaseFirestore
 import CoreLocation
 
 
-class AddressSearchViewController: UIViewController, UINavigationControllerDelegate, SendUpdateLocationDelegate {
+class AddressSearchViewController: UIViewController, UINavigationControllerDelegate, SendDataProtocol, SendUpdateLocationDelegate {
+    
+    
+    var location:[String] = []
     func sendUpdate(location: CLLocationCoordinate2D?) {
         //
+        selectedLocation = location
+        DispatchQueue.main.async {
+            if let latitude = self.selectedLocation?.latitude {
+                self.addressLabel.text = "\(latitude)"
+            }
+        }
+        print("sendUpdate 실행완료")
     }
+    
+    
     
     
     //MARK: - Properites
@@ -31,43 +44,30 @@ class AddressSearchViewController: UIViewController, UINavigationControllerDeleg
             print("nonOptionalLocation")
             addressLabel.text = String(format:"%f",nonOptionalLocation)
         }
-        //addressLabel.text = 
-    
-        
-        
-        //
-        
     }
     
     
     var firebaseDB: DatabaseReference!
-    
-    
     @IBOutlet var addressLabel: UILabel!
-    
     @IBOutlet var clothingBinImageButton: UIButton!
     
+    @IBOutlet var cordinateLabel: UILabel!
+    
     let imagePicker = UIImagePickerController()
-    
     let storage = Storage.storage()
-    
     var selectedLocation : CLLocationCoordinate2D?
     
-    // While the file names are the same, the references point to different files
-    // mountainsRef.name == mountainImagesRef.name            // true
-    // mountainsRef.fullPath == mountainImagesRef.fullPath    // false
-        
-    
-    
+    var locationString : String = "" {
 
-    //var firebaseDB: DatabaseReference
-    //let myFirestore = MyFir
-    
-    var locationString : String = ""
+        willSet(newValue){
+            print(newValue)
+        }
+    }
+
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
-             self.view.endEditing(true)
-       }
+        self.view.endEditing(true)
+    }
     //storyboardName : 파일이름, storyboardID : ViewController의 ID
     let storyboardName = "AddressSearchView"
     let storyboardID = "addressSearchVC1"
@@ -78,37 +78,32 @@ class AddressSearchViewController: UIViewController, UINavigationControllerDeleg
         
         vc.delegate = self
         
-         super.viewDidLoad()
-        
-        //여기 주석
-        //imagePicker.delegate = self
-        //imagePicker.allowsEditing = false
-        //imagePicker.sourceType = .camera
-
-        //photoImageView.layer.borderWidth  = 0.5
-        //photoImageView.layer.borderColor = UIColor.lightGray.cgColor
-        
+        super.viewDidLoad()
         
         // Create a root reference
         let storageRef = storage.reference()
-
+        
         
         let riversRef = storageRef.child("images/rivers.jpg")
         
         // Create a reference to "mountains.jpg"
         let mountainsRef = storageRef.child("mountains.jpg")
-
+        
         // Create a reference to 'images/mountains.jpg'
         let mountainImagesRef = storageRef.child("images/mountains.jpg")
-
-        // Create a reference to the file you want to upload
         
+        // Create a reference to the file you want to upload
+        "\(selectedLocation?.latitude)"
     }
     override func viewWillAppear(_ animated: Bool) {
         print("주소:\(String(describing: selectedLocation))")
         //addressLabel.text = String(describing: selectedLocation)
     }
     
+    func dataSend(data: String) {
+        print("dataSend 실행 ")
+        addressLabel.text = data
+    }
     
     @IBAction func addLoctionButtonTapped(_ sender: UIButton) {
         print("Button Pressed")
@@ -119,10 +114,19 @@ class AddressSearchViewController: UIViewController, UINavigationControllerDeleg
         let storyboardID = vc.storyboardID
         
         let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+        let viewController = storyboard.instantiateViewController(identifier: storyboardID) as TableViewSearchViewController
         vc.delegate = self
-
+        vc.dataDelegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        
+        viewController.delegate = self
+        //self.navigationController?.pu
+        
         present(viewController, animated: true)
+        //present(vc, animated: true, completion: nil)
+
+        
+        
         
         
     }
@@ -131,57 +135,76 @@ class AddressSearchViewController: UIViewController, UINavigationControllerDeleg
     
     
     @IBAction func submitButtonTapped(_ sender: Any) {
-//        guard let content = "test data" else {return}
-//        let message = Message(id: "234", content: content)
-//
-//        storage.
+        //        guard let content = "test data" else {return}
+        //        let message = Message(id: "234", content: content)
+        //
+        //        storage.
         let storageRef = Storage.storage().reference()
-
-        
-        
-        
         //new for database
         firebaseDB = Database.database().reference()
         //firebaseDB.child(Date().toString()).setValue(addressTextfield.text)
-        firebaseDB.child("냥냥").setValue("value값 입니다")
+        firebaseDB.child("냥냥").setValue("\(String(describing: addressLabel.text))")
         // Data in memory
         let data = Data()
-
+        
+        
+        let dbRef = Firestore.firestore().collection("location")
+        
+        dbRef.getDocuments { (snapshot, error) in
+            if let snapshot {
+                var tempLocation: [String] = []
+                
+                for document in snapshot.documents {
+                    let id: String = document.documentID
+                    
+                    let docData: [String : Any] = document.data()
+                    let loc: String = docData["loc"] as? String ?? ""
+                    
+                    //self.location[0] = self.addressLabel.text ?? ""
+                    
+                    //tempLocation.append(self.location[0])
+                    
+                    // 데이터 올리기 loc인 데이터에 올린다, id는 새로 생성
+                    // dbRef.document(id).setData(["loc":String(describing: self.addressLabel.text)])
+                    dbRef.document(id).setData(["loc":self.locationString])
+                    print("locationString: \(self.locationString)")
+                }
+                self.location = tempLocation
+            }
+        }
+        
         // Create a reference to the file you want to upload
-          let riversRef = storageRef.child("currentLocation.jpg")
+        let riversRef = storageRef.child("currentLocation.jpg")
         
         // Upload the file to the path "images/rivers.jpg"
         let uploadTask = riversRef.putData(data, metadata: nil) { (metadata, error) in
-          guard let metadata = metadata else {
-            // Uh-oh, an error occurred!
-            return
-          }
-          // Metadata contains file metadata such as size, content-type.
-          let size = metadata.size
-          // You can also access to download URL after upload.
-          riversRef.downloadURL { (url, error) in
-            guard let downloadURL = url else {
-              // Uh-oh, an error occurred!
-              return
+            guard let metadata = metadata else {
+                // Uh-oh, an error occurred!
+                return
             }
-          }
+            // Metadata contains file metadata such as size, content-type.
+            let size = metadata.size
+            // You can also access to download URL after upload.
+            riversRef.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    // Uh-oh, an error occurred!
+                    return
+                }
+            }
         }
-            
-            
+        
+        
     }
     
-    //여기
+  
     @IBAction func closeButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
-        
     }
     
     @IBAction func clothingbinImageButtonTapped(_ sender: UIButton) {
-
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         present(imagePicker,animated: true, completion: nil)
-        
     }
     
     
@@ -191,10 +214,12 @@ class AddressSearchViewController: UIViewController, UINavigationControllerDeleg
         let fileName = "name"
         let metaData = StorageMetadata()
         metaData.contentType = ""
-
-        
     }
     
+    func checkData(str : String) -> Void {
+        print("잘 받았나? :\(str)")
+        locationString = "경도: \(str)"
+    }
 }
 
 
@@ -229,7 +254,4 @@ extension AddressSearchViewController : UIImagePickerControllerDelegate {
         
         self.dismiss(animated: true, completion: nil)
     }
-    
-  
-
 }

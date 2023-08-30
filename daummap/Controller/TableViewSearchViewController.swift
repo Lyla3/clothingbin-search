@@ -13,14 +13,20 @@ protocol SendUpdateLocationDelegate: AnyObject {
     func sendUpdate(location: CLLocationCoordinate2D?)
 }
 
+protocol SendDataProtocol {
+  func dataSend(data: String)
+}
+
 class LocationCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
 }
 
-class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
+class AddressSearchViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
     
     var delegate: SendUpdateLocationDelegate?
+    var dataDelegate: SendDataProtocol?
+    
     var selectedLocation: String = ""
     
     @IBOutlet weak var tableView: UITableView!
@@ -71,15 +77,29 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
     }
     
     func closeView(location:CLLocationCoordinate2D?) {
-        let vc = AddressSearchViewController()
-        vc.selectedLocation = location
-        print("\(location?.latitude)")
-        if let a = location?.latitude {
-            print(a)
-            vc.locationString = String(a)
-            //vc.addressLabel.text = String(a)
-        }
+//        let vc = AddressSearchViewController()
+//        vc.selectedLocation = location
+//        print("\(location?.latitude)")
+//        if let a = location?.latitude {
+//            print(a)
+//            vc.locationString = String(a)
+//            //vc.addressLabel.text = String(a)
+//            vc.checkData(str: "\(a)")
+//        }
+        // guard let previousViewController = self.storyboard?.
+                
+//                if let text = selectedLocation{
+//
+//                   }
         
+        
+        // 데이터를 넘겨준다
+        dataDelegate?.dataSend(data: selectedLocation)
+                   print("selectedLocation:\(selectedLocation)")
+        
+                   //4. delegate 처리가 끝난 뒤에, navigation pop처리
+                   //self.navigationController?.popViewController(animated: true)
+        delegate?.sendUpdate(location: places?.placemark.coordinate)
         self.dismiss(animated: true)
     }
     
@@ -101,6 +121,7 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
             
             print(places?.placemark.coordinate) // 위경도 가져옴
             
+            delegate?.sendUpdate(location: places?.placemark.coordinate)
             //다른 페이지로 넘겨주고 종료..?
             closeView(location: places?.placemark.coordinate)
             
@@ -113,7 +134,6 @@ class TableViewSearchViewController: UIViewController, UISearchBarDelegate, UITa
         
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
-        //searchCompleter?.resultTypes = .address // 혹시 값이 안날아온다면 이건 주석처리 해주세요
         searchCompleter?.region = searchRegion
         
         searchbar.delegate = self
@@ -184,5 +204,6 @@ extension TableViewSearchViewController {
         if let suggestion = completerResults?[indexPath.row] {
             search(for: suggestion)
         }
+        
     }
 }

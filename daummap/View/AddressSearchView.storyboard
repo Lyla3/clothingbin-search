@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -152,6 +153,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YnD-Fa-Pt5">
+                                <rect key="frame" x="186.5" y="702" width="41.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -168,6 +175,7 @@
                             <constraint firstItem="Ztl-Mn-t1H" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="ITY-et-jWK"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="spA-bQ-Z17" secondAttribute="trailing" constant="5" id="KUO-2L-OBM"/>
                             <constraint firstItem="TUf-CY-Lan" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="LPT-tb-LNj"/>
+                            <constraint firstItem="YnD-Fa-Pt5" firstAttribute="top" secondItem="TUf-CY-Lan" secondAttribute="bottom" constant="33.5" id="NNo-OZ-AwE"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="Q24-Za-FUJ"/>
                             <constraint firstItem="spA-bQ-Z17" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="UmU-5J-49g"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="VQk-V6-CkN"/>
@@ -176,6 +184,7 @@
                             <constraint firstItem="TUf-CY-Lan" firstAttribute="top" secondItem="spA-bQ-Z17" secondAttribute="bottom" constant="5" id="gOJ-tl-2wQ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="quD-MC-T4T" secondAttribute="trailing" id="iJ9-GF-0oS"/>
                             <constraint firstItem="dyc-9g-kEU" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="jMI-px-mQs"/>
+                            <constraint firstItem="YnD-Fa-Pt5" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="oVH-91-Dm2"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Ztl-Mn-t1H" secondAttribute="trailing" id="p5V-UH-SiZ"/>
                         </constraints>
                     </view>
@@ -186,6 +195,7 @@
                     <connections>
                         <outlet property="addressLabel" destination="TUf-CY-Lan" id="w4a-6H-zLG"/>
                         <outlet property="clothingBinImageButton" destination="yF6-6s-5lR" id="pEy-iT-aHP"/>
+                        <outlet property="cordinateLabel" destination="YnD-Fa-Pt5" id="bfO-t8-N4n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

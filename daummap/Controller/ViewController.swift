@@ -343,7 +343,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         print("현재위치 버튼이 눌렸습니다. ")
         // ❤️
         print("::checkButtonStatus::")
-        print(clothingBinManager.buttonCheck(pressedButtonStatus: .currentLocation))
+        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .currentLocation))
         
         // locationManager 상태에 따라 실행되는 함수가 달라짐
         switch locationManager.authorizationStatus {
@@ -424,7 +424,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         print("현재 지도 검색 검색 버튼이 눌렸습니다.")
         // ❤️
         print("::checkButtonStatus::")
-        print(clothingBinManager.buttonCheck(pressedButtonStatus: .map))
+        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
         
         loadDataFromAllCVS()
         
@@ -445,6 +445,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
         let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         
         present(viewController, animated: true)
     }
@@ -577,14 +578,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         buttonSelectUnable()
         
         // 타입 변환: [[Sting]] -> [ClothingBin]
+        // ✅
+        let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
+        
+        // changeStringToClothingBin
         let districtClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-        let poiItemArray = clothingBinManager.makePOIItemsByDistrict(from: districtClothingBinArray)
+
+        clothingBinManager.clothingBins = districtClothingBinArray
         
-        mapView.addPOIItems(poiItemArray)
-        poiItemIsOnMap = true
+        // checkButtonFunction에서 계산된 버튼을 실행한다.
+        let poiItems = clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
         
-        //dataArray 배열 비워주기
-        clearArray()
+        
+        mapView.addPOIItems(poiItems)
+        
         buttonSelectAble()
     }
     
@@ -614,7 +621,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //MARK: - PickerView 확인 버튼
     @objc func onPickDone() {
-        /// 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
+        // 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
+        // ❤️
         regionButton.text = "\(selectedCity.rawValue)"
         UIPickerToCVS(resourceFileName:selectedCity.getFileName())
         regionButton.resignFirstResponder()
@@ -761,7 +769,10 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         
         // ❤️
         print("::checkButtonStatus::")
-        print(clothingBinManager.buttonCheck(pressedButtonStatus: .region))
+        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .region))
+        
+        let excuteButton = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
+        
     }
     
     //mapview 터치시 피커뷰 내려가도록

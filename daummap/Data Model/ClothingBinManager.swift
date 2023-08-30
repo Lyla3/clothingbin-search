@@ -22,6 +22,8 @@ class ClothingBinManager {
     var distanceArray:[ClothingBin] = []
     var distanceArrayTenCloseToUser:[ClothingBin] = []
     
+    var clothingBins: [ClothingBin] = []
+    
     // 이동
     var poiItemIsOnMap: Bool = false
     
@@ -184,13 +186,10 @@ class ClothingBinManager {
 //        return false
 //    }
     
-    func buttonCheck(pressedButtonStatus: ButtonStatus) -> ExecuteButton {
+    func checkButtonFunction(pressedButtonStatus: ButtonStatus) -> ExecuteButton {
         if poiItemIsOnMap && pressedButtonStatus == .currentLocation {
            // 현재위치로만 이동
-            
             presentButtonStatus = pressedButtonStatus
-            
-            
             poiItemIsOnMap = false
             previousButtonStatus = presentButtonStatus
             return .changeMapCenter
@@ -223,6 +222,34 @@ class ClothingBinManager {
                 return .currentLocation
             }
         }
+    }
+    
+    func executeButtonFunction(buttonStatus: ExecuteButton) ->  [MTMapPOIItem] {
+        switch buttonStatus {
+        case .region:
+            print("buttonStatus .region")
+            
+            let poiItems = makePOIItemsByDistrict(from: clothingBins)
+            clearPoiItem()
+            return poiItems
+        case .currentLocation:
+            print("buttonStatus .currentLocation")
+            let poiItems = makePOIItemsByDistrict(from: clothingBins)
+            clearPoiItem()
+            return poiItems
+        case .map:
+            print("buttonStatus .map")
+            let poiItems = makePOIItemsByDistrict(from: clothingBins)
+            clearPoiItem()
+            return poiItems
+        case .changeMapCenter:
+            print("buttonStatus .changeMapCenter")
+            return makePOIItemsByDistrict(from: clothingBins)
+        }
+    }
+    
+    func clearPoiItem() {
+        clothingBins = []
     }
 }
 
