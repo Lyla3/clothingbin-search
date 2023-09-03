@@ -10,9 +10,7 @@ import Foundation
 struct CurrentLocationManager {
     
     let DEFAULT_POSITION = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
-    
-    
-    
+
     // MTMapPointGeo로 변환
     func changeMTMapPoint(latitude: Double?, longitude: Double?) -> MTMapPoint {
         if latitude != nil && longitude != nil {

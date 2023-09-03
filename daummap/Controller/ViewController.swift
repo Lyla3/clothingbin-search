@@ -584,7 +584,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         // changeStringToClothingBin
         let districtClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
 
-        clothingBinManager.clothingBins = districtClothingBinArray
+        clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
         
         // checkButtonFunction에서 계산된 버튼을 실행한다.
         let poiItems = clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
@@ -592,7 +592,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         mapView.addPOIItems(poiItems)
         
-        buttonSelectAble()
+        // buttonSelectAble()
     }
     
     func removePOIItemsData() {

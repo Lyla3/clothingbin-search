@@ -16,19 +16,26 @@ class ClothingBinManager {
     var clothingBinArray: [ClothingBin] = []
     
     var maplocationManager: MapLocationManager = MapLocationManager()
+    var currentLocationManager: CurrentLocationManager = CurrentLocationManager()
     
     var locationManager: CLLocationManager = CLLocationManager()
     
     var distanceArray:[ClothingBin] = []
     var distanceArrayTenCloseToUser:[ClothingBin] = []
     
-    var clothingBins: [ClothingBin] = []
+    var clothingBinsFromCSV: [ClothingBin] = []
     
     // 이동
     var poiItemIsOnMap: Bool = false
     
     var previousButtonStatus: ButtonStatus = .none
     var presentButtonStatus: ButtonStatus = .none
+    
+    var userLocation: MTMapPoint
+    
+    init() {
+        userLocation = currentLocationManager.DEFAULT_POSITION
+    }
     
     
 
@@ -92,7 +99,7 @@ class ClothingBinManager {
         return poiItemArray
     }
     
-    //MARK: - 1) 
+    //MARK: - 1) 현재위치 makePOIItemsByCurrentLoaction
 
     func makePOIItemsByCurrentLoaction(at poiItem: MTMapPoint) ->  MTMapPOIItem {
         var currentLocationPOIItem = MTMapPOIItem()
@@ -104,6 +111,8 @@ class ClothingBinManager {
     }
     
     // VC: loadClothingBinByDistrict
+    
+    //MARK: - 2) 지역 makePOIItemsByDistrict
     func makePOIItemsByDistrict(from districtClothingBinArray: [ClothingBin]) ->  [MTMapPOIItem]  {
         // 배열 비워주기
         poiItemArray = []
@@ -122,6 +131,7 @@ class ClothingBinManager {
     }
     
     // VC: loadClothinBinByBound
+    //MARK: - 3) 현재지도 makePOIItemsInUserScreen
     func makePOIItemsInUserScreen(from screenClothingBinArray: [ClothingBin], topRightLat: Double, topRightLon: Double, bottomLeftLat: Double, bottomLeftLon: Double) throws -> [MTMapPOIItem] {
         poiItemArray = []
 
@@ -226,30 +236,32 @@ class ClothingBinManager {
     
     func executeButtonFunction(buttonStatus: ExecuteButton) ->  [MTMapPOIItem] {
         switch buttonStatus {
-        case .region:
-            print("buttonStatus .region")
-            
-            let poiItems = makePOIItemsByDistrict(from: clothingBins)
-            clearPoiItem()
-            return poiItems
         case .currentLocation:
             print("buttonStatus .currentLocation")
-            let poiItems = makePOIItemsByDistrict(from: clothingBins)
+            //let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)\
+            
+            //
+            let poiItems = makePOIItemsByCurrentLoaction(at: <#T##MTMapPoint#>)
+            clearPoiItem()
+            return poiItems
+        case .region:
+            print("buttonStatus .region")
+            let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
             clearPoiItem()
             return poiItems
         case .map:
             print("buttonStatus .map")
-            let poiItems = makePOIItemsByDistrict(from: clothingBins)
+            let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
             clearPoiItem()
             return poiItems
         case .changeMapCenter:
             print("buttonStatus .changeMapCenter")
-            return makePOIItemsByDistrict(from: clothingBins)
+            return makePOIItemsByDistrict(from: clothingBinsFromCSV)
         }
     }
     
     func clearPoiItem() {
-        clothingBins = []
+        clothingBinsFromCSV = []
     }
 }
 
