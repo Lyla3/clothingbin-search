@@ -121,24 +121,24 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }()
     
     //주소검색 버튼
-    private let searchAddressButton: UIButton = {
-        let searchAddressbutton = UIButton()
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
-        searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-        searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        searchAddressbutton.setTitleColor(.black, for: .normal)
-        searchAddressbutton.tintColor = .black
-        searchAddressbutton.layer.borderColor = UIColor.black.cgColor
-        searchAddressbutton.layer.borderWidth = 1
-        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
-        searchAddressbutton.layer.cornerRadius = 2
-        searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
-        searchAddressbutton.layer.shadowOpacity = 0.3
-        searchAddressbutton.layer.shadowOffset = CGSize.zero
-        searchAddressbutton.layer.shadowRadius = 6
-        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
-        return searchAddressbutton
-    }()
+//    private let searchAddressButton: UIButton = {
+//        let searchAddressbutton = UIButton()
+//        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+//        searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+//        searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+//        searchAddressbutton.setTitleColor(.black, for: .normal)
+//        searchAddressbutton.tintColor = .black
+//        searchAddressbutton.layer.borderColor = UIColor.black.cgColor
+//        searchAddressbutton.layer.borderWidth = 1
+//        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+//        searchAddressbutton.layer.cornerRadius = 2
+//        searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
+//        searchAddressbutton.layer.shadowOpacity = 0.3
+//        searchAddressbutton.layer.shadowOffset = CGSize.zero
+//        searchAddressbutton.layer.shadowRadius = 6
+//        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+//        return searchAddressbutton
+//    }()
     
     //지역 선택 버튼
     private let regionButton: UITextField = {
@@ -428,7 +428,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
         loadDataFromAllCVS()
         
-        let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
         
         if checkMapViewLevel() {
             loadClothingBinByBound()
@@ -436,20 +436,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     //searchAddressButton 눌릴 시 실행되는 함수
-    @objc func searchAddressButtonTapped(sender: UIButton) {
-        print("::searchAddressButtonTapped::")
-        
-        let vc = AddressSearchViewController()
-        let storyboardName = vc.storyboardName
-        let storyboardID = vc.storyboardID
-        
-        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
-        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        
-        present(viewController, animated: true)
-    }
-    
+//    @objc func searchAddressButtonTapped(sender: UIButton) {
+//        print("::searchAddressButtonTapped::")
+//
+//        let vc = AddressSearchViewController()
+//        let storyboardName = vc.storyboardName
+//        let storyboardID = vc.storyboardID
+//
+//        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
+//        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+//        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+//        
+//        present(viewController, animated: true)
+//    }
+//
     
     @objc func locationSelectButtonTapped(sender: UIButton) {
         //print("지역선택 버튼이 눌렸습니다")
@@ -515,25 +515,66 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.addPOIItems(poiItemArrayInclothingBinManager)
             mapView.fitAreaToShowAllPOIItems()
         }
-        //clearArray()
+        clearArray()
     }
     //MARK: - 2) 유저 화면 상 -> 의류수거함
     func loadClothingBinByBound() {
-        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-        
+//        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
         let topRightLat = mapView.mapBounds.topRight.mapPointGeo().latitude
         let bottomLeftLon = mapView.mapBounds.bottomLeft.mapPointGeo().longitude
         let topRightLon = mapView.mapBounds.topRight.mapPointGeo().longitude
+//
+//        do {
+//            let clothingArrayByBound = try clothingBinManager.makePOIItemsInUserScreen(from: allClothingBinArray, topRightLat: topRightLat, topRightLon: topRightLon, bottomLeftLat: bottomLeftLat, bottomLeftLon: bottomLeftLon)
+//
+//            self.helpTextView.isHidden = true
+//            mapView.addPOIItems(clothingArrayByBound)
+//            clearArray()
+//
+//            //clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
+//            let mapClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+//
+//            clothingBinManager.clothingBinsFromCSV = mapClothingBinArray
+//
+//            clothingBinManager.mapCornerCoordinate =
+//            CoordinateUserScreen(
+//                bottomLeftLat: bottomLeftLat,
+//                topRightLat: topRightLat,
+//                bottomLeftLon: bottomLeftLon,
+//                topRightLon: topRightLon )
+//
+//
+//        } catch ClothingBinError.noneClothingBin {
+//            helpTextView.text = "현 위치에 등록된 의류수거함이 없습니다."
+//            helpTextView.isHidden = false
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+//                self.helpTextView.isHidden = true
+//            }
+//        }  catch {
+//            print("Error: processing loadClothinBinByBound")
+//        }
         
+        let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .map)
+        
+        // changeStringToClothingBin
+//        let districtClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+
+        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        
+        clothingBinManager.clothingBinArray = allClothingBinArray
+        clothingBinManager.mapCornerCoordinate = CoordinateUserScreen(
+            bottomLeftLat: bottomLeftLat,
+            topRightLat: topRightLat,
+            bottomLeftLon: bottomLeftLon,
+            topRightLon: topRightLon)
+        
+        // checkButtonFunction에서 계산된 버튼을 실행한다.
         do {
-            let clothingArrayByBound = try clothingBinManager.makePOIItemsInUserScreen(from: allClothingBinArray, topRightLat: topRightLat, topRightLon: topRightLon, bottomLeftLat: bottomLeftLat, bottomLeftLon: bottomLeftLon)
-            
-            self.helpTextView.isHidden = true
-            mapView.addPOIItems(clothingArrayByBound)
-            clearArray()
-            
+            let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
+            mapView.addPOIItems(poiItems)
         } catch ClothingBinError.noneClothingBin {
             helpTextView.text = "현 위치에 등록된 의류수거함이 없습니다."
             helpTextView.isHidden = false
@@ -543,6 +584,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         }  catch {
             print("Error: processing loadClothinBinByBound")
         }
+        clearArray()
+
     }
     
     func checkMapViewLevel() -> Bool{
@@ -576,7 +619,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private func loadClothingBinByDistrict() {
         removePOIItemsData()
         buttonSelectUnable()
-        
+        mapView.removeAllPOIItems()
         // 타입 변환: [[Sting]] -> [ClothingBin]
         // ✅
         let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
@@ -587,12 +630,18 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
         
         // checkButtonFunction에서 계산된 버튼을 실행한다.
-        let poiItems = clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
-        
-        
-        mapView.addPOIItems(poiItems)
-        
-        // buttonSelectAble()
+        do { let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
+            
+            mapView.addPOIItems(poiItems)
+            //clearArray()
+        } catch ClothingBinError.noneClothingBin {
+            print("loadClothingBinByDistrict: ClothingBinError.noneClothingBin")
+        }  catch {
+            print("Error: processing loadClothinBinByBound")
+        }
+        clearArray()
+
+        buttonSelectAble()
     }
     
     func removePOIItemsData() {
@@ -655,7 +704,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         
         self.view.addSubview(mapView)
         self.view.addSubview(currentLocationButton)
-        self.view.addSubview(searchAddressButton)
+        // self.view.addSubview(searchAddressButton)
         self.view.addSubview(currentLocationSearchMapButton)
         self.view.addSubview(regionButton)
         self.view.addSubview(helpTextView)
@@ -673,7 +722,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         currentLocationSearchMapButton.addTarget(self, action: #selector(currentMapButtonTapped), for: .touchUpInside)
         
         //searchAddressButton 버튼 눌릴 시
-        searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
+        // searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
         
         //지역선택 버튼 눌리면 locationSelectButtonTapped 실행, pickerView가 실질적으로 실행
         regionButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
@@ -706,12 +755,12 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         ])
         
         //주소검색 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
-            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
-            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
-        ])
+//        NSLayoutConstraint.activate([
+//            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
+//            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+//            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
+//            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
+//        ])
         
         //현재지도 검색 버튼 레이아웃
         NSLayoutConstraint.activate([

@@ -31,11 +31,13 @@ class ClothingBinManager {
     var previousButtonStatus: ButtonStatus = .none
     var presentButtonStatus: ButtonStatus = .none
     
-    var userLocation: MTMapPoint
+    var mapCornerCoordinate: CoordinateUserScreen = CoordinateUserScreen()
     
-    init() {
-        userLocation = currentLocationManager.DEFAULT_POSITION
-    }
+//    var userLocation: MTMapPoint
+//    
+//    init() {
+//        userLocation = currentLocationManager.DEFAULT_POSITION
+//    }
     
     
 
@@ -84,14 +86,14 @@ class ClothingBinManager {
         poiItemArray = []
         
         for clothingBin in inputArray {
-            if clothingBin.distanceFromUser ?? 999999 < 20000 {
+            if clothingBin.distanceFromUser ?? 999999 < 200000 {
                 let poiItem = MTMapPOIItem()
                 poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
                     latitude: clothingBin.lat,
                     longitude: clothingBin.lon ))
                 poiItem.itemName = clothingBin.info
                 poiItem.customImage = UIImage(named: "location")
-                poiItem.markerType = .customImage
+                poiItem.markerType = .redPin
                 poiItemArray.append(poiItem)
             }
             
@@ -116,6 +118,8 @@ class ClothingBinManager {
     func makePOIItemsByDistrict(from districtClothingBinArray: [ClothingBin]) ->  [MTMapPOIItem]  {
         // 배열 비워주기
         poiItemArray = []
+        clothingBinsFromCSV = []
+        
         for clothingBin in districtClothingBinArray {
             
             let poiItem = MTMapPOIItem()
@@ -132,16 +136,48 @@ class ClothingBinManager {
     
     // VC: loadClothinBinByBound
     //MARK: - 3) 현재지도 makePOIItemsInUserScreen
-    func makePOIItemsInUserScreen(from screenClothingBinArray: [ClothingBin], topRightLat: Double, topRightLon: Double, bottomLeftLat: Double, bottomLeftLon: Double) throws -> [MTMapPOIItem] {
+//    func makePOIItemsInUserScreen(from screenClothingBinArray: [ClothingBin], topRightLat: Double, topRightLon: Double, bottomLeftLat: Double, bottomLeftLon: Double) throws -> [MTMapPOIItem] {
+//        poiItemArray = []
+//
+//        var screenClotingBinArray: [ClothingBin] = []
+//        //위도로 비교
+//        screenClotingBinArray = screenClotingBinArray.filter { $0.lat > bottomLeftLat && $0.lat  < topRightLat}
+//        //경도로 비교
+//        screenClotingBinArray = screenClotingBinArray.filter { $0.lon > bottomLeftLon && $0.lon < topRightLon}
+//
+//        if screenClotingBinArray.count == 0 {
+//            for clothingBin in screenClotingBinArray {
+//                let poiItem = MTMapPOIItem()
+//                poiItem.itemName = clothingBin.info
+//                poiItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(
+//                    latitude: clothingBin.lat,
+//                    longitude: clothingBin.lon))
+//                poiItem.markerType = .redPin
+//                poiItemArray.append(poiItem)
+//
+//            }
+//            return poiItemArray
+//
+//        } else {
+//            throw ClothingBinError.noneClothingBin
+//        }
+//
+//    }
+    
+    //MARK: - 3) 현재지도 makePOIItemsInUserScreen
+    func makePOIItemsInUserScreen() throws -> [MTMapPOIItem] {
         poiItemArray = []
 
-        var screenClotingBinArray: [ClothingBin] = []
+        // 저장된 배열 의류수거함 불러오기
+        var screenClotingBinArray: [ClothingBin] = clothingBinArray
         //위도로 비교
-        screenClotingBinArray = screenClotingBinArray.filter { $0.lat > bottomLeftLat && $0.lat  < topRightLat}
+        screenClotingBinArray = screenClotingBinArray.filter { $0.lat > mapCornerCoordinate.bottomLeftLat && $0.lat  < mapCornerCoordinate.topRightLat}
         //경도로 비교
-        screenClotingBinArray = screenClotingBinArray.filter { $0.lon > bottomLeftLon && $0.lon < topRightLon}
+        screenClotingBinArray = screenClotingBinArray.filter { $0.lon > mapCornerCoordinate.bottomLeftLon && $0.lon < mapCornerCoordinate.topRightLon }
         
-        if screenClotingBinArray.count == 0 {
+        
+        print("screenClotingBinArray의 개수: \(screenClotingBinArray.count)")
+        if screenClotingBinArray.count != 0 {
             for clothingBin in screenClotingBinArray {
                 let poiItem = MTMapPOIItem()
                 poiItem.itemName = clothingBin.info
@@ -234,33 +270,45 @@ class ClothingBinManager {
         }
     }
     
-    func executeButtonFunction(buttonStatus: ExecuteButton) ->  [MTMapPOIItem] {
+    func executeButtonFunction(buttonStatus: ExecuteButton) throws -> [MTMapPOIItem] {
         switch buttonStatus {
         case .currentLocation:
             print("buttonStatus .currentLocation")
-            //let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)\
+            let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
             
             //
-            let poiItems = makePOIItemsByCurrentLoaction(at: <#T##MTMapPoint#>)
-            clearPoiItem()
+            //let poiItems = makePOIItemsByCurrentLoaction(at: <#T##MTMapPoint#>)
+            clearClothingBinCSV()
             return poiItems
         case .region:
             print("buttonStatus .region")
             let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
-            clearPoiItem()
+            clearClothingBinCSV()
             return poiItems
         case .map:
             print("buttonStatus .map")
-            let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
-            clearPoiItem()
-            return poiItems
+            //makePOIItemsInUserScreen(from: clothingBinsFromCSV, topRightLat: <#T##Double#>, topRightLon: <#T##Double#>, bottomLeftLat: <#T##Double#>, bottomLeftLon: <#T##Double#>)
+            do {
+                let poiItems = try makePOIItemsInUserScreen()
+                clearClothingBinCSV()
+                return poiItems
+            } catch ClothingBinError.noneClothingBin {
+                print("ClothingBinError.noneClothingBin")
+                throw ClothingBinError.noneClothingBin
+            } catch {
+                print("Error: processing loadClothinBinByBound")
+                return poiItemArray
+            }
+            //let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
+           
+            // return poiItems
         case .changeMapCenter:
             print("buttonStatus .changeMapCenter")
             return makePOIItemsByDistrict(from: clothingBinsFromCSV)
         }
     }
     
-    func clearPoiItem() {
+    func clearClothingBinCSV() {
         clothingBinsFromCSV = []
     }
 }
