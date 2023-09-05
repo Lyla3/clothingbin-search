@@ -47,6 +47,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //엑셀 파일에서 불러온 의류수거함 위치 데이터 배열
     var clothingBinLocationArray : [[String]] = []
     
+    // activityIndicator
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+
+    
     
     //MARK: - UISetting
     
@@ -186,18 +190,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         return view
     }()
     
-    //activityIndicator 생성
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        // Create an indicator
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        activityIndicator.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
-        activityIndicator.hidesWhenStopped = false
-        activityIndicator.style = UIActivityIndicatorView.Style.medium
-        activityIndicator.stopAnimating()
-        activityIndicator.hidesWhenStopped = true
-        return activityIndicator
-    }()
+//    activityIndicator 생성
+    private let loadingView: LoadingView = {
+       let view = LoadingView()
+       view.translatesAutoresizingMaskIntoConstraints = false
+       return view
+     }()
     
     
     override func viewDidLoad() {
@@ -456,20 +454,46 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     // 현재 지도 검색
     @objc func currentMapButtonTapped(sender: UIButton) {
-        removePOIItemsData()
+//        removePOIItemsData()
+//        
+//        print("현재 지도 검색 검색 버튼이 눌렸습니다.")
+//        // ❤️
+//        print("::checkButtonStatus::")
+//        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
+//        
+//        loadDataFromAllCVS()
+//        
+//        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+//        
+//        if checkMapViewLevel() {
+//            loadClothingBinByBound()
+//        }
         
-        print("현재 지도 검색 검색 버튼이 눌렸습니다.")
-        // ❤️
-        print("::checkButtonStatus::")
-        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
-        
-        loadDataFromAllCVS()
-        
-        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
-        
-        if checkMapViewLevel() {
-            loadClothingBinByBound()
+        loadingView.isLoading = true
+        self.getSomeData { [weak self] in
+            
+            self?.removePOIItemsData()
+            
+            print("현재 지도 검색 검색 버튼이 눌렸습니다.")
+            // ❤️
+            print("::checkButtonStatus::")
+            print(self?.clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
+            
+            self?.loadDataFromAllCVS()
+            
+            //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+            
+            if ((self?.checkMapViewLevel()) != nil) {
+                self?.loadClothingBinByBound()
+            }
+          self?.loadingView.isLoading = false
+            print("loading")
         }
+//        self.getSomeData { [weak self] in
+//
+//          self?.loadingView.isLoading = false
+//        }
+        
     }
     
     //searchAddressButton 눌릴 시 실행되는 함수
@@ -761,7 +785,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         regionButton.resignFirstResponder() /// 피커뷰 내림
     }
     
-    
+    // 로딩 뷰 실행
+    private func getSomeData(completion: @escaping () -> ()) {
+        DispatchQueue.main.async {
+            completion()
+        }
+     }
 }
 
 
@@ -771,8 +800,10 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
     //MARK: - UI 설정
     func makeUI(){
         createPickerView()
-        
         self.view.addSubview(mapView)
+        self.mapView.addSubview(self.loadingView)
+        //loadingView.addSubview(activityIndicator)
+
         self.view.addSubview(currentLocationButton)
         // self.view.addSubview(searchAddressButton)
         self.view.addSubview(currentLocationSearchMapButton)
@@ -862,6 +893,14 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
             self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
         ])
+        
+        // loadingView
+        NSLayoutConstraint.activate([
+             self.loadingView.leftAnchor.constraint(equalTo: self.mapView.leftAnchor),
+             self.loadingView.rightAnchor.constraint(equalTo: self.mapView.rightAnchor),
+             self.loadingView.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor),
+             self.loadingView.topAnchor.constraint(equalTo: self.mapView.topAnchor),
+           ])
     }
     
     //MARK: - PickerView 설정
@@ -917,26 +956,26 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         }
     }
     
-    func activityIndicatorStartAction() {
-        self.activityIndicator.startAnimating()
-        if !activityIndicator.isAnimating {
-            self.activityIndicator.isHidden = false
-            DispatchQueue.main.async {
-                
-            }
-        }
-    }
+//    func activityIndicatorStartAction() {
+//        self.activityIndicator.startAnimating()
+//        if !activityIndicator.isAnimating {
+//            self.activityIndicator.isHidden = false
+//            DispatchQueue.main.async {
+//
+//            }
+//        }
+//    }
     
-    func activityIndicatorStopAction() {
-        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
-        self.activityIndicator.stopAnimating()
-        
-        if activityIndicator.isAnimating {
-            DispatchQueue.main.async {
-                
-            }
-        }
-    }
+//    func activityIndicatorStopAction() {
+//        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
+//        self.activityIndicator.stopAnimating()
+//
+//        if activityIndicator.isAnimating {
+//            DispatchQueue.main.async {
+//
+//            }
+//        }
+//    }
     
     func switchActivityIndicator() {
         

@@ -315,6 +315,7 @@
 		63ABB5CF28EC2462003A533E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 63ABB39328EC1FE0003A533E /* libc++.tbd */; };
 		63B528462A853D550047E225 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B528452A853D550047E225 /* Constants.swift */; };
 		63D403AB2A6D405D00377A8F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 63D403AA2A6D405D00377A8F /* .gitignore */; };
+		63D56ED72AA77E640033094B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D56ED62AA77E640033094B /* LoadingView.swift */; };
 		63E00C0928F00E3700E6AFD4 /* PositionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E00C0828F00E3700E6AFD4 /* PositionData.swift */; };
 		63E0A4822A1A67A2001470F2 /* AddressSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E0A4812A1A67A2001470F2 /* AddressSearchView.swift */; };
 		63E0A4842A1A67D6001470F2 /* AddressSearchView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63E0A4832A1A67D6001470F2 /* AddressSearchView.storyboard */; };
@@ -652,6 +653,7 @@
 		63ABB5CA28EC22EE003A533E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		63B528452A853D550047E225 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		63D403AA2A6D405D00377A8F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		63D56ED62AA77E640033094B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		63E00C0828F00E3700E6AFD4 /* PositionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionData.swift; sourceTree = "<group>"; };
 		63E0A4812A1A67A2001470F2 /* AddressSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchView.swift; sourceTree = "<group>"; };
 		63E0A4832A1A67D6001470F2 /* AddressSearchView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddressSearchView.storyboard; sourceTree = "<group>"; };
@@ -1132,6 +1134,7 @@
 				63E0A4832A1A67D6001470F2 /* AddressSearchView.storyboard */,
 				6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */,
 				6395CC8A2A24D18000B479B2 /* TableViewSearchAddressView.storyboard */,
+				63D56ED62AA77E640033094B /* LoadingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1576,6 +1579,7 @@
 				63E0A4822A1A67A2001470F2 /* AddressSearchView.swift in Sources */,
 				63EAE5FA2AA4C1E1006DD932 /* CoordinateUserScreen.swift in Sources */,
 				63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */,
+				63D56ED72AA77E640033094B /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
