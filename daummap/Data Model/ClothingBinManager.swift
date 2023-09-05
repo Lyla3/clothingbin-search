@@ -33,7 +33,7 @@ class ClothingBinManager {
     
     var mapCornerCoordinate: CoordinateUserScreen = CoordinateUserScreen()
     
-//    var userLocation: MTMapPoint
+    var userLocation: MTMapPoint = MTMapPoint()
 //    
 //    init() {
 //        userLocation = currentLocationManager.DEFAULT_POSITION
@@ -80,6 +80,34 @@ class ClothingBinManager {
             return []
         }
     }
+    //MARK: - loadClothingBinCloseCurrentLocation2
+
+    func loadClothingBinCloseCurrentLocation2(csvArray cvsArray:[ClothingBin]) -> [ClothingBin] {
+        // 위치 업데이트 시작
+        self.locationManager.startUpdatingLocation()
+        dump(cvsArray)
+        // 현재위치와의 거리를 구한다.
+        for clothingBin in cvsArray {
+            let clothingbinCoordinate = CLLocation(latitude: CLLocationDegrees(clothingBin.lat), longitude: CLLocationDegrees(clothingBin.lon))
+            let distanceFromCurrentLocationToClothingBin = Double(locationManager.location?.distance(from: clothingbinCoordinate) ?? 99999999)
+            
+            let currentDistance = distanceFromCurrentLocationToClothingBin
+            distanceArray.append(ClothingBin(info: clothingBin.info, lat: clothingBin.lat, lon: clothingBin.lon, distance: currentDistance))
+        }
+        
+        // distanceArray에서 가까운 순으로 10개를 뽑는다.
+        // distanceArrayTenCloseToUser에 넣는다.
+        distanceArray.sort(by: {$0.distanceFromUser ?? 9999999 < $1.distanceFromUser ?? 9999999})
+        if distanceArray.count >= 10 {
+            for i in 0...9 {
+                distanceArrayTenCloseToUser.append(distanceArray[i])
+            }
+            return distanceArrayTenCloseToUser
+        } else {
+            print("Number of distanceArray less than 10.")
+            return []
+        }
+    }
     
     func makeMapPOIItem(with inputArray: [ClothingBin]) -> [MTMapPOIItem] {
         // 사용자 위치에서 20km이내의 의류수거함만 가져올 수 있도록 한다.
@@ -92,7 +120,7 @@ class ClothingBinManager {
                     latitude: clothingBin.lat,
                     longitude: clothingBin.lon ))
                 poiItem.itemName = clothingBin.info
-                poiItem.customImage = UIImage(named: "location")
+                // poiItem.customImage = UIImage(named: "location")
                 poiItem.markerType = .redPin
                 poiItemArray.append(poiItem)
             }
@@ -103,12 +131,12 @@ class ClothingBinManager {
     
     //MARK: - 1) 현재위치 makePOIItemsByCurrentLoaction
 
-    func makePOIItemsByCurrentLoaction(at poiItem: MTMapPoint) ->  MTMapPOIItem {
-        var currentLocationPOIItem = MTMapPOIItem()
-        currentLocationPOIItem.itemName = "현재위치"
-        currentLocationPOIItem.mapPoint = poiItem
-        currentLocationPOIItem.markerType = .yellowPin
-        
+    func makePOIItemsByCurrentLoaction(at poiItem: MTMapPoint) ->  [MTMapPOIItem] {
+        var currentLocationPOIItem = [MTMapPOIItem()]
+        currentLocationPOIItem[0].itemName = "현재위치"
+        currentLocationPOIItem[0].mapPoint = poiItem
+        currentLocationPOIItem[0].markerType = .yellowPin
+
         return currentLocationPOIItem
     }
     
@@ -274,8 +302,19 @@ class ClothingBinManager {
         switch buttonStatus {
         case .currentLocation:
             print("buttonStatus .currentLocation")
-            let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
+            var poiItems : [MTMapPOIItem] = []
             
+            // 현재위치에서 10개 남기기
+            let closePOIItemFromUserLocation = makeMapPOIItem(with: loadClothingBinCloseCurrentLocation2(csvArray: clothingBinArray))
+            
+            //let poiItems = makePOIItemsByDistrict(from: clothingBinsFromCSV)
+            // let poiItems = makePOIItemsByCurrentLoaction(at: userLocation)
+            
+            //
+            // var currentPOIItem = makeMapPOIItem(with: clothingBinArray)
+            
+            // 유저 poiItems 추가
+            poiItems.append(contentsOf: makePOIItemsByCurrentLoaction(at: userLocation))
             //
             //let poiItems = makePOIItemsByCurrentLoaction(at: <#T##MTMapPoint#>)
             clearClothingBinCSV()

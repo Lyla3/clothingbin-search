@@ -121,24 +121,24 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }()
     
     //주소검색 버튼
-//    private let searchAddressButton: UIButton = {
-//        let searchAddressbutton = UIButton()
-//        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
-//        searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-//        searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-//        searchAddressbutton.setTitleColor(.black, for: .normal)
-//        searchAddressbutton.tintColor = .black
-//        searchAddressbutton.layer.borderColor = UIColor.black.cgColor
-//        searchAddressbutton.layer.borderWidth = 1
-//        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
-//        searchAddressbutton.layer.cornerRadius = 2
-//        searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
-//        searchAddressbutton.layer.shadowOpacity = 0.3
-//        searchAddressbutton.layer.shadowOffset = CGSize.zero
-//        searchAddressbutton.layer.shadowRadius = 6
-//        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
-//        return searchAddressbutton
-//    }()
+    //    private let searchAddressButton: UIButton = {
+    //        let searchAddressbutton = UIButton()
+    //        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
+    //        searchAddressbutton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+    //        searchAddressbutton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+    //        searchAddressbutton.setTitleColor(.black, for: .normal)
+    //        searchAddressbutton.tintColor = .black
+    //        searchAddressbutton.layer.borderColor = UIColor.black.cgColor
+    //        searchAddressbutton.layer.borderWidth = 1
+    //        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+    //        searchAddressbutton.layer.cornerRadius = 2
+    //        searchAddressbutton.layer.shadowColor = UIColor.gray.cgColor
+    //        searchAddressbutton.layer.shadowOpacity = 0.3
+    //        searchAddressbutton.layer.shadowOffset = CGSize.zero
+    //        searchAddressbutton.layer.shadowRadius = 6
+    //        searchAddressbutton.translatesAutoresizingMaskIntoConstraints = false
+    //        return searchAddressbutton
+    //    }()
     
     //지역 선택 버튼
     private let regionButton: UITextField = {
@@ -361,44 +361,81 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             
             let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
             
-            
+            clothingBinManager.locationManager = locationManager
             
             print("poiItemIsOnMap:\(poiItemIsOnMap)")
             
-            // 지도 지역구 버튼이 눌린 경우 한번 누르면 현재 위치만을 받아오도록 함
-            if (!poiItemIsOnMap && currentLocationButtonTapCount == 0) || ( currentLocationButtonTapCount > 0)  {
-                currentLocationButtonTapCount = 0
-                removePOIItemsData()
-                
-                // 현재 위치를 지도의 중앙으로 맞춤 : mapView
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-                
-                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
-                
-                
-                // 현재위치 추가 : mapView
-                mapView.add(currentLocationPOIItem)
-                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-                
-                // CVSdataArray 업데이트 -> 전체 의류수거함
-                loadDataFromAllCVS()
-                
-                // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
-                loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
-                clearArray()
-            } else {
-                currentLocationButtonTapCount += 1
-                
-                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
-                
-                
-                // 현재위치 추가
-                mapView.add(currentLocationPOIItem)
-                
-                mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
+            
+            // 버튼 타입 지정
+            let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .currentLocation)
+            
+            if buttonType == .currentLocation || buttonType == .changeMapCenter {
+                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)),zoomLevel: 2, animated: true)
             }
+            
+            // 현재 위치 보내기
+            clothingBinManager.userLocation = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude))
+            
+            // 의류수거함 업데이트
+            loadDataFromAllCVS()
+            
+            
+            let allClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+            
+            clothingBinManager.clothingBinArray = allClothingBinArray
+//            
+//            let allClothingBinArray = clothingBinManager.loadClothingBinCloseCurrentLocation2(csvArray: allClothingBinArray)
+            
+            
+            
+            do{
+                let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
+                mapView.addPOIItems(poiItems)
+            } catch ClothingBinError.noneClothingBin {
+                print("currentLocationButtonTapped - ClothingBinError.noneClothingBin")
+            } catch {
+                print("Error: processing loadClothinBinByBound")
+            }
+            clearArray()
+            
+            
+            
+            
+            //------------------
+            // 지도 지역구 버튼이 눌린 경우 한번 누르면 현재 위치만을 받아오도록 함
+//            if (!poiItemIsOnMap && currentLocationButtonTapCount == 0) || ( currentLocationButtonTapCount > 0)  {
+//                currentLocationButtonTapCount = 0
+//                removePOIItemsData()
+//
+//                // 현재 위치를 지도의 중앙으로 맞춤 : mapView
+//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+//
+//                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+//                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
+//
+//
+//                // 현재위치 추가 : mapView
+//                mapView.add(currentLocationPOIItem)
+//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+//
+//                // CVSdataArray 업데이트 -> 전체 의류수거함
+//                loadDataFromAllCVS()
+//
+//                // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
+//                loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
+//                clearArray()
+//            } else {
+//                currentLocationButtonTapCount += 1
+//
+//                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+//                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
+//
+//
+//                // 현재위치 추가
+//                mapView.add(currentLocationPOIItem)
+//
+//                mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
+//            }
         @unknown default:
             self.alertCurrentLocation()
         }
@@ -436,20 +473,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     //searchAddressButton 눌릴 시 실행되는 함수
-//    @objc func searchAddressButtonTapped(sender: UIButton) {
-//        print("::searchAddressButtonTapped::")
-//
-//        let vc = AddressSearchViewController()
-//        let storyboardName = vc.storyboardName
-//        let storyboardID = vc.storyboardID
-//
-//        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
-//        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
-//        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-//        
-//        present(viewController, animated: true)
-//    }
-//
+    //    @objc func searchAddressButtonTapped(sender: UIButton) {
+    //        print("::searchAddressButtonTapped::")
+    //
+    //        let vc = AddressSearchViewController()
+    //        let storyboardName = vc.storyboardName
+    //        let storyboardID = vc.storyboardID
+    //
+    //        let storyboard = UIStoryboard(name: storyboardName, bundle: Bundle.main)
+    //        let viewController = storyboard.instantiateViewController(identifier: storyboardID)
+    //        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+    //
+    //        present(viewController, animated: true)
+    //    }
+    //
     
     @objc func locationSelectButtonTapped(sender: UIButton) {
         //print("지역선택 버튼이 눌렸습니다")
@@ -501,7 +538,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         let clotingbinDataArray =  clothingBinManager.loadClothingBinCloseCurrentLocation(from: cvsArray, locationManager: locationManager)
         
         // poiItemArray에 POIItem 업데이트
-        // poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
+        poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
         
         let poiItemArrayInclothingBinManager = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
         
@@ -516,52 +553,87 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.fitAreaToShowAllPOIItems()
         }
         clearArray()
+        
+        
+        //        let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .currentLocation)
+        //
+        //        let clotingbinDataArray =  clothingBinManager.loadClothingBinCloseCurrentLocation(from: cvsArray, locationManager: locationManager)
+        //
+        //        // changeStringToClothingBin
+        //        let allClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        //
+        //        do {
+        //            let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
+        //            mapView.addPOIItems(poiItems)
+        //        } catch ClothingBinError.noneClothingBin {
+        //            print("loadClothingBinByCurrentLocation - ClothingBinError.noneClothingBin")
+        //        }  catch {
+        //            print("Error: processing loadClothingBinByCurrentLocation")
+        //        }
+        //        clearArray()
+        
+        // poiItemArray에 POIItem 업데이트
+        // poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
+        //
+        //        let poiItemArrayInclothingBinManager = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
+        //
+        //        if poiItemArrayInclothingBinManager.isEmpty == true {
+        //            helpTextView.text = "현재 위치에서 가까운 의류수거함이 없습니다."
+        //            helpTextView.isHidden = false
+        //            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+        //                self.helpTextView.isHidden = true
+        //            }
+        //        } else {
+        //            mapView.addPOIItems(poiItemArrayInclothingBinManager)
+        //            mapView.fitAreaToShowAllPOIItems()
+        //        }
+        //        clearArray()
     }
     //MARK: - 2) 유저 화면 상 -> 의류수거함
     func loadClothingBinByBound() {
-//        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-
+        //        let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        
         //사용자 화면의 끝점의 좌표
         let bottomLeftLat = mapView.mapBounds.bottomLeft.mapPointGeo().latitude
         let topRightLat = mapView.mapBounds.topRight.mapPointGeo().latitude
         let bottomLeftLon = mapView.mapBounds.bottomLeft.mapPointGeo().longitude
         let topRightLon = mapView.mapBounds.topRight.mapPointGeo().longitude
-//
-//        do {
-//            let clothingArrayByBound = try clothingBinManager.makePOIItemsInUserScreen(from: allClothingBinArray, topRightLat: topRightLat, topRightLon: topRightLon, bottomLeftLat: bottomLeftLat, bottomLeftLon: bottomLeftLon)
-//
-//            self.helpTextView.isHidden = true
-//            mapView.addPOIItems(clothingArrayByBound)
-//            clearArray()
-//
-//            //clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
-//            let mapClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-//
-//            clothingBinManager.clothingBinsFromCSV = mapClothingBinArray
-//
-//            clothingBinManager.mapCornerCoordinate =
-//            CoordinateUserScreen(
-//                bottomLeftLat: bottomLeftLat,
-//                topRightLat: topRightLat,
-//                bottomLeftLon: bottomLeftLon,
-//                topRightLon: topRightLon )
-//
-//
-//        } catch ClothingBinError.noneClothingBin {
-//            helpTextView.text = "현 위치에 등록된 의류수거함이 없습니다."
-//            helpTextView.isHidden = false
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//                self.helpTextView.isHidden = true
-//            }
-//        }  catch {
-//            print("Error: processing loadClothinBinByBound")
-//        }
+        //
+        //        do {
+        //            let clothingArrayByBound = try clothingBinManager.makePOIItemsInUserScreen(from: allClothingBinArray, topRightLat: topRightLat, topRightLon: topRightLon, bottomLeftLat: bottomLeftLat, bottomLeftLon: bottomLeftLon)
+        //
+        //            self.helpTextView.isHidden = true
+        //            mapView.addPOIItems(clothingArrayByBound)
+        //            clearArray()
+        //
+        //            //clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
+        //            let mapClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        //
+        //            clothingBinManager.clothingBinsFromCSV = mapClothingBinArray
+        //
+        //            clothingBinManager.mapCornerCoordinate =
+        //            CoordinateUserScreen(
+        //                bottomLeftLat: bottomLeftLat,
+        //                topRightLat: topRightLat,
+        //                bottomLeftLon: bottomLeftLon,
+        //                topRightLon: topRightLon )
+        //
+        //
+        //        } catch ClothingBinError.noneClothingBin {
+        //            helpTextView.text = "현 위치에 등록된 의류수거함이 없습니다."
+        //            helpTextView.isHidden = false
+        //            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+        //                self.helpTextView.isHidden = true
+        //            }
+        //        }  catch {
+        //            print("Error: processing loadClothinBinByBound")
+        //        }
         
         let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .map)
         
         // changeStringToClothingBin
-//        let districtClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-
+        //        let districtClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
+        
         let allClothingBinArray = mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
         
         clothingBinManager.clothingBinArray = allClothingBinArray
@@ -585,7 +657,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             print("Error: processing loadClothinBinByBound")
         }
         clearArray()
-
+        
     }
     
     func checkMapViewLevel() -> Bool{
@@ -621,26 +693,24 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         buttonSelectUnable()
         mapView.removeAllPOIItems()
         // 타입 변환: [[Sting]] -> [ClothingBin]
-        // ✅
         let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
         
         // changeStringToClothingBin
         let districtClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-
+        
         clothingBinManager.clothingBinsFromCSV = districtClothingBinArray
         
         // checkButtonFunction에서 계산된 버튼을 실행한다.
         do { let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
             
             mapView.addPOIItems(poiItems)
-            //clearArray()
         } catch ClothingBinError.noneClothingBin {
             print("loadClothingBinByDistrict: ClothingBinError.noneClothingBin")
         }  catch {
             print("Error: processing loadClothinBinByBound")
         }
         clearArray()
-
+        
         buttonSelectAble()
     }
     
@@ -755,12 +825,12 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         ])
         
         //주소검색 버튼 레이아웃
-//        NSLayoutConstraint.activate([
-//            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
-//            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-//            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
-//            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
-//        ])
+        //        NSLayoutConstraint.activate([
+        //            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
+        //            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+        //            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
+        //            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
+        //        ])
         
         //현재지도 검색 버튼 레이아웃
         NSLayoutConstraint.activate([
