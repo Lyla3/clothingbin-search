@@ -49,7 +49,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     // activityIndicator
     let activityIndicator = UIActivityIndicatorView(style: .large)
-
+    
     
     
     //MARK: - UISetting
@@ -190,12 +190,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         return view
     }()
     
-//    activityIndicator 생성
+    //    activityIndicator 생성
     private let loadingView: LoadingView = {
-       let view = LoadingView()
-       view.translatesAutoresizingMaskIntoConstraints = false
-       return view
-     }()
+        let view = LoadingView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     
     override func viewDidLoad() {
@@ -338,6 +338,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //MARK: - 현재 위치 버튼 실행시
     @objc func currentLocationButtonTapped(sender: UIButton) {
+        self.loadingView.isLoading = true
         print("현재위치 버튼이 눌렸습니다. ")
         // ❤️
         print("::checkButtonStatus::")
@@ -357,7 +358,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 return
             }
             
-            let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
+//            let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
             
             clothingBinManager.locationManager = locationManager
             
@@ -374,66 +375,65 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             // 현재 위치 보내기
             clothingBinManager.userLocation = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude))
             
-            // 의류수거함 업데이트
-            loadDataFromAllCVS()
-            
-            
-            let allClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-            
-            clothingBinManager.clothingBinArray = allClothingBinArray
-//            
-//            let allClothingBinArray = clothingBinManager.loadClothingBinCloseCurrentLocation2(csvArray: allClothingBinArray)
-            
-            
-            
-            do{
-                let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
-                mapView.addPOIItems(poiItems)
-            } catch ClothingBinError.noneClothingBin {
-                print("currentLocationButtonTapped - ClothingBinError.noneClothingBin")
-            } catch {
-                print("Error: processing loadClothinBinByBound")
+            self.getSomeData { [weak self] in
+                self?.loadDataFromAllCVS()
+//                let allClothingBinArray =  self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]])
+//                self?.clothingBinManager.clothingBinArray = allClothingBinArray
+                
+                guard let allClothingBinArray = self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]] ) else {
+                    return print("allClothingBinArray is nil")
+                }
+                self?.clothingBinManager.clothingBinArray = allClothingBinArray
+                
+                do{
+                    let poiItems = try self?.clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
+                    self?.mapView.addPOIItems(poiItems)
+                } catch ClothingBinError.noneClothingBin {
+                    print("currentLocationButtonTapped - ClothingBinError.noneClothingBin")
+                } catch {
+                    print("Error: processing loadClothinBinByBound")
+                }
+                self?.clearArray()
+              self?.loadingView.isLoading = false
             }
-            clearArray()
-            
-            
-            
+            // 의류수거함 업데이트
+
             
             //------------------
             // 지도 지역구 버튼이 눌린 경우 한번 누르면 현재 위치만을 받아오도록 함
-//            if (!poiItemIsOnMap && currentLocationButtonTapCount == 0) || ( currentLocationButtonTapCount > 0)  {
-//                currentLocationButtonTapCount = 0
-//                removePOIItemsData()
-//
-//                // 현재 위치를 지도의 중앙으로 맞춤 : mapView
-//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-//
-//                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-//                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
-//
-//
-//                // 현재위치 추가 : mapView
-//                mapView.add(currentLocationPOIItem)
-//                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
-//
-//                // CVSdataArray 업데이트 -> 전체 의류수거함
-//                loadDataFromAllCVS()
-//
-//                // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
-//                loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
-//                clearArray()
-//            } else {
-//                currentLocationButtonTapCount += 1
-//
-//                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
-//                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
-//
-//
-//                // 현재위치 추가
-//                mapView.add(currentLocationPOIItem)
-//
-//                mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
-//            }
+            //            if (!poiItemIsOnMap && currentLocationButtonTapCount == 0) || ( currentLocationButtonTapCount > 0)  {
+            //                currentLocationButtonTapCount = 0
+            //                removePOIItemsData()
+            //
+            //                // 현재 위치를 지도의 중앙으로 맞춤 : mapView
+            //                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+            //
+            //                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+            //                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
+            //
+            //
+            //                // 현재위치 추가 : mapView
+            //                mapView.add(currentLocationPOIItem)
+            //                mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)), animated: true)
+            //
+            //                // CVSdataArray 업데이트 -> 전체 의류수거함
+            //                loadDataFromAllCVS()
+            //
+            //                // 업데이트된 CVSdataArray를 바탕으로 가까이 있는 의류수거함 데이터를 불러온다.
+            //                loadClothingBinByCurrentLocation(from: clothingBinLocationArray)
+            //                clearArray()
+            //            } else {
+            //                currentLocationButtonTapCount += 1
+            //
+            //                // 사용자의 현재위치 MTMapPOIItem 형식으로 반환
+            //                let currentLocationPOIItem = clothingBinManager.makePOIItemsByCurrentLoaction(at: currentLocationMTMapPoint)
+            //
+            //
+            //                // 현재위치 추가
+            //                mapView.add(currentLocationPOIItem)
+            //
+            //                mapView.setMapCenter(currentlocationManager.changeMTMapPoint(latitude: currentLocationCoordinate.latitude, longitude: currentLocationCoordinate.longitude), zoomLevel: 2, animated: true)
+            //            }
         @unknown default:
             self.alertCurrentLocation()
         }
@@ -454,20 +454,20 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     // 현재 지도 검색
     @objc func currentMapButtonTapped(sender: UIButton) {
-//        removePOIItemsData()
-//        
-//        print("현재 지도 검색 검색 버튼이 눌렸습니다.")
-//        // ❤️
-//        print("::checkButtonStatus::")
-//        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
-//        
-//        loadDataFromAllCVS()
-//        
-//        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
-//        
-//        if checkMapViewLevel() {
-//            loadClothingBinByBound()
-//        }
+        //        removePOIItemsData()
+        //
+        //        print("현재 지도 검색 검색 버튼이 눌렸습니다.")
+        //        // ❤️
+        //        print("::checkButtonStatus::")
+        //        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .map))
+        //
+        //        loadDataFromAllCVS()
+        //
+        //        //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
+        //
+        //        if checkMapViewLevel() {
+        //            loadClothingBinByBound()
+        //        }
         
         loadingView.isLoading = true
         self.getSomeData { [weak self] in
@@ -486,13 +486,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             if ((self?.checkMapViewLevel()) != nil) {
                 self?.loadClothingBinByBound()
             }
-          self?.loadingView.isLoading = false
+            self?.loadingView.isLoading = false
             print("loading")
         }
-//        self.getSomeData { [weak self] in
-//
-//          self?.loadingView.isLoading = false
-//        }
+        //        self.getSomeData { [weak self] in
+        //
+        //          self?.loadingView.isLoading = false
+        //        }
         
     }
     
@@ -766,6 +766,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     @objc func onPickDone() {
         // 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
         // ❤️
+        getSomeData {
+            
+        }
         regionButton.text = "\(selectedCity.rawValue)"
         UIPickerToCVS(resourceFileName:selectedCity.getFileName())
         regionButton.resignFirstResponder()
@@ -773,12 +776,21 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     func UIPickerToCVS (resourceFileName:String) {
         print("activityIndicatorStartAction")
-        
-        loadDataFromCVSAt(resource: resourceFileName)
-        if clothingBinLocationArray.count != 0 {
-            loadClothingBinByDistrict()
-            mapView.fitAreaToShowAllPOIItems()
+        // 로딩 중 구현
+        self.loadingView.isLoading = true
+        self.getSomeData { [weak self] in
+            self?.loadDataFromCVSAt(resource: resourceFileName)
+            if self?.clothingBinLocationArray.count != 0 {
+                self?.loadClothingBinByDistrict()
+                self?.mapView.fitAreaToShowAllPOIItems()
+            }
+          self?.loadingView.isLoading = false
         }
+//        loadDataFromCVSAt(resource: resourceFileName)
+//        if clothingBinLocationArray.count != 0 {
+//            loadClothingBinByDistrict()
+//            mapView.fitAreaToShowAllPOIItems()
+//        }
     }
     
     @objc func pickerViewResign() {
@@ -790,7 +802,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         DispatchQueue.main.async {
             completion()
         }
-     }
+    }
 }
 
 
@@ -803,7 +815,7 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         self.view.addSubview(mapView)
         self.mapView.addSubview(self.loadingView)
         //loadingView.addSubview(activityIndicator)
-
+        
         self.view.addSubview(currentLocationButton)
         // self.view.addSubview(searchAddressButton)
         self.view.addSubview(currentLocationSearchMapButton)
@@ -896,11 +908,11 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         
         // loadingView
         NSLayoutConstraint.activate([
-             self.loadingView.leftAnchor.constraint(equalTo: self.mapView.leftAnchor),
-             self.loadingView.rightAnchor.constraint(equalTo: self.mapView.rightAnchor),
-             self.loadingView.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor),
-             self.loadingView.topAnchor.constraint(equalTo: self.mapView.topAnchor),
-           ])
+            self.loadingView.leftAnchor.constraint(equalTo: self.mapView.leftAnchor),
+            self.loadingView.rightAnchor.constraint(equalTo: self.mapView.rightAnchor),
+            self.loadingView.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor),
+            self.loadingView.topAnchor.constraint(equalTo: self.mapView.topAnchor),
+        ])
     }
     
     //MARK: - PickerView 설정
@@ -956,26 +968,26 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         }
     }
     
-//    func activityIndicatorStartAction() {
-//        self.activityIndicator.startAnimating()
-//        if !activityIndicator.isAnimating {
-//            self.activityIndicator.isHidden = false
-//            DispatchQueue.main.async {
-//
-//            }
-//        }
-//    }
+    //    func activityIndicatorStartAction() {
+    //        self.activityIndicator.startAnimating()
+    //        if !activityIndicator.isAnimating {
+    //            self.activityIndicator.isHidden = false
+    //            DispatchQueue.main.async {
+    //
+    //            }
+    //        }
+    //    }
     
-//    func activityIndicatorStopAction() {
-//        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
-//        self.activityIndicator.stopAnimating()
-//
-//        if activityIndicator.isAnimating {
-//            DispatchQueue.main.async {
-//
-//            }
-//        }
-//    }
+    //    func activityIndicatorStopAction() {
+    //        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
+    //        self.activityIndicator.stopAnimating()
+    //
+    //        if activityIndicator.isAnimating {
+    //            DispatchQueue.main.async {
+    //
+    //            }
+    //        }
+    //    }
     
     func switchActivityIndicator() {
         
