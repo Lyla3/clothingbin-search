@@ -55,36 +55,36 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //MARK: - UISetting
     
     //초기 안내 창 뷰
-    private let guideView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+//    private let guideView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
     
     //초기 안내 창 뷰 - nextButton
-    private let guideViewNextButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-        button.setTitle("다음", for: .normal)
-        
-        button.layer.cornerRadius = 10
-        button.layer.shadowRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
-        return button
-    }()
+//    private let guideViewNextButton: UIButton = {
+//        let button = UIButton()
+//        button.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+//        button.setTitle("다음", for: .normal)
+//
+//        button.layer.cornerRadius = 10
+//        button.layer.shadowRadius = 10
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
+//        return button
+//    }()
     
     // 안내창 예시이미지 - 현재 지도 검색
-    private let guideViewImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .red
-        imageView.image = UIImage(named: "guidemap_1")
-        imageView.contentMode = .scaleAspectFit
-        //imageView.heightAnchor = 100
-        return imageView
-    }()
-    
+//    private let guideViewImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.backgroundColor = .red
+//        imageView.image = UIImage(named: "guidemap_1")
+//        imageView.contentMode = .scaleAspectFit
+//        //imageView.heightAnchor = 100
+//        return imageView
+//    }()
+//
     //현위치 버튼
     private let currentLocationButton: UIButton = {
         let currentLocationbutton = UIButton()
@@ -194,6 +194,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     private let loadingView: LoadingView = {
         let view = LoadingView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
         return view
     }()
     
@@ -302,7 +303,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("")
         print("===============================")
-        print("[ViewController > didFailWithError() : 위치 정보 확인 에러]")
+        print("[Vi  ewController > didFailWithError() : 위치 정보 확인 에러]")
         print("[error : \(error)]")
         print("[localizedDescription : \(error.localizedDescription)]")
         print("===============================")
@@ -483,11 +484,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             
             //let mapCenterPointByMTMapPoint = mapView.mapCenterPoint!
             
-            if ((self?.checkMapViewLevel()) != nil) {
+            if ((self?.checkMapViewLevel()) != nil) && self?.checkMapViewLevel() == true  {
                 self?.loadClothingBinByBound()
             }
             self?.loadingView.isLoading = false
-            print("loading")
         }
         //        self.getSomeData { [weak self] in
         //
@@ -517,12 +517,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         //실행 X
     }
     
-    @objc func closeGuideView() {
-        // guideViewNextButton 버튼이 눌렸을 때 실행된다.
-        guideView.removeFromSuperview()
-        self.guideView.removeFromSuperview()
-        
-    }
+//    @objc func closeGuideView() {
+//        // guideViewNextButton 버튼이 눌렸을 때 실행된다.
+//        guideView.removeFromSuperview()
+//        self.guideView.removeFromSuperview()
+//
+//    }
     
     
     //MARK: - 엑셀 파일 파싱 함수
@@ -775,7 +775,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     func UIPickerToCVS (resourceFileName:String) {
-        print("activityIndicatorStartAction")
         // 로딩 중 구현
         self.loadingView.isLoading = true
         self.getSomeData { [weak self] in
@@ -821,9 +820,12 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
         self.view.addSubview(currentLocationSearchMapButton)
         self.view.addSubview(regionButton)
         self.view.addSubview(helpTextView)
-        self.view.addSubview(guideView)
-        self.guideView.addSubview(guideViewNextButton)
-        self.guideView.addSubview(guideViewImageView)
+        
+        // 가이드뷰
+//        self.view.addSubview(guideView)
+//        self.guideView.addSubview(guideViewNextButton)
+//        self.guideView.addSubview(guideViewImageView)
+        
         //self.view.addSubview(guideViewImageView)
         
         
@@ -883,28 +885,28 @@ extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewD
             self.currentLocationSearchMapButton.heightAnchor.constraint(equalToConstant: 28)
         ])
         
-        //초기 안내 뷰 레이아웃
-        NSLayoutConstraint.activate([
-            self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
-        ])
-        
-        //안내 뷰 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
-            self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
-            self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        // 예시이미지 레이아웃
-        NSLayoutConstraint.activate([
-            self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
-            self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
-            self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
-            self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
-        ])
+//        //초기 안내 뷰 레이아웃
+//        NSLayoutConstraint.activate([
+//            self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
+//            self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+//            self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//            self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+//        ])
+//
+//        //안내 뷰 버튼 레이아웃
+//        NSLayoutConstraint.activate([
+//            self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
+//            self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+//            self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
+//        ])
+//
+//        // 예시이미지 레이아웃
+//        NSLayoutConstraint.activate([
+//            self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
+//            self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+//            self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
+//            self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
+//        ])
         
         // loadingView
         NSLayoutConstraint.activate([

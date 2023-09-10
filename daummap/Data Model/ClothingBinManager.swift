@@ -85,7 +85,7 @@ class ClothingBinManager {
     func loadClothingBinCloseCurrentLocation2(csvArray cvsArray:[ClothingBin]) -> [ClothingBin] {
         // 위치 업데이트 시작
         self.locationManager.startUpdatingLocation()
-        dump(cvsArray)
+        //dump(cvsArray)
         // 현재위치와의 거리를 구한다.
         for clothingBin in cvsArray {
             let clothingbinCoordinate = CLLocation(latitude: CLLocationDegrees(clothingBin.lat), longitude: CLLocationDegrees(clothingBin.lon))
