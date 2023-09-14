@@ -22,6 +22,8 @@
 		6367717E2A0807BD00A663D7 /* Seoul_Gangnam.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */; };
 		636771802A09CDF400A663D7 /* Seoul_Dongjak.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */; };
 		636771822A0A923B00A663D7 /* MapLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636771812A0A923B00A663D7 /* MapLocationManager.swift */; };
+		63852C5E2AAF720C00B47A23 /* Extension + View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63852C5D2AAF720C00B47A23 /* Extension + View.swift */; };
+		63852C602AAF728700B47A23 /* FirstLaunchChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63852C5F2AAF728700B47A23 /* FirstLaunchChecker.swift */; };
 		6395CC852A2367E700B479B2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6395CC842A2367E700B479B2 /* FirebaseDatabase */; };
 		6395CC872A24CF9500B479B2 /* TableViewSearchView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */; };
 		6395CC892A24CFB800B479B2 /* TableViewSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6395CC882A24CFB800B479B2 /* TableViewSearchViewController.swift */; };
@@ -349,6 +351,8 @@
 		6367717D2A0807BD00A663D7 /* Seoul_Gangnam.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Gangnam.csv; sourceTree = "<group>"; };
 		6367717F2A09CDF400A663D7 /* Seoul_Dongjak.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Seoul_Dongjak.csv; sourceTree = "<group>"; };
 		636771812A0A923B00A663D7 /* MapLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLocationManager.swift; sourceTree = "<group>"; };
+		63852C5D2AAF720C00B47A23 /* Extension + View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + View.swift"; sourceTree = "<group>"; };
+		63852C5F2AAF728700B47A23 /* FirstLaunchChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchChecker.swift; sourceTree = "<group>"; };
 		6395CC862A24CF9500B479B2 /* TableViewSearchView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TableViewSearchView.storyboard; sourceTree = "<group>"; };
 		6395CC882A24CFB800B479B2 /* TableViewSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSearchViewController.swift; sourceTree = "<group>"; };
 		6395CC8A2A24D18000B479B2 /* TableViewSearchAddressView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TableViewSearchAddressView.storyboard; sourceTree = "<group>"; };
@@ -698,9 +702,18 @@
 				634BD7762A8267FC000740EC /* ClothingBin.swift */,
 				634BD7742A8267F1000740EC /* ClothingBinManager.swift */,
 				63B528452A853D550047E225 /* Constants.swift */,
+				63852C5F2AAF728700B47A23 /* FirstLaunchChecker.swift */,
 			);
 			name = Model;
 			path = "Data Model";
+			sourceTree = "<group>";
+		};
+		63852C5C2AAF71F200B47A23 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				63852C5D2AAF720C00B47A23 /* Extension + View.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		63ABB36728EC1ED6003A533E = {
@@ -724,6 +737,7 @@
 		63ABB37228EC1ED6003A533E /* daummap */ = {
 			isa = PBXGroup;
 			children = (
+				63852C5C2AAF71F200B47A23 /* Extension */,
 				63D403AA2A6D405D00377A8F /* .gitignore */,
 				634BD6D72A7FA7B0000740EC /* Model */,
 				63E0A4802A1A6740001470F2 /* View */,
@@ -1574,8 +1588,10 @@
 				63FCE0492A0D474A00B822C3 /* FirebaseStorageManager.swift in Sources */,
 				63043A212A22014B00F303BC /* FirebaseStruct.swift in Sources */,
 				634BD7772A8267FC000740EC /* ClothingBin.swift in Sources */,
+				63852C5E2AAF720C00B47A23 /* Extension + View.swift in Sources */,
 				636771822A0A923B00A663D7 /* MapLocationManager.swift in Sources */,
 				63ABB37428EC1ED6003A533E /* AppDelegate.swift in Sources */,
+				63852C602AAF728700B47A23 /* FirstLaunchChecker.swift in Sources */,
 				63E0A4822A1A67A2001470F2 /* AddressSearchView.swift in Sources */,
 				63EAE5FA2AA4C1E1006DD932 /* CoordinateUserScreen.swift in Sources */,
 				63ABB37628EC1ED6003A533E /* SceneDelegate.swift in Sources */,

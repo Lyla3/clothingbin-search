@@ -54,37 +54,37 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     //MARK: - UISetting
     
-    //초기 안내 창 뷰
-//    private let guideView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
+    //    초기 안내 창 뷰
+    private let guideView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
-    //초기 안내 창 뷰 - nextButton
-//    private let guideViewNextButton: UIButton = {
-//        let button = UIButton()
-//        button.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-//        button.setTitle("다음", for: .normal)
-//
-//        button.layer.cornerRadius = 10
-//        button.layer.shadowRadius = 10
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
-//        return button
-//    }()
+    //    초기 안내 창 뷰 - nextButton
+    private let guideViewNextButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+        button.setTitle("다음", for: .normal)
+        
+        button.layer.cornerRadius = 10
+        button.layer.shadowRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(closeGuideView), for: .touchUpInside)
+        return button
+    }()
     
-    // 안내창 예시이미지 - 현재 지도 검색
-//    private let guideViewImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .red
-//        imageView.image = UIImage(named: "guidemap_1")
-//        imageView.contentMode = .scaleAspectFit
-//        //imageView.heightAnchor = 100
-//        return imageView
-//    }()
-//
+    //     안내창 예시이미지 - 현재 지도 검색
+    private let guideViewImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "guidemap_1")
+        imageView.contentMode = .scaleAspectFit
+        //imageView.heightAnchor = 100
+        return imageView
+    }()
+    
     //현위치 버튼
     private let currentLocationButton: UIButton = {
         let currentLocationbutton = UIButton()
@@ -205,6 +205,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
+        
         makeUI()
         
         pickerViewcityListNew =
@@ -216,6 +217,9 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         if let currentLocationLat = coor?.latitude , let currentLocationLon = coor?.longitude {
             mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLat, longitude: currentLocationLon)), animated: true)
         }
+        
+        //첫 실행 확인
+        checkFirstLuanch()
     }
     
     
@@ -359,7 +363,7 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 return
             }
             
-//            let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
+            //            let currentLocationMTMapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLocationLatitude, longitude: currentLocationLongitude)) ?? DEFAULT_POSITION
             
             clothingBinManager.locationManager = locationManager
             
@@ -378,8 +382,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             
             self.getSomeData { [weak self] in
                 self?.loadDataFromAllCVS()
-//                let allClothingBinArray =  self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]])
-//                self?.clothingBinManager.clothingBinArray = allClothingBinArray
+                //                let allClothingBinArray =  self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]])
+                //                self?.clothingBinManager.clothingBinArray = allClothingBinArray
                 
                 guard let allClothingBinArray = self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]] ) else {
                     return print("allClothingBinArray is nil")
@@ -395,10 +399,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                     print("Error: processing loadClothinBinByBound")
                 }
                 self?.clearArray()
-              self?.loadingView.isLoading = false
+                self?.loadingView.isLoading = false
             }
             // 의류수거함 업데이트
-
+            
             
             //------------------
             // 지도 지역구 버튼이 눌린 경우 한번 누르면 현재 위치만을 받아오도록 함
@@ -517,12 +521,12 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         //실행 X
     }
     
-//    @objc func closeGuideView() {
-//        // guideViewNextButton 버튼이 눌렸을 때 실행된다.
-//        guideView.removeFromSuperview()
-//        self.guideView.removeFromSuperview()
-//
-//    }
+        @objc func closeGuideView() {
+            // guideViewNextButton 버튼이 눌렸을 때 실행된다.
+            guideView.removeFromSuperview()
+            self.guideView.removeFromSuperview()
+    
+        }
     
     
     //MARK: - 엑셀 파일 파싱 함수
@@ -783,13 +787,13 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
                 self?.loadClothingBinByDistrict()
                 self?.mapView.fitAreaToShowAllPOIItems()
             }
-          self?.loadingView.isLoading = false
+            self?.loadingView.isLoading = false
         }
-//        loadDataFromCVSAt(resource: resourceFileName)
-//        if clothingBinLocationArray.count != 0 {
-//            loadClothingBinByDistrict()
-//            mapView.fitAreaToShowAllPOIItems()
-//        }
+        //        loadDataFromCVSAt(resource: resourceFileName)
+        //        if clothingBinLocationArray.count != 0 {
+        //            loadClothingBinByDistrict()
+        //            mapView.fitAreaToShowAllPOIItems()
+        //        }
     }
     
     @objc func pickerViewResign() {
@@ -802,231 +806,281 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             completion()
         }
     }
+    
+    private func checkFirstLuanch() {
+        //        if FirstLaunchChecker.isFirstLaunched() {
+        //            print("첫 실행입니다.")
+        //            UserDefaults.standard.set(false, forKey: Text.isFirstLaunchedKey)
+        //            makeGuideViewUI()
+        //        } else {
+        //            print("첫 실행이 아닙니다.")
+        //            makeGuideViewUI()
+        //        }
+        //    }
+    }
+    
 }
-
-
-
-extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource{
     
-    //MARK: - UI 설정
-    func makeUI(){
-        createPickerView()
-        self.view.addSubview(mapView)
-        self.mapView.addSubview(self.loadingView)
-        //loadingView.addSubview(activityIndicator)
-        
-        self.view.addSubview(currentLocationButton)
-        // self.view.addSubview(searchAddressButton)
-        self.view.addSubview(currentLocationSearchMapButton)
-        self.view.addSubview(regionButton)
-        self.view.addSubview(helpTextView)
-        
-        // 가이드뷰
-//        self.view.addSubview(guideView)
-//        self.guideView.addSubview(guideViewNextButton)
-//        self.guideView.addSubview(guideViewImageView)
-        
-        //self.view.addSubview(guideViewImageView)
-        
-        
-        helpTextView.isHidden = true
-        
-        // 현재 위치 버튼 눌림
-        currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
-        
-        currentLocationSearchMapButton.addTarget(self, action: #selector(currentMapButtonTapped), for: .touchUpInside)
-        
-        //searchAddressButton 버튼 눌릴 시
-        // searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
-        
-        //지역선택 버튼 눌리면 locationSelectButtonTapped 실행, pickerView가 실질적으로 실행
-        regionButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
-        mapView.setZoomLevel(2, animated: false)
-        
-        
-        //지역선택 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.regionButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
-            self.regionButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-            self.regionButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-            self.regionButton.heightAnchor.constraint(equalToConstant: 40)
-        ])
-        
-        //안내 알림창 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.helpTextView.topAnchor.constraint(equalTo: self.view.topAnchor, constant:600),
-            self.helpTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
-            self.helpTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50),
-            self.helpTextView.heightAnchor.constraint(equalToConstant: 60)
-        ])
-        
-        
-        //현재위치 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
-            self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-            self.currentLocationButton.widthAnchor.constraint(equalToConstant: 32),
-            self.currentLocationButton.heightAnchor.constraint(equalToConstant: 32)
-        ])
-        
-        //주소검색 버튼 레이아웃
-        //        NSLayoutConstraint.activate([
-        //            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
-        //            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
-        //            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
-        //            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
-        //        ])
-        
-        //현재지도 검색 버튼 레이아웃
-        NSLayoutConstraint.activate([
-            self.currentLocationSearchMapButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 70),
-            self.currentLocationSearchMapButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.currentLocationSearchMapButton.widthAnchor.constraint(equalToConstant: 95),
-            self.currentLocationSearchMapButton.heightAnchor.constraint(equalToConstant: 28)
-        ])
-        
-//        //초기 안내 뷰 레이아웃
-//        NSLayoutConstraint.activate([
-//            self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
-//            self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-//            self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//            self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
-//        ])
-//
-//        //안내 뷰 버튼 레이아웃
-//        NSLayoutConstraint.activate([
-//            self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
-//            self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
-//            self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
-//        ])
-//
-//        // 예시이미지 레이아웃
-//        NSLayoutConstraint.activate([
-//            self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
-//            self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
-//            self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
-//            self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
-//        ])
-        
-        // loadingView
-        NSLayoutConstraint.activate([
-            self.loadingView.leftAnchor.constraint(equalTo: self.mapView.leftAnchor),
-            self.loadingView.rightAnchor.constraint(equalTo: self.mapView.rightAnchor),
-            self.loadingView.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor),
-            self.loadingView.topAnchor.constraint(equalTo: self.mapView.topAnchor),
-        ])
-    }
     
-    //MARK: - PickerView 설정
-    //PickerView의 component 개수
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    // PickerView의 component별 행수
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerViewcityListNew.count
-    }
-    
-    // PickerView의 component의 내용에 들어갈 list
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(pickerViewcityListNew[row])"
-    }
-    
-    // 피커뷰에서 선택된 행을 처리할 수 있는 메서드
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        //선택된 city를 selectedCity에 넣어줌.
-        selectedCity = Region(rawValue: pickerViewcityListNew[row]) ?? .Gangnam
-        currentRow=row
+    extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
         
-        // ❤️
-        print("::checkButtonStatus::")
-        print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .region))
+        //MARK: - UI 설정
+        func makeUI(){
+            createPickerView()
+            self.view.addSubview(mapView)
+            self.mapView.addSubview(self.loadingView)
+            //loadingView.addSubview(activityIndicator)
+            
+            self.view.addSubview(currentLocationButton)
+            // self.view.addSubview(searchAddressButton)
+            self.view.addSubview(currentLocationSearchMapButton)
+            self.view.addSubview(regionButton)
+            self.view.addSubview(helpTextView)
+            
+            // 가이드뷰
+            self.view.addSubview(guideView)
+            self.guideView.addSubview(guideViewNextButton)
+            self.guideView.addSubview(guideViewImageView)
+            //
+            //        self.view.addSubview(guideViewImageView)
+            
+            
+            helpTextView.isHidden = true
+            
+            // 현재 위치 버튼 눌림
+            currentLocationButton.addTarget(self, action: #selector(currentLocationButtonTapped), for: .touchUpInside)
+            
+            currentLocationSearchMapButton.addTarget(self, action: #selector(currentMapButtonTapped), for: .touchUpInside)
+            
+            //searchAddressButton 버튼 눌릴 시
+            // searchAddressButton.addTarget(self, action: #selector(searchAddressButtonTapped), for: .touchUpInside)
+            
+            //지역선택 버튼 눌리면 locationSelectButtonTapped 실행, pickerView가 실질적으로 실행
+            regionButton.addTarget(self, action: #selector(locationSelectButtonTapped), for: .touchUpInside)
+            mapView.setZoomLevel(2, animated: false)
+            
+            
+            //지역선택 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.regionButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant:750),
+                self.regionButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
+                self.regionButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
+                self.regionButton.heightAnchor.constraint(equalToConstant: 40)
+            ])
+            
+            //안내 알림창 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.helpTextView.topAnchor.constraint(equalTo: self.view.topAnchor, constant:600),
+                self.helpTextView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
+                self.helpTextView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50),
+                self.helpTextView.heightAnchor.constraint(equalToConstant: 60)
+            ])
+            
+            
+            //현재위치 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.currentLocationButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100),
+                self.currentLocationButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+                self.currentLocationButton.widthAnchor.constraint(equalToConstant: 32),
+                self.currentLocationButton.heightAnchor.constraint(equalToConstant: 32)
+            ])
+            
+            //주소검색 버튼 레이아웃
+            //        NSLayoutConstraint.activate([
+            //            self.searchAddressButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 150),
+            //            self.searchAddressButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 328),
+            //            self.searchAddressButton.widthAnchor.constraint(equalToConstant: 32),
+            //            self.searchAddressButton.heightAnchor.constraint(equalToConstant: 32)
+            //        ])
+            
+            //현재지도 검색 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.currentLocationSearchMapButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 70),
+                self.currentLocationSearchMapButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                self.currentLocationSearchMapButton.widthAnchor.constraint(equalToConstant: 95),
+                self.currentLocationSearchMapButton.heightAnchor.constraint(equalToConstant: 28)
+            ])
+            
+            //
+            // loadingView
+            NSLayoutConstraint.activate([
+                self.loadingView.leftAnchor.constraint(equalTo: self.mapView.leftAnchor),
+                self.loadingView.rightAnchor.constraint(equalTo: self.mapView.rightAnchor),
+                self.loadingView.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor),
+                self.loadingView.topAnchor.constraint(equalTo: self.mapView.topAnchor),
+            ])
+            
+            //가이드 뷰 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
+                self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+            ])
+            //
+            //        //안내 뷰 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
+                self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+                self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
+            ])
+            //
+            //        // 예시이미지 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
+                self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+                self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
+                self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
+            ])
+            
+            //makeGuideViewUI()
+        }
         
-        let excuteButton = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
+        private func makeGuideViewUI() {
+            // 가이드뷰
+            //        self.view.addSubview(guideView)
+            //        self.guideView.addSubview(guideViewNextButton)
+            //        self.guideView.addSubview(guideViewImageView)
+            //
+            // self.guideView.addSubviews(guideViewNextButton,guideViewImageView)
+            //        self.view.addSubview(guideViewImageView)
+            
+            //가이드 뷰 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideView.topAnchor.constraint(equalTo: self.view.topAnchor),
+                self.guideView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                self.guideView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                self.guideView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+            ])
+            //
+            //        //안내 뷰 버튼 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideViewNextButton.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -100 ),
+                self.guideViewNextButton.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+                self.guideViewNextButton.widthAnchor.constraint(equalToConstant: 50)
+            ])
+            //
+            //        // 예시이미지 레이아웃
+            NSLayoutConstraint.activate([
+                self.guideViewImageView.bottomAnchor.constraint(equalTo: self.guideView.bottomAnchor, constant: -200 ),
+                self.guideViewImageView.centerXAnchor.constraint(equalTo: self.guideView.centerXAnchor),
+                self.guideViewImageView.leadingAnchor.constraint(equalTo: self.guideView.leadingAnchor, constant: 10 ),
+                self.guideViewImageView.trailingAnchor.constraint(equalTo: self.guideView.trailingAnchor, constant: 10 )
+            ])
+            
+        }
         
-    }
-    
-    //mapview 터치시 피커뷰 내려가도록
-    func mapView(_ mapView: MTMapView!, singleTapOn mapPoint: MTMapPoint!) {
-        regionButton.resignFirstResponder()
-    }
-    
-    //poiItem 선택시 poiItem 지도 메서드 실행되도록
-    func mapView(_ mapView: MTMapView!, touchedCalloutBalloonOf poiItem: MTMapPOIItem!) {
-        UIPasteboard.general.string = poiItem.itemName
+        //MARK: - PickerView 설정
+        //PickerView의 component 개수
+        func numberOfComponents(in pickerView: UIPickerView) -> Int {
+            return 1
+        }
         
-        //네이버 지도 앱 실행
-        if poiItem.itemName != nil {
-            let urlStr = "nmap://search?query=\( poiItem.itemName!)&appname=sumsum.daummap"
-            let appStoreURL = URL(string: "http://itunes.apple.com/app/id311867728?mt=8")!
-            guard let encodedStr = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-            let url = URL(string: encodedStr)!
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-            } else {
-                UIApplication.shared.open(appStoreURL)
+        // PickerView의 component별 행수
+        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            return pickerViewcityListNew.count
+        }
+        
+        // PickerView의 component의 내용에 들어갈 list
+        func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+            return "\(pickerViewcityListNew[row])"
+        }
+        
+        // 피커뷰에서 선택된 행을 처리할 수 있는 메서드
+        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            //선택된 city를 selectedCity에 넣어줌.
+            selectedCity = Region(rawValue: pickerViewcityListNew[row]) ?? .Gangnam
+            currentRow=row
+            
+            // ❤️
+            print("::checkButtonStatus::")
+            print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .region))
+            
+            let excuteButton = clothingBinManager.checkButtonFunction(pressedButtonStatus: .region)
+            
+        }
+        
+        //mapview 터치시 피커뷰 내려가도록
+        func mapView(_ mapView: MTMapView!, singleTapOn mapPoint: MTMapPoint!) {
+            regionButton.resignFirstResponder()
+        }
+        
+        //poiItem 선택시 poiItem 지도 메서드 실행되도록
+        func mapView(_ mapView: MTMapView!, touchedCalloutBalloonOf poiItem: MTMapPOIItem!) {
+            UIPasteboard.general.string = poiItem.itemName
+            
+            //네이버 지도 앱 실행
+            if poiItem.itemName != nil {
+                let urlStr = "nmap://search?query=\( poiItem.itemName!)&appname=sumsum.daummap"
+                let appStoreURL = URL(string: "http://itunes.apple.com/app/id311867728?mt=8")!
+                guard let encodedStr = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
+                let url = URL(string: encodedStr)!
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIApplication.shared.open(appStoreURL)
+                }
             }
+        }
+        
+        //    func activityIndicatorStartAction() {
+        //        self.activityIndicator.startAnimating()
+        //        if !activityIndicator.isAnimating {
+        //            self.activityIndicator.isHidden = false
+        //            DispatchQueue.main.async {
+        //
+        //            }
+        //        }
+        //    }
+        
+        //    func activityIndicatorStopAction() {
+        //        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
+        //        self.activityIndicator.stopAnimating()
+        //
+        //        if activityIndicator.isAnimating {
+        //            DispatchQueue.main.async {
+        //
+        //            }
+        //        }
+        //    }
+        
+        func switchActivityIndicator() {
+            
+        }
+        
+        //마커 로드중일때 다른 버튼 선택 막는 메서드
+        func buttonSelectUnable() {
+            currentLocationButton.isEnabled = false
+            currentLocationSearchMapButton.isEnabled = false
+        }
+        
+        //마커 로드중일때 다른 버튼 선택 방지 해제 메서드
+        func buttonSelectAble() {
+            currentLocationButton.isEnabled = true
+            currentLocationSearchMapButton.isEnabled = true
+        }
+    }
+
+    
+    //MARK: - String - remove 익스텐션 구현
+    extension String {
+        func remove(target string: String) -> String {
+            return components(separatedBy: string).joined()
         }
     }
     
-    //    func activityIndicatorStartAction() {
-    //        self.activityIndicator.startAnimating()
-    //        if !activityIndicator.isAnimating {
-    //            self.activityIndicator.isHidden = false
-    //            DispatchQueue.main.async {
-    //
-    //            }
-    //        }
-    //    }
     
-    //    func activityIndicatorStopAction() {
-    //        print("activityIndicator.isAnimating:\(activityIndicator.isAnimating)")
-    //        self.activityIndicator.stopAnimating()
-    //
-    //        if activityIndicator.isAnimating {
-    //            DispatchQueue.main.async {
-    //
-    //            }
-    //        }
-    //    }
-    
-    func switchActivityIndicator() {
+    extension CLLocation {
         
+        /// Get distance between two points
+        ///
+        /// - Parameters:
+        ///   - from: first point
+        ///   - to: second point
+        /// - Returns: the distance in meters
+        class func distance(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> CLLocationDistance {
+            let from = CLLocation(latitude: from.latitude, longitude: from.longitude)
+            let to = CLLocation(latitude: to.latitude, longitude: to.longitude)
+            return from.distance(from: to)
+        }
     }
-    
-    //마커 로드중일때 다른 버튼 선택 막는 메서드
-    func buttonSelectUnable() {
-        currentLocationButton.isEnabled = false
-        currentLocationSearchMapButton.isEnabled = false
-    }
-    
-    //마커 로드중일때 다른 버튼 선택 방지 해제 메서드
-    func buttonSelectAble() {
-        currentLocationButton.isEnabled = true
-        currentLocationSearchMapButton.isEnabled = true
-    }
-}
-
-//MARK: - String - remove 익스텐션 구현
-extension String {
-    func remove(target string: String) -> String {
-        return components(separatedBy: string).joined()
-    }
-}
-
-
-extension CLLocation {
-    
-    /// Get distance between two points
-    ///
-    /// - Parameters:
-    ///   - from: first point
-    ///   - to: second point
-    /// - Returns: the distance in meters
-    class func distance(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> CLLocationDistance {
-        let from = CLLocation(latitude: from.latitude, longitude: from.longitude)
-        let to = CLLocation(latitude: to.latitude, longitude: to.longitude)
-        return from.distance(from: to)
-    }
-}

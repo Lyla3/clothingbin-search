@@ -13,8 +13,8 @@
 /* Begin PBXFileReference section */
 		0FB5B09872F6A2B0F6C06EA7BCEF0237 /* Pods-daummap-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-daummap-acknowledgements.plist"; sourceTree = "<group>"; };
 		4D5C91AC09E774B4EE1E7D7018C62837 /* Pods-daummap-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-daummap-dummy.m"; sourceTree = "<group>"; };
-		76AB8DD9D52C8A65B4143C78E2777FAD /* Pods-daummap */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-daummap"; path = "libPods-daummap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		76AB8DD9D52C8A65B4143C78E2777FAD /* libPods-daummap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-daummap.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		ADC900DBB4CCB480192F480BC28C640B /* Pods-daummap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-daummap.release.xcconfig"; sourceTree = "<group>"; };
 		C75993DF83DDE9DC7BD6AEC9732260FD /* Pods-daummap-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-daummap-acknowledgements.markdown"; sourceTree = "<group>"; };
 		F7845A55FD91548BF30CF4E0F356215D /* Pods-daummap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-daummap.debug.xcconfig"; sourceTree = "<group>"; };
@@ -34,7 +34,7 @@
 		9D898DC834584269A788E0F79441EC45 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				76AB8DD9D52C8A65B4143C78E2777FAD /* Pods-daummap */,
+				76AB8DD9D52C8A65B4143C78E2777FAD /* libPods-daummap.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,7 +104,7 @@
 			);
 			name = "Pods-daummap";
 			productName = "Pods-daummap";
-			productReference = 76AB8DD9D52C8A65B4143C78E2777FAD /* Pods-daummap */;
+			productReference = 76AB8DD9D52C8A65B4143C78E2777FAD /* libPods-daummap.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -220,7 +220,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
@@ -240,7 +240,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
