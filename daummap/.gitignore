@@ -123,5 +123,6 @@ iOSInjectionProject/
 
 # file: .gitignore
 Info.plist
+GoogleService-Info.plist
 
 # End of https://www.gitignore.io/api/xcode,swift,cocoapods
