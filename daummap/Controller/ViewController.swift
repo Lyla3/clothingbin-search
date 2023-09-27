@@ -27,7 +27,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     // Manager로 이동(삭제 예정)
     var poiItemIsOnMap: Bool = false
-    
     var currentLocationCoordinate = CurrentLocationCoordinate()
     var currentlocationManager = CurrentLocationManager()
     var clothingBinManager: ClothingBinManager = ClothingBinManager()
@@ -38,8 +37,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     
     // 현재 위치 button이 몇번 눌렸는지 감지
     var currentLocationButtonTapCount : Int = 0
-    
-    
     
     //mapLocationManager (Model)
     var mapLocationManager = MapLocationManager()
@@ -226,9 +223,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         checkFirstLuanch()
     }
     
-    
-    
-    
     //MARK: - Actions
     func loadLocation() {
         print("")
@@ -303,10 +297,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         
     }
     
-    
-    
-    
-    
     // MARK: - [위도, 경도 받아오기 에러가 발생한 경우]
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("")
@@ -317,8 +307,8 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         print("===============================")
         print("")
     }
-    //MARK: - mapLongTap
     
+    //MARK: - mapLongTap
     // 길게 지도 눌리면 의류수거함 추가됨
     func mapView(_ mapView: MTMapView!, longPressOn mapPoint: MTMapPoint!) {
         print("길게 화면이 눌렸습니다 - longtap")
@@ -336,7 +326,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             poitemLongtapped.markerType = .bluePin
             mapView.addPOIItems([poitemLongtapped])
         })
-        
         // 버튼을 알림창에 추가해줌
         alert.addAction(cancle)
         alert.addAction(ok)
@@ -344,12 +333,10 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     }
     
     
-    
     //MARK: - 현재 위치 버튼 실행시
     @objc func currentLocationButtonTapped(sender: UIButton) {
         self.loadingView.isLoading = true
         print("현재위치 버튼이 눌렸습니다. ")
-        // ❤️
         print("::checkButtonStatus::")
         print(clothingBinManager.checkButtonFunction(pressedButtonStatus: .currentLocation))
         
@@ -386,8 +373,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             
             self.getSomeData { [weak self] in
                 self?.loadDataFromAllCVS()
-                //                let allClothingBinArray =  self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]])
-                //                self?.clothingBinManager.clothingBinArray = allClothingBinArray
                 
                 guard let allClothingBinArray = self?.mapLocationManager.changeStringToClothingBin(from: self?.clothingBinLocationArray ?? [[""]] ) else {
                     return print("allClothingBinArray is nil")
@@ -543,7 +528,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
         parseCSVAt(url: URL(fileURLWithPath: path))
     }
     
-    
     //MARK: - CVS 전체 파일 데이터 로드 - 전체 csv파일을 경로로 지정
     private func loadDataFromAllCVS() {
         for resource in Region.allCases {
@@ -573,41 +557,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
             mapView.fitAreaToShowAllPOIItems()
         }
         clearArray()
-        
-        
-        //        let buttonType = clothingBinManager.checkButtonFunction(pressedButtonStatus: .currentLocation)
-        //
-        //        let clotingbinDataArray =  clothingBinManager.loadClothingBinCloseCurrentLocation(from: cvsArray, locationManager: locationManager)
-        //
-        //        // changeStringToClothingBin
-        //        let allClothingBinArray =  mapLocationManager.changeStringToClothingBin(from: clothingBinLocationArray)
-        //
-        //        do {
-        //            let poiItems = try clothingBinManager.executeButtonFunction(buttonStatus: buttonType)
-        //            mapView.addPOIItems(poiItems)
-        //        } catch ClothingBinError.noneClothingBin {
-        //            print("loadClothingBinByCurrentLocation - ClothingBinError.noneClothingBin")
-        //        }  catch {
-        //            print("Error: processing loadClothingBinByCurrentLocation")
-        //        }
-        //        clearArray()
-        
-        // poiItemArray에 POIItem 업데이트
-        // poiItemArray = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
-        //
-        //        let poiItemArrayInclothingBinManager = clothingBinManager.makeMapPOIItem(with: clotingbinDataArray)
-        //
-        //        if poiItemArrayInclothingBinManager.isEmpty == true {
-        //            helpTextView.text = "현재 위치에서 가까운 의류수거함이 없습니다."
-        //            helpTextView.isHidden = false
-        //            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-        //                self.helpTextView.isHidden = true
-        //            }
-        //        } else {
-        //            mapView.addPOIItems(poiItemArrayInclothingBinManager)
-        //            mapView.fitAreaToShowAllPOIItems()
-        //        }
-        //        clearArray()
     }
     //MARK: - 2) 유저 화면 상 -> 의류수거함
     func loadClothingBinByBound() {
@@ -761,7 +710,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
     //MARK: - PickerView 확인 버튼
     @objc func onPickDone() {
         // 확인 눌렀을 때 액션 정의 -> 아래 코드에서는 라벨 텍스트 업데이트
-        // ❤️
         getSomeData {
             
         }
@@ -821,7 +769,6 @@ class ViewController: UIViewController,MTMapViewDelegate,CLLocationManagerDelega
 
 
 extension ViewController: UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource {
-    
     //MARK: - UI 설정
     func makeUI(){
         createPickerView()
@@ -1043,7 +990,6 @@ extension String {
         return components(separatedBy: string).joined()
     }
 }
-
 
 extension CLLocation {
     
